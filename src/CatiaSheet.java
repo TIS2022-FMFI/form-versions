@@ -1,3 +1,7 @@
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -97,6 +101,34 @@ public class CatiaSheet {
                 line = new ArrayList<>(Arrays.asList(lines.get(index).split("\\s+")));
             }
         }
+    }
+
+    //TODO ked bude gui, tak pridat nahravanie obrazku
+    public void insert() throws SQLException {
+        try (PreparedStatement s = DbContext.getConnection().prepareStatement("INSERT INTO part (part_id, type, date, comment, image) VALUES (?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS)) {
+            s.setString(1, this.documentNo);
+            s.setString(2, getType());
+            s.setDate(3, parseDate(this.header.get(header.size()-1).releaseDate));
+            s.setString(4, this.header.get(header.size()-1).changes);
+            File img = new File("src/img.png");
+            s.setBlob(5, new FileInputStream(img));
+            s.executeUpdate();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public Date parseDate(String date) {
+        return Date.valueOf(date);
+    }
+
+    public String getType() {
+        switch (documentNo.split("\\.")[0]) {
+            case "173": return "calculation";
+            case "273": return "protoype";
+            case "735": return "serial";
+        }
+        return "null";
     }
 
     public void print() {
