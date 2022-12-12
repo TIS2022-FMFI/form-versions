@@ -38,5 +38,6 @@ public class PDFParser {
         CatiaSheet cs = parseFile(path);
 
         cs.print();
+
     }
 }
