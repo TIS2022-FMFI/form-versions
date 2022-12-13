@@ -135,6 +135,19 @@ public class Controller implements Initializable{
 
                 mainPdf = PDFParser.parseFile(String.valueOf(selectedFile));
                 l = FXCollections.observableArrayList(mainPdf.items);
+                l.addAll(
+                        new BOM("adas","asdas","faonpas","aisfnoasnfoias","oa"),
+                        new BOM("adas","asdas","faonpas","aisfnoasnfoias","oa"),
+                new BOM("adas","asdas","faonpas","aisfnoasnfoias","oa"),
+                new BOM("adas","asdas","faonpas","aisfnoasnfoias","oa"),
+                new BOM("adas","asdas","faonpas","aisfnoasnfoias","oa"),
+                new BOM("adas","asdas","faonpas","aisfnoasnfoias","oa"),
+                new BOM("adas","asdas","faonpas","aisfnoasnfoias","oa"),
+                        new BOM("adas","asdas","faonpas","aisfnoasnfoias","oa"),
+                        new BOM("adas","asdas","faonpas","aisfnoasnfoias","oa"),
+                        new BOM("adas","asdas","faonpas","aisfnoasnfoias","oa"),
+                        new BOM("adas","asdas","faonpas","aisfnoasnfoias","oa")
+                );
                 createTable();
                 createHeaderFooter();
 
