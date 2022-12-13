@@ -12,7 +12,6 @@ public class Main {
                 DbContext.setConnection(connection);
 
                 CatiaSheet cs = PDFParser.parseFile("src/cat2.pdf");
-                cs.insert();
 
 
             } else {
