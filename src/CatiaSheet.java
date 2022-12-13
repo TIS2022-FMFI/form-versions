@@ -104,9 +104,9 @@ public class CatiaSheet {
     }
 
     //TODO ked bude gui, tak pridat nahravanie obrazku
-    public void insert() throws SQLException {
+    public void insertIntoPart() throws SQLException {
         try (PreparedStatement s = DbContext.getConnection().prepareStatement("INSERT INTO part (part_id, type, date, comment, image) VALUES (?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS)) {
-            s.setString(1, this.documentNo);
+            s.setString(1, this.documentNo + this.version);
             s.setString(2, getType());
             s.setDate(3, parseDate(this.header.get(header.size()-1).releaseDate));
             s.setString(4, this.header.get(header.size()-1).changes);
@@ -118,8 +118,17 @@ public class CatiaSheet {
         }
     }
 
+    public void insertIntoBom(String bomid) throws SQLException {
+        try (PreparedStatement s = DbContext.getConnection().prepareStatement("INSERT INTO bom (part_id, bom_id) VALUES (?,?)", Statement.RETURN_GENERATED_KEYS)) {
+            s.setString(1, this.documentNo);
+            s.setString(2, bomid);
+            s.executeUpdate();
+        }
+    }
+
     public Date parseDate(String date) {
-        return Date.valueOf(date);
+        System.out.println(date.split("-")[0]+"-"+date.split("-")[2]+"-"+date.split("-")[1]);
+        return Date.valueOf(date.split("-")[0]+"-"+date.split("-")[2]+"-"+date.split("-")[1]);
     }
 
     public String getType() {
