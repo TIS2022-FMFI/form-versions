@@ -3,6 +3,8 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -126,7 +128,7 @@ public class Controller implements Initializable{
     @FXML
     void loadMainPdf(ActionEvent event) {
         FileChooser fc = new FileChooser();
-        fc.setInitialDirectory(new File("C:\\3AIN\\TIS\\GITHAB\\form-versions\\src"));
+        fc.setInitialDirectory(new File("D:\\MatFyz\\V_SEMESTER\\BOGE\\form-versions\\src"));
         File selectedFile = fc.showOpenDialog(null);
 
         if (selectedFile != null){
@@ -153,5 +155,20 @@ public class Controller implements Initializable{
     public void showImage(ActionEvent actionEvent) {
         Image image = Clipboard.getSystemClipboard().getImage();
         imageShowcase.setImage(image);
+    }
+
+    //TODO checkovanie ci subpart nema dalsi part
+    public void insert() throws SQLException {
+
+        mainPdf.insertIntoPart(); // inserts the main pdf
+
+        subpartsCatiaSheetList.forEach(cs -> {
+            try {
+                cs.insertIntoBom(mainPdf.documentNo + mainPdf.version); // inserts connections between part-subpart
+                cs.insertIntoPart(); // inserts the subpart itself
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        });
     }
 }

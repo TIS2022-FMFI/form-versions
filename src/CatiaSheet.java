@@ -105,6 +105,8 @@ public class CatiaSheet {
 
     //TODO ked bude gui, tak pridat nahravanie obrazku
     public void insertIntoPart() throws SQLException {
+        DatabaseChange dc = new DatabaseChange("1111", "Uploaded " + documentNo + version + " to the database", new Timestamp(System.currentTimeMillis()));
+        dc.insert();
         try (PreparedStatement s = DbContext.getConnection().prepareStatement("INSERT INTO part (part_id, type, date, comment, image) VALUES (?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS)) {
             s.setString(1, this.documentNo + this.version);
             s.setString(2, getType());
@@ -119,9 +121,11 @@ public class CatiaSheet {
     }
 
     public void insertIntoBom(String bomid) throws SQLException {
+        DatabaseChange dc = new DatabaseChange("1111", "Assigned " + documentNo + version + " to " + bomid, new Timestamp(System.currentTimeMillis()));
+        dc.insert();
         try (PreparedStatement s = DbContext.getConnection().prepareStatement("INSERT INTO bom (part_id, bom_id) VALUES (?,?)", Statement.RETURN_GENERATED_KEYS)) {
-            s.setString(1, this.documentNo);
-            s.setString(2, bomid);
+            s.setString(2, this.documentNo);
+            s.setString(1, bomid);
             s.executeUpdate();
         }
     }

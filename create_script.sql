@@ -1,3 +1,14 @@
+create table bom
+(
+    id int auto_increment
+        primary key,
+    bom_id varchar(20) null,
+    part_id varchar(20) null
+);
+
+create index part_id
+    on bom (part_id);
+
 create table db_log
 (
     id int auto_increment
@@ -21,19 +32,6 @@ create table part
 
 alter table part
     add primary key (id);
-
-create table bom
-(
-    id int auto_increment
-        primary key,
-    bom_id int null,
-    part_id int null,
-    constraint bom_ibfk_2
-        foreign key (part_id) references part (id)
-);
-
-create index part_id
-    on bom (part_id);
 
 create table dvp
 (
