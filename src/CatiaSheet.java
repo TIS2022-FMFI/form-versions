@@ -31,7 +31,7 @@ public class CatiaSheet {
 
     public CatiaSheet(List<String> lines) {
         int index = lines.indexOf("Toleranzenangaben / Tolerances data");
-        if (index > 0 && lines.get(index + 1).equals("Erstellt")) {
+        if (index >= 0 && lines.get(index + 1).equals("Erstellt")) {
             index -= 1;
             toleranceData.add(lines.get(index).substring(lines.get(index).indexOf("ISO ")));
             index += 16;
@@ -46,7 +46,7 @@ public class CatiaSheet {
         }
 
         index = lines.indexOf("Freigegeben");
-        if (lines.get(index + 1).equals("Released")) {
+        if (index >= 0 && lines.get(index + 1).equals("Released")) {
             index += 2;
             List<String> line = new ArrayList<>(Arrays.asList(lines.get(index).split("\\s+")));
             char headVersion = 'A';
@@ -62,24 +62,24 @@ public class CatiaSheet {
             }
         }
 
-        responsible = header.get(0).released;
-        index = 0;
-        while (lines.get(index).indexOf(responsible) != 0) {
-            index++;
-        }
-        toleranceData.add(lines.get(index - 1));//.substring(lines.get(index - 1).indexOf("ISO ")));
-        toleranceData.add(lines.get(index - 2));//.substring(lines.get(index - 2).indexOf("ISO ")));
-        responsible = lines.get(index++);
-        designation2 = lines.get(index++);
-        scale = lines.get(index++);
-        sheet = lines.get(index++);
-        of = lines.get(index++);
-        externalDocumentNo = lines.get(index++); //asi to je toto ale nwm
-        technInfo = lines.get(index++); //nie je iste
-        calculatedMass = lines.get(index++);
-        material = lines.get(index++);
-        materialNo = lines.get(index++); //nie je iste
-        surfaceProtection = lines.get(index);
+//        responsible = header.get(0).released;
+//        index = 0;
+//        while (lines.get(index).indexOf(responsible) != 0) {
+//            index++;
+//        }
+//        toleranceData.add(lines.get(index - 1));//.substring(lines.get(index - 1).indexOf("ISO ")));
+//        toleranceData.add(lines.get(index - 2));//.substring(lines.get(index - 2).indexOf("ISO ")));
+//        responsible = lines.get(index++);
+//        designation2 = lines.get(index++);
+//        scale = lines.get(index++);
+//        sheet = lines.get(index++);
+//        of = lines.get(index++);
+//        externalDocumentNo = lines.get(index++); //asi to je toto ale nwm
+//        technInfo = lines.get(index++); //nie je iste
+//        calculatedMass = lines.get(index++);
+//        material = lines.get(index++);
+//        materialNo = lines.get(index++); //nie je iste
+//        surfaceProtection = lines.get(index);
 
         index = 0;
         while (index < lines.size() - 1 && !lines.get(index).equals("Item") && !lines.get(index + 1).equals("Benennung")) {
