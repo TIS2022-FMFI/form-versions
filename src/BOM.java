@@ -10,6 +10,15 @@ public class BOM {
 
 
 
+
+    public BOM(String i, String des, String draw, String mat, String w){
+        item = i;
+        designation = des;
+        drawingNo = draw;
+        material = mat;
+        weight = w;
+    }
+
     public BOM(List<String> input) {
         int index = 0;
         item = input.get(index++);

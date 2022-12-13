@@ -12,6 +12,7 @@
 <?import javafx.scene.effect.InnerShadow?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.StackPane?>
 
 <TabPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="827.0" prefWidth="1238.0" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller">
   <tabs>
@@ -21,18 +22,23 @@
               <items>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="511.0" prefWidth="1238.0">
                      <children>
-                        <SplitPane dividerPositions="0.8610271903323263" layoutX="533.0" layoutY="194.0" orientation="VERTICAL" prefHeight="547.0" prefWidth="1238.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                        <SplitPane dividerPositions="0.8731117824773413" layoutX="533.0" layoutY="194.0" orientation="VERTICAL" prefHeight="547.0" prefWidth="1238.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                           <items>
                             <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
                                  <children>
-                                    <TableView fx:id="tableView" layoutX="-1.0" layoutY="243.0" prefHeight="540.0" prefWidth="1238.0" AnchorPane.bottomAnchor="-217.0" AnchorPane.leftAnchor="-1.0" AnchorPane.rightAnchor="-1.0" AnchorPane.topAnchor="243.0">
-                                       <columns>
-                                          <TableColumn fx:id="item" prefWidth="55.0" resizable="false" text="Item" />
-                                          <TableColumn fx:id="designation" prefWidth="130.0" resizable="false" text="Designation" />
-                                          <TableColumn fx:id="drawingNo" minWidth="0.0" prefWidth="125.0" text="Drawing No." />
-                                          <TableColumn fx:id="material" minWidth="4.0" prefWidth="830.0" text="Material" />
-                                          <TableColumn fx:id="weight" minWidth="0.0" prefWidth="115.0" resizable="false" text="Weight" />
-                                       </columns></TableView>
+                                    <StackPane layoutX="-1.0" layoutY="243.0" AnchorPane.bottomAnchor="-217.0" AnchorPane.leftAnchor="-1.0" AnchorPane.rightAnchor="-1.0" AnchorPane.topAnchor="243.0">
+                                       <children>
+                                          <TableView fx:id="tableView" prefHeight="540.0" prefWidth="1238.0">
+                                             <columns>
+                                                <TableColumn fx:id="item" prefWidth="55.0" resizable="false" text="Item" />
+                                                <TableColumn fx:id="designation" prefWidth="130.0" resizable="false" text="Designation" />
+                                                <TableColumn fx:id="drawingNo" minWidth="0.0" prefWidth="125.0" text="Drawing No." />
+                                                <TableColumn fx:id="material" minWidth="4.0" prefWidth="830.0" text="Material" />
+                                                <TableColumn fx:id="weight" minWidth="0.0" prefWidth="115.0" resizable="false" text="Weight" />
+                                             </columns>
+                                          </TableView>
+                                       </children>
+                                    </StackPane>
                                     <Label layoutX="3.0" layoutY="4.0" prefHeight="16.0" prefWidth="50.0" text="Header">
                                        <effect>
                                           <InnerShadow />
