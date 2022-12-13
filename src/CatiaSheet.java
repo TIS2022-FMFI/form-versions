@@ -31,7 +31,7 @@ public class CatiaSheet {
 
     public CatiaSheet(List<String> lines) {
         int index = lines.indexOf("Toleranzenangaben / Tolerances data");
-        if (index > 0 && lines.get(index + 1).equals("Erstellt")) {
+        if (index >= 0 && lines.get(index + 1).equals("Erstellt")) {
             index -= 1;
             toleranceData.add(lines.get(index).substring(lines.get(index).indexOf("ISO ")));
             index += 16;
@@ -46,7 +46,7 @@ public class CatiaSheet {
         }
 
         index = lines.indexOf("Freigegeben");
-        if (lines.get(index + 1).equals("Released")) {
+        if (index >= 0 && lines.get(index + 1).equals("Released")) {
             index += 2;
             List<String> line = new ArrayList<>(Arrays.asList(lines.get(index).split("\\s+")));
             char headVersion = 'A';
@@ -62,24 +62,24 @@ public class CatiaSheet {
             }
         }
 
-        responsible = header.get(0).released;
-        index = 0;
-        while (lines.get(index).indexOf(responsible) != 0) {
-            index++;
-        }
-        toleranceData.add(lines.get(index - 1));//.substring(lines.get(index - 1).indexOf("ISO ")));
-        toleranceData.add(lines.get(index - 2));//.substring(lines.get(index - 2).indexOf("ISO ")));
-        responsible = lines.get(index++);
-        designation2 = lines.get(index++);
-        scale = lines.get(index++);
-        sheet = lines.get(index++);
-        of = lines.get(index++);
-        externalDocumentNo = lines.get(index++); //asi to je toto ale nwm
-        technInfo = lines.get(index++); //nie je iste
-        calculatedMass = lines.get(index++);
-        material = lines.get(index++);
-        materialNo = lines.get(index++); //nie je iste
-        surfaceProtection = lines.get(index);
+//        responsible = header.get(0).released;
+//        index = 0;
+//        while (lines.get(index).indexOf(responsible) != 0) {
+//            index++;
+//        }
+//        toleranceData.add(lines.get(index - 1));//.substring(lines.get(index - 1).indexOf("ISO ")));
+//        toleranceData.add(lines.get(index - 2));//.substring(lines.get(index - 2).indexOf("ISO ")));
+//        responsible = lines.get(index++);
+//        designation2 = lines.get(index++);
+//        scale = lines.get(index++);
+//        sheet = lines.get(index++);
+//        of = lines.get(index++);
+//        externalDocumentNo = lines.get(index++); //asi to je toto ale nwm
+//        technInfo = lines.get(index++); //nie je iste
+//        calculatedMass = lines.get(index++);
+//        material = lines.get(index++);
+//        materialNo = lines.get(index++); //nie je iste
+//        surfaceProtection = lines.get(index);
 
         index = 0;
         while (index < lines.size() - 1 && !lines.get(index).equals("Item") && !lines.get(index + 1).equals("Benennung")) {
@@ -140,6 +140,174 @@ public class CatiaSheet {
         return "null";
     }
 
+    public List<CatiaComment> getHeader() {
+        return header;
+    }
+
+    public void setHeader(List<CatiaComment> header) {
+        this.header = header;
+    }
+
+    public String getMaterial() {
+        return material;
+    }
+
+    public void setMaterial(String material) {
+        this.material = material;
+    }
+
+    public String getSurfaceProtection() {
+        return surfaceProtection;
+    }
+
+    public void setSurfaceProtection(String surfaceProtection) {
+        this.surfaceProtection = surfaceProtection;
+    }
+
+    public String getCalculatedMass() {
+        return calculatedMass;
+    }
+
+    public void setCalculatedMass(String calculatedMass) {
+        this.calculatedMass = calculatedMass;
+    }
+
+    public String getMaterialNo() {
+        return materialNo;
+    }
+
+    public void setMaterialNo(String materialNo) {
+        this.materialNo = materialNo;
+    }
+
+    public String getVersion2() {
+        return version2;
+    }
+
+    public void setVersion2(String version2) {
+        this.version2 = version2;
+    }
+
+    public List<String> getToleranceData() {
+        return toleranceData;
+    }
+
+    public void setToleranceData(List<String> toleranceData) {
+        this.toleranceData = toleranceData;
+    }
+
+    public String getExternalDocumentNo() {
+        return externalDocumentNo;
+    }
+
+    public void setExternalDocumentNo(String externalDocumentNo) {
+        this.externalDocumentNo = externalDocumentNo;
+    }
+
+    public String getTechnInfo() {
+        return technInfo;
+    }
+
+    public void setTechnInfo(String technInfo) {
+        this.technInfo = technInfo;
+    }
+
+    public String getScale() {
+        return scale;
+    }
+
+    public void setScale(String scale) {
+        this.scale = scale;
+    }
+
+    public String getGenerated() {
+        return generated;
+    }
+
+    public void setGenerated(String generated) {
+        this.generated = generated;
+    }
+
+    public String getResponsible() {
+        return responsible;
+    }
+
+    public void setResponsible(String responsible) {
+        this.responsible = responsible;
+    }
+
+    public String getDevelopedFromDocument() {
+        return developedFromDocument;
+    }
+
+    public void setDevelopedFromDocument(String developedFromDocument) {
+        this.developedFromDocument = developedFromDocument;
+    }
+
+    public String getSize() {
+        return size;
+    }
+
+    public void setSize(String size) {
+        this.size = size;
+    }
+
+    public String getDesignation() {
+        return designation;
+    }
+
+    public void setDesignation(String designation) {
+        this.designation = designation;
+    }
+
+    public String getDesignation2() {
+        return designation2;
+    }
+
+    public void setDesignation2(String designation2) {
+        this.designation2 = designation2;
+    }
+
+    public String getSheet() {
+        return sheet;
+    }
+
+    public void setSheet(String sheet) {
+        this.sheet = sheet;
+    }
+
+    public String getOf() {
+        return of;
+    }
+
+    public void setOf(String of) {
+        this.of = of;
+    }
+
+    public String getDocumentNo() {
+        return documentNo;
+    }
+
+    public void setDocumentNo(String documentNo) {
+        this.documentNo = documentNo;
+    }
+
+    public String getVersion() {
+        return version;
+    }
+
+    public void setVersion(String version) {
+        this.version = version;
+    }
+
+    public List<BOM> getItems() {
+        return items;
+    }
+
+    public void setItems(List<BOM> items) {
+        this.items = items;
+    }
+
     public void print() {
         System.out.print("Header: ");
         header.forEach(CatiaComment::print);
@@ -178,6 +346,7 @@ public class CatiaSheet {
         System.out.println(materialNo);
         System.out.print("Surface protection: ");
         System.out.println(surfaceProtection);
+
         if (items.size() > 0) {
             System.out.println();
             System.out.println("Items:");

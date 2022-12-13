@@ -8,6 +8,8 @@ public class BOM {
     //public List<String> material = new ArrayList<>();
     public String weight = "";
 
+
+
     public BOM(List<String> input) {
         int index = 0;
         item = input.get(index++);
@@ -32,6 +34,47 @@ public class BOM {
             weight += input.get(index);
         }
     }
+
+    public String getItem() {
+        return item;
+    }
+
+    public void setItem(String item) {
+        this.item = item;
+    }
+
+    public String getDesignation() {
+        return designation;
+    }
+
+    public void setDesignation(String designation) {
+        this.designation = designation;
+    }
+
+    public String getDrawingNo() {
+        return drawingNo;
+    }
+
+    public void setDrawingNo(String drawingNo) {
+        this.drawingNo = drawingNo;
+    }
+
+    public String getMaterial() {
+        return material;
+    }
+
+    public void setMaterial(String material) {
+        this.material = material;
+    }
+
+    public String getWeight() {
+        return weight;
+    }
+
+    public void setWeight(String weight) {
+        this.weight = weight;
+    }
+
     public void print() {
         System.out.print(item);
         System.out.print(" ");
