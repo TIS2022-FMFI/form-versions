@@ -175,6 +175,7 @@ public class Controller implements Initializable{
 
         findParents(); // adds the parent-child connections
 
+        mainPdf.setImage(imageShowcase.getImage());
         mainPdf.insertIntoPart(); // inserts the main pdf
 
         subpartsCatiaSheetList.forEach(cs -> { // inserts the parent-child connections
