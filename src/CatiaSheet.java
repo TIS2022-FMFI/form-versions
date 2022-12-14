@@ -29,6 +29,8 @@ public class CatiaSheet {
     public String version = "";
     public List<BOM> items = new ArrayList<>();
 
+    public List<String> parents;
+
     public CatiaSheet(List<String> lines) {
         int index = lines.indexOf("Toleranzenangaben / Tolerances data");
         if (index >= 0 && lines.get(index + 1).equals("Erstellt")) {

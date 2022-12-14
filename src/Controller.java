@@ -173,14 +173,43 @@ public class Controller implements Initializable{
     //TODO checkovanie ci subpart nema dalsi part
     public void insert() throws SQLException {
 
+        findParents(); // adds the parent-child connections
+
         mainPdf.insertIntoPart(); // inserts the main pdf
 
-        subpartsCatiaSheetList.forEach(cs -> {
+        subpartsCatiaSheetList.forEach(cs -> { // inserts the parent-child connections
+            if (!cs.parents.isEmpty()) {
+                cs.parents.forEach(parent -> {
+                    try {
+                        cs.insertIntoBom(parent);
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
+                });
+            }
+
             try {
-                cs.insertIntoBom(mainPdf.documentNo + mainPdf.version); // inserts connections between part-subpart
                 cs.insertIntoPart(); // inserts the subpart itself
             } catch (SQLException e) {
                 e.printStackTrace();
+            }
+        });
+    }
+
+    public void findParents() {
+        subpartsCatiaSheetList.forEach(catiaSheet -> {
+            if (!catiaSheet.items.isEmpty()) {
+                catiaSheet.items.forEach(it -> {
+                    addParent(catiaSheet.documentNo, it.drawingNo);
+                });
+            }
+        });
+    }
+
+    public void addParent(String parent, String child) {
+        subpartsCatiaSheetList.forEach(catiaSheet -> {
+            if (catiaSheet.documentNo.equals(child)) {
+                catiaSheet.parents.add(parent);
             }
         });
     }
