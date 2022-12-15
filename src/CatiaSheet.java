@@ -37,6 +37,14 @@ public class CatiaSheet {
     public List<String> parents;
     public Image image;
 
+    public CatiaSheet(String dn, String vs, String dt, List<CatiaComment> cm, Image im) {
+        version = vs;
+        documentNo = dn;
+        generated = dt;
+        header = cm;
+        image = im;
+    }
+
     public CatiaSheet(List<String> lines) {
         int index = lines.indexOf("Toleranzenangaben / Tolerances data");
         if (index >= 0 && lines.get(index + 1).equals("Erstellt")) {
