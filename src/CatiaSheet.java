@@ -1,6 +1,8 @@
+import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.image.Image;
 
 import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
 import java.awt.image.RenderedImage;
 import java.io.*;
 import java.sql.*;
@@ -33,7 +35,7 @@ public class CatiaSheet {
     public String version = "";
     public List<BOM> items = new ArrayList<>();
 
-    public List<String> parents;
+    public List<String> parents = new ArrayList<String>();
     public Image image;
 
     public CatiaSheet(String dn, String vs, String dt, List<CatiaComment> cm, Image im) {
@@ -121,27 +123,33 @@ public class CatiaSheet {
     }
 
     //TODO ked bude gui, tak pridat nahravanie obrazku
-    public void insertIntoPart() throws SQLException {
+    public void insertIntoPart() throws SQLException, IOException {
         DatabaseChange dc = new DatabaseChange("1111", "Uploaded " + documentNo + version + " to the database", new Timestamp(System.currentTimeMillis()));
         dc.insert();
-        try {
-            File outputfile = new File("saved.jpg");
-            ImageIO.write((RenderedImage) image, "jpg", outputfile);
+        System.out.println(image);
+        if (image != null) {
+            BufferedImage bImage = SwingFXUtils.fromFXImage(image, null);
+
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            ImageIO.write(bImage, "jpeg", baos);
+            byte[] bytes = baos.toByteArray();
 
             try (PreparedStatement s = DbContext.getConnection().prepareStatement("INSERT INTO part (part_id, type, date, comment, image) VALUES (?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS)) {
                 s.setString(1, this.documentNo + this.version);
                 s.setString(2, getType());
-                s.setDate(3, parseDate(this.header.get(header.size()-1).releaseDate));
+                s.setString(3, this.header.get(header.size()-1).releaseDate);
                 s.setString(4, this.header.get(header.size()-1).changes);
-                s.setBlob(5, new FileInputStream(new File("saved.jpg")));
+                s.setBytes(5, bytes);
                 s.executeUpdate();
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
             }
-
-            outputfile.delete();
-
-        } catch (IOException ignored) {
+        } else {
+            try (PreparedStatement s = DbContext.getConnection().prepareStatement("INSERT INTO part (part_id, type, date, comment) VALUES (?,?,?,?)", Statement.RETURN_GENERATED_KEYS)) {
+                s.setString(1, this.documentNo + this.version);
+                s.setString(2, getType());
+                s.setString(3, this.header.get(header.size()-1).releaseDate);
+                s.setString(4, this.header.get(header.size()-1).changes);
+                s.executeUpdate();
+            }
         }
 
 
