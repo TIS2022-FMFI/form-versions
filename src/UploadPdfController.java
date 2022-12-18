@@ -1,20 +1,21 @@
-import java.awt.*;
-import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.sql.SQLException;
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
@@ -24,11 +25,10 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.Clipboard;
 import javafx.stage.FileChooser;
+import org.apache.commons.io.IOUtils;
 
-import javax.swing.*;
 
-
-public class Controller implements Initializable{
+public class UploadPdfController implements Initializable {
     @FXML
     public TextField verziaTextField;
 
@@ -54,22 +54,31 @@ public class Controller implements Initializable{
     public Button subpartPdf;
 
     @FXML
-    private TableView<BOM> tableView;
+    public TextField userid;
 
     @FXML
-    private TableColumn<BOM, String> item;
+    public Button inserToDB;
 
     @FXML
-    private TableColumn<BOM, String> designation;
+    private TableView<CatiaSheet> tableView;
 
     @FXML
-    private TableColumn<BOM, String> drawingNo;
+    private TableColumn<CatiaSheet, String> item;
 
     @FXML
-    private TableColumn<BOM, String> material;
+    private TableColumn<CatiaSheet, String> designation;
 
     @FXML
-    private TableColumn<BOM, String> weight;
+    private TableColumn<CatiaSheet, String> documentNo;
+
+    @FXML
+    public TableColumn<CatiaSheet, String> version;
+
+    @FXML
+    public TableColumn<CatiaSheet, String> lastHeaderDate;
+
+    @FXML
+    public TableColumn<CatiaSheet, String> lastHeaderChange;
 
     @FXML
     Button imgButton;
@@ -78,17 +87,18 @@ public class Controller implements Initializable{
 
     CatiaSheet mainPdf = null;
 
+    List<CatiaSheet> subpartsCatiaSheetList = new ArrayList<>();;
 
-    List<CatiaSheet> subpartsCatiaSheetList;
-    List<String> subpartsPdfAbsolutePathsList;
+    FileChooser fc = new FileChooser();
 
-    ObservableList<BOM> l;
+    ObservableList<CatiaSheet> l;
+
+    public void changeController(Event event) throws IOException {
+
+    }
 
     @Override
     public void initialize(URL arg0, ResourceBundle arg1) {
-        subpartsCatiaSheetList = new ArrayList<>();
-        subpartsPdfAbsolutePathsList = new ArrayList<>();
-
 
 
 
@@ -101,22 +111,26 @@ public class Controller implements Initializable{
 
     public void createTable(){
 
-        item.setCellValueFactory(new PropertyValueFactory<>("item"));
+//        item.setCellValueFactory(new PropertyValueFactory<>("item"));
 
         designation.setCellValueFactory(new PropertyValueFactory<>("designation"));
 
-        drawingNo.setCellValueFactory(new PropertyValueFactory<>("drawingNo"));
+        documentNo.setCellValueFactory(new PropertyValueFactory<>("documentNo"));
 
-        material.setCellValueFactory(new PropertyValueFactory<>("material"));
+        version.setCellValueFactory(new PropertyValueFactory<>("version"));
 
-        weight.setCellValueFactory(new PropertyValueFactory<>("weight"));
+        lastHeaderDate.setCellValueFactory(new PropertyValueFactory<>("lastHeaderDate"));
 
+        lastHeaderChange.setCellValueFactory(new PropertyValueFactory<>("lastHeaderChange"));
 //        tableView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
         tableView.setItems(l);
+
+
+//        tableView.setItems(ll);
     }
 
     public void createHeaderFooter(){
-        CatiaComment h = mainPdf.header.get(mainPdf.header.size()-1);
+        CatiaComment h = mainPdf.geLastVersionHeader();
 
         verziaTextField.setText(h.version);
         komentTextArea.setText(h.changes);
@@ -127,31 +141,18 @@ public class Controller implements Initializable{
 
     @FXML
     void loadMainPdf(ActionEvent event) {
-        FileChooser fc = new FileChooser();
-        fc.setInitialDirectory(new File("D:\\MatFyz\\V_SEMESTER\\BOGE\\form-versions\\src"));
+        fc.setTitle("Choose the main PDF file");
+        fc.setInitialDirectory(new File("C:\\3AIN\\TIS\\GITHAB\\form-versions\\src\\pdfka"));
         File selectedFile = fc.showOpenDialog(null);
 
         if (selectedFile != null){
-            System.out.println(selectedFile);
             try {
 
                 mainPdf = PDFParser.parseFile(String.valueOf(selectedFile));
-                l = FXCollections.observableArrayList(mainPdf.items);
-                l.addAll(
-                        new BOM("adas","asdas","faonpas","aisfnoasnfoias","oa"),
-                        new BOM("adas","asdas","faonpas","aisfnoasnfoias","oa"),
-                new BOM("adas","asdas","faonpas","aisfnoasnfoias","oa"),
-                new BOM("adas","asdas","faonpas","aisfnoasnfoias","oa"),
-                new BOM("adas","asdas","faonpas","aisfnoasnfoias","oa"),
-                new BOM("adas","asdas","faonpas","aisfnoasnfoias","oa"),
-                new BOM("adas","asdas","faonpas","aisfnoasnfoias","oa"),
-                        new BOM("adas","asdas","faonpas","aisfnoasnfoias","oa"),
-                        new BOM("adas","asdas","faonpas","aisfnoasnfoias","oa"),
-                        new BOM("adas","asdas","faonpas","aisfnoasnfoias","oa"),
-                        new BOM("adas","asdas","faonpas","aisfnoasnfoias","oa")
-                );
-                createTable();
-                createHeaderFooter();
+
+
+                loadSubpartPdf(event);
+
 
             } catch (Exception e) {
                 e.printStackTrace();
@@ -163,7 +164,47 @@ public class Controller implements Initializable{
     @FXML
     void loadSubpartPdf(ActionEvent event) {
 
+        fc.setTitle("Choose the subpart PDF files");
+        fc.setInitialDirectory(new File("C:\\3AIN\\TIS\\GITHAB\\form-versions\\src\\pdfka"));
+
+
+        List<File> listPathov = fc.showOpenMultipleDialog(null);
+
+        if (listPathov != null){
+            listPathov.forEach(item ->{
+                try {
+                    subpartsCatiaSheetList.add(PDFParser.parseFile(item.toString()));
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            });
+            l = FXCollections.observableArrayList(subpartsCatiaSheetList);
+//            System.out.println(subpartsCatiaSheetList);
+
+
+        }
+
+        else System.out.println("Failed to load");
+
+//        setBOMInfoKomponent();
+        createTable();
+        createHeaderFooter();
+
+
+
     }
+
+//    void setBOMInfoKomponent(){ //tu nastavujem verziu konkretneho itemu podla pridanych pdfiek
+//        for (BOM b : mainPdf.getItems()){
+//            for (CatiaSheet cs : subpartsCatiaSheetList){
+//                if (b.drawingNo.equals(cs.documentNo)){
+//
+//                }
+//            }
+//        }
+
+//    }
 
     public void showImage(ActionEvent actionEvent) {
         Image image = Clipboard.getSystemClipboard().getImage();
@@ -214,4 +255,23 @@ public class Controller implements Initializable{
             }
         });
     }
+
+    public void login(ActionEvent actionEvent) throws IOException {
+
+    }
+
+    public boolean check() throws IOException {
+        FileInputStream fis = new FileInputStream("C:\\3AIN\\TIS\\GITHAB\\form-versions\\userid\\userlogin");
+        String data = IOUtils.toString(fis, StandardCharsets.UTF_8);
+
+        if (!data.equals("")){
+            return true;
+        }
+        else {
+            userid.setText(data);
+            return true;
+        }
+    }
+
+
 }

@@ -1,11 +1,8 @@
-import com.sun.xml.internal.messaging.saaj.util.ByteInputStream;
 import javafx.scene.image.Image;
 
 import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
 import java.awt.image.RenderedImage;
 import java.io.*;
-import java.nio.file.Files;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -13,6 +10,8 @@ import java.util.List;
 
 public class CatiaSheet {
     public List<CatiaComment> header = new ArrayList<>();
+    public String lastHeaderChange = "";
+    public String lastHeaderDate = "";
     public String material = "";
     public String surfaceProtection = "";
     public String calculatedMass = "";
@@ -117,6 +116,8 @@ public class CatiaSheet {
                 line = new ArrayList<>(Arrays.asList(lines.get(index).split("\\s+")));
             }
         }
+        lastHeaderChange = header.get(header.size()-1).changes;
+        lastHeaderDate = header.get(header.size()-1).releaseDate;
     }
 
     //TODO ked bude gui, tak pridat nahravanie obrazku
@@ -170,6 +171,10 @@ public class CatiaSheet {
             case "735": return "serial";
         }
         return "null";
+    }
+
+    public CatiaComment geLastVersionHeader(){
+        return header.get(header.size()-1);
     }
 
     public List<CatiaComment> getHeader() {
@@ -338,6 +343,22 @@ public class CatiaSheet {
 
     public void setItems(List<BOM> items) {
         this.items = items;
+    }
+
+    public String getLastHeaderChange() {
+        return lastHeaderChange;
+    }
+
+    public void setLastHeaderChange(String lastHeaderChange) {
+        this.lastHeaderChange = lastHeaderChange;
+    }
+
+    public String getLastHeaderDate() {
+        return lastHeaderDate;
+    }
+
+    public void setLastHeaderDate(String lastHeaderDate) {
+        this.lastHeaderDate = lastHeaderDate;
     }
 
     public void print() {
