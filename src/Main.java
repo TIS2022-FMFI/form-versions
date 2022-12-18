@@ -18,7 +18,6 @@ public class Main extends Application {
             if (connection != null) {
                 DbContext.setConnection(connection);
 
-                CatiaSheet cs = PDFParser.parseFile("src/cat3.pdf");
 
 
             } else {
@@ -35,7 +34,7 @@ public class Main extends Application {
     }
     @Override
     public void start(Stage stage) throws Exception {
-        Parent root = FXMLLoader.load(getClass().getResource("versionOne.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("xmlka/versionOne.fxml"));
         stage.setTitle("BogeParser");
         stage.setScene(new Scene(root));
         stage.show();
