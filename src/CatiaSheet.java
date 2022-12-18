@@ -1,6 +1,11 @@
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
+import com.sun.xml.internal.messaging.saaj.util.ByteInputStream;
+import javafx.scene.image.Image;
+
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.awt.image.RenderedImage;
+import java.io.*;
+import java.nio.file.Files;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -28,6 +33,17 @@ public class CatiaSheet {
     public String documentNo = "";
     public String version = "";
     public List<BOM> items = new ArrayList<>();
+
+    public List<String> parents;
+    public Image image;
+
+    public CatiaSheet(String dn, String vs, String dt, List<CatiaComment> cm, Image im) {
+        version = vs;
+        documentNo = dn;
+        generated = dt;
+        header = cm;
+        image = im;
+    }
 
     public CatiaSheet(List<String> lines) {
         int index = lines.indexOf("Toleranzenangaben / Tolerances data");
@@ -105,23 +121,39 @@ public class CatiaSheet {
 
     //TODO ked bude gui, tak pridat nahravanie obrazku
     public void insertIntoPart() throws SQLException {
-        try (PreparedStatement s = DbContext.getConnection().prepareStatement("INSERT INTO part (part_id, type, date, comment, image) VALUES (?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS)) {
-            s.setString(1, this.documentNo + this.version);
-            s.setString(2, getType());
-            s.setDate(3, parseDate(this.header.get(header.size()-1).releaseDate));
-            s.setString(4, this.header.get(header.size()-1).changes);
-            File img = new File("src/img.png");
-            s.setBlob(5, new FileInputStream(img));
-            s.executeUpdate();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
+        DatabaseChange dc = new DatabaseChange("1111", "Uploaded " + documentNo + version + " to the database", new Timestamp(System.currentTimeMillis()));
+        dc.insert();
+        try {
+            File outputfile = new File("saved.jpg");
+            ImageIO.write((RenderedImage) image, "jpg", outputfile);
+
+            try (PreparedStatement s = DbContext.getConnection().prepareStatement("INSERT INTO part (part_id, type, date, comment, image) VALUES (?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS)) {
+                s.setString(1, this.documentNo + this.version);
+                s.setString(2, getType());
+                s.setDate(3, parseDate(this.header.get(header.size()-1).releaseDate));
+                s.setString(4, this.header.get(header.size()-1).changes);
+                s.setBlob(5, new FileInputStream(new File("saved.jpg")));
+                s.executeUpdate();
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+
+            outputfile.delete();
+
+        } catch (IOException ignored) {
         }
+
+
+
+
     }
 
     public void insertIntoBom(String bomid) throws SQLException {
+        DatabaseChange dc = new DatabaseChange("1111", "Assigned " + documentNo + version + " to " + bomid, new Timestamp(System.currentTimeMillis()));
+        dc.insert();
         try (PreparedStatement s = DbContext.getConnection().prepareStatement("INSERT INTO bom (part_id, bom_id) VALUES (?,?)", Statement.RETURN_GENERATED_KEYS)) {
-            s.setString(1, this.documentNo);
-            s.setString(2, bomid);
+            s.setString(2, this.documentNo);
+            s.setString(1, bomid);
             s.executeUpdate();
         }
     }
@@ -352,5 +384,21 @@ public class CatiaSheet {
             System.out.println("Items:");
             items.forEach(BOM::print);
         }
+    }
+
+    public List<String> getParents() {
+        return parents;
+    }
+
+    public void setParents(List<String> parents) {
+        this.parents = parents;
+    }
+
+    public Image getImage() {
+        return image;
+    }
+
+    public void setImage(Image image) {
+        this.image = image;
     }
 }
