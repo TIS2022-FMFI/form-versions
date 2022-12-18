@@ -160,7 +160,7 @@ public class UploadPdfController implements Initializable {
     }
 
     public void createHeaderFooter(){
-        CatiaComment h = mainPdf.geLastVersionHeader();
+        CatiaComment h = mainPdf.getLastVersionHeader();
 
         verziaTextField.setText(h.version);
         komentTextArea.setText(h.changes);
@@ -242,14 +242,14 @@ public class UploadPdfController implements Initializable {
     }
 
     //TODO checkovanie ci subpart nema dalsi part
-    public void insert() throws SQLException {
+    public void insert() throws SQLException, IOException {
 
         findParents(); // adds the parent-child connections
 
         mainPdf.setImage(imageShowcase.getImage());
         mainPdf.insertIntoPart(); // inserts the main pdf
 
-        subpartsCatiaSheetList.forEach(cs -> { // inserts the parent-child connections
+        l.forEach(cs -> { // inserts the parent-child connections
             if (!cs.parents.isEmpty()) {
                 cs.parents.forEach(parent -> {
                     try {
@@ -259,17 +259,22 @@ public class UploadPdfController implements Initializable {
                     }
                 });
             }
+            try {
+                cs.insertIntoBom(mainPdf.documentNo);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
 
             try {
                 cs.insertIntoPart(); // inserts the subpart itself
-            } catch (SQLException e) {
+            } catch (SQLException | IOException e) {
                 e.printStackTrace();
             }
         });
     }
 
     public void findParents() {
-        subpartsCatiaSheetList.forEach(catiaSheet -> {
+        l.forEach(catiaSheet -> {
             if (!catiaSheet.items.isEmpty()) {
                 catiaSheet.items.forEach(it -> {
                     addParent(catiaSheet.documentNo, it.drawingNo);
@@ -279,8 +284,9 @@ public class UploadPdfController implements Initializable {
     }
 
     public void addParent(String parent, String child) {
-        subpartsCatiaSheetList.forEach(catiaSheet -> {
+        l.forEach(catiaSheet -> {
             if (catiaSheet.documentNo.equals(child)) {
+                System.out.println(parent);
                 catiaSheet.parents.add(parent);
             }
         });

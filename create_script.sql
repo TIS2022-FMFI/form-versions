@@ -23,7 +23,7 @@ create table part
     id int auto_increment,
     part_id varchar(20) not null,
     type varchar(20) not null,
-    date date not null,
+    date varchar(30) not null,
     comment varchar(250) null,
     image longblob null,
     constraint part_id_uindex
@@ -38,7 +38,7 @@ create table dvp
     id int auto_increment
         primary key,
     part_id int null,
-    date date not null,
+    date varchar(30) not null,
     aa varchar(100) null,
     constraint dvp_ibfk_1
         foreign key (part_id) references part (id)
