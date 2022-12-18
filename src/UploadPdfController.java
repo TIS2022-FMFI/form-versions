@@ -12,6 +12,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -21,6 +22,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.Clipboard;
@@ -39,10 +41,10 @@ public class UploadPdfController implements Initializable {
     public TextField releaseTextField;
 
     @FXML
-    public TextField docNo;
+    public TextField docNoTextField;
 
     @FXML
-    public TextField devFrom;
+    public TextField devFromTextField;
 
     @FXML
     public ImageView imageShowcase;
@@ -61,6 +63,9 @@ public class UploadPdfController implements Initializable {
 
     @FXML
     private TableView<CatiaSheet> tableView;
+
+    @FXML
+    private TableColumn<CatiaSheet, String> item;
 
     @FXML
     private TableColumn<CatiaSheet, String> designation;
@@ -90,11 +95,12 @@ public class UploadPdfController implements Initializable {
 
     ObservableList<CatiaSheet> l;
 
+
     @Override
     public void initialize(URL arg0, ResourceBundle arg1) {
 
 
-
+    tableView.setEditable(true);
 //        imgButton.setOnAction( event -> {
 //
 //            //testing ci funguje z clipboardu image
@@ -104,15 +110,48 @@ public class UploadPdfController implements Initializable {
 
     public void createTable(){
 
+//        item.setCellValueFactory(new PropertyValueFactory<>("item"));
+
         designation.setCellValueFactory(new PropertyValueFactory<>("designation"));
+        designation.setCellFactory(TextFieldTableCell.forTableColumn());
+        designation.setOnEditCommit(catiaSheetStringCellEditEvent -> {
+            CatiaSheet c = catiaSheetStringCellEditEvent.getRowValue();
+            c.setDesignation(catiaSheetStringCellEditEvent.getNewValue());
+
+            subpartsCatiaSheetList.forEach(e ->{
+                System.out.println(e.designation);
+            });
+                System.out.println(docNoTextField.getText());
+        });
 
         documentNo.setCellValueFactory(new PropertyValueFactory<>("documentNo"));
+        documentNo.setCellFactory(TextFieldTableCell.forTableColumn());
+        documentNo.setOnEditCommit(catiaSheetStringCellEditEvent -> {
+            CatiaSheet c = catiaSheetStringCellEditEvent.getRowValue();
+            c.setDocumentNo(catiaSheetStringCellEditEvent.getNewValue());
+        });
 
         version.setCellValueFactory(new PropertyValueFactory<>("version"));
+        version.setCellFactory(TextFieldTableCell.forTableColumn());
+        version.setOnEditCommit(catiaSheetStringCellEditEvent -> {
+            CatiaSheet c = catiaSheetStringCellEditEvent.getRowValue();
+            c.setVersion(catiaSheetStringCellEditEvent.getNewValue());
+        });
 
         lastHeaderDate.setCellValueFactory(new PropertyValueFactory<>("lastHeaderDate"));
+        lastHeaderDate.setCellFactory(TextFieldTableCell.forTableColumn());
+        lastHeaderDate.setOnEditCommit(catiaSheetStringCellEditEvent -> {
+            CatiaSheet c = catiaSheetStringCellEditEvent.getRowValue();
+            c.setLastHeaderDate(catiaSheetStringCellEditEvent.getNewValue());
+        });
+
 
         lastHeaderChange.setCellValueFactory(new PropertyValueFactory<>("lastHeaderChange"));
+        lastHeaderChange.setCellFactory(TextFieldTableCell.forTableColumn());
+        lastHeaderChange.setOnEditCommit(catiaSheetStringCellEditEvent -> {
+            CatiaSheet c = catiaSheetStringCellEditEvent.getRowValue();
+            c.setLastHeaderChange(catiaSheetStringCellEditEvent.getNewValue());
+        });
 //        tableView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
         tableView.setItems(l);
 
@@ -121,19 +160,19 @@ public class UploadPdfController implements Initializable {
     }
 
     public void createHeaderFooter(){
-        CatiaComment h = mainPdf.geLastVersionHeader();
+        CatiaComment h = mainPdf.getLastVersionHeader();
 
         verziaTextField.setText(h.version);
         komentTextArea.setText(h.changes);
         releaseTextField.setText(h.releaseDate);
-        docNo.setText(mainPdf.documentNo);
-        devFrom.setText(mainPdf.developedFromDocument);
+        docNoTextField.setText(mainPdf.documentNo);
+        devFromTextField.setText(mainPdf.developedFromDocument);
     }
 
     @FXML
     void loadMainPdf(ActionEvent event) {
         fc.setTitle("Choose the main PDF file");
-        fc.setInitialDirectory(new File("D:\\MatFyz\\V_SEMESTER\\BOGE\\form-versions\\src\\pdfka"));
+        fc.setInitialDirectory(new File("C:\\3AIN\\TIS\\GITHAB\\form-versions\\src\\pdfka"));
         File selectedFile = fc.showOpenDialog(null);
 
         if (selectedFile != null){
@@ -156,7 +195,7 @@ public class UploadPdfController implements Initializable {
     void loadSubpartPdf(ActionEvent event) {
 
         fc.setTitle("Choose the subpart PDF files");
-        fc.setInitialDirectory(new File("D:\\MatFyz\\V_SEMESTER\\BOGE\\form-versions\\src\\pdfka"));
+        fc.setInitialDirectory(new File("C:\\3AIN\\TIS\\GITHAB\\form-versions\\src\\pdfka"));
 
 
         List<File> listPathov = fc.showOpenMultipleDialog(null);
@@ -269,6 +308,5 @@ public class UploadPdfController implements Initializable {
             return true;
         }
     }
-
 
 }

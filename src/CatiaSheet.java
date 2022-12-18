@@ -122,6 +122,7 @@ public class CatiaSheet {
         lastHeaderDate = header.get(header.size()-1).releaseDate;
     }
 
+
     //TODO ked bude gui, tak pridat nahravanie obrazku
     public void insertIntoPart() throws SQLException, IOException {
         DatabaseChange dc = new DatabaseChange("1111", "Uploaded " + documentNo + version + " to the database", new Timestamp(System.currentTimeMillis()));
@@ -137,8 +138,8 @@ public class CatiaSheet {
             try (PreparedStatement s = DbContext.getConnection().prepareStatement("INSERT INTO part (part_id, type, date, comment, image) VALUES (?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS)) {
                 s.setString(1, this.documentNo + this.version);
                 s.setString(2, getType());
-                s.setString(3, this.header.get(header.size()-1).releaseDate);
-                s.setString(4, this.header.get(header.size()-1).changes);
+                s.setString(3, getLastVersionHeader().releaseDate);
+                s.setString(4, getLastVersionHeader().changes);
                 s.setBytes(5, bytes);
                 s.executeUpdate();
             }
@@ -146,8 +147,8 @@ public class CatiaSheet {
             try (PreparedStatement s = DbContext.getConnection().prepareStatement("INSERT INTO part (part_id, type, date, comment) VALUES (?,?,?,?)", Statement.RETURN_GENERATED_KEYS)) {
                 s.setString(1, this.documentNo + this.version);
                 s.setString(2, getType());
-                s.setString(3, this.header.get(header.size()-1).releaseDate);
-                s.setString(4, this.header.get(header.size()-1).changes);
+                s.setString(3, getLastVersionHeader().releaseDate);
+                s.setString(4, getLastVersionHeader().changes);
                 s.executeUpdate();
             }
         }
@@ -181,7 +182,7 @@ public class CatiaSheet {
         return "null";
     }
 
-    public CatiaComment geLastVersionHeader(){
+    public CatiaComment getLastVersionHeader(){
         return header.get(header.size()-1);
     }
 
