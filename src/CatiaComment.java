@@ -8,6 +8,11 @@ public class CatiaComment {
     public String releaseDate = "";
     public String released = "";
 
+    public CatiaComment(String chng) {
+        changes = chng;
+    }
+
+
     CatiaComment(List<String> input) {
         int i = 0;
         version = input.get(i++);

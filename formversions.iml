@@ -18,5 +18,17 @@
         <SOURCES />
       </library>
     </orderEntry>
+    <orderEntry type="library" name="poi-bin-5.2" level="project" />
+    <orderEntry type="library" name="poi-ooxml-full-5.2.3" level="project" />
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="file://$MODULE_DIR$/lib/poi-bin-5.2.3-20220909/poi-bin-5.2.3" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+        <jarDirectory url="file://$MODULE_DIR$/lib/poi-bin-5.2.3-20220909/poi-bin-5.2.3" recursive="false" />
+      </library>
+    </orderEntry>
   </component>
 </module>
