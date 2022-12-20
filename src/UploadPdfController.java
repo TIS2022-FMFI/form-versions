@@ -163,7 +163,7 @@ public class UploadPdfController implements Initializable {
     @FXML
     void loadMainPdf(ActionEvent event) {
         fc.setTitle("Choose the main PDF file");
-        fc.setInitialDirectory(new File("C:\\3AIN\\TIS\\GITHAB\\form-versions\\src\\pdfka"));
+        fc.setInitialDirectory(new File("src\\pdfka"));
         File selectedFile = fc.showOpenDialog(null);
 
         if (selectedFile != null) {
@@ -186,7 +186,7 @@ public class UploadPdfController implements Initializable {
     void loadSubpartPdf(ActionEvent event) {
 
         fc.setTitle("Choose the subpart PDF files");
-        fc.setInitialDirectory(new File("C:\\3AIN\\TIS\\GITHAB\\form-versions\\src\\pdfka"));
+        fc.setInitialDirectory(new File("src\\pdfka"));
 
 
         List<File> listPathov = fc.showOpenMultipleDialog(null);
@@ -237,7 +237,7 @@ public class UploadPdfController implements Initializable {
                 });
             }
             try {
-                cs.insertIntoBom(mainPdf.documentNo, user.getName());
+                cs.insertIntoBom(mainPdf.documentNo+mainPdf.version, user.getName());
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -255,7 +255,7 @@ public class UploadPdfController implements Initializable {
         subpartsCatiaSheetList.forEach(catiaSheet -> {
             if (!catiaSheet.items.isEmpty()) {
                 catiaSheet.items.forEach(it -> {
-                    addParent(catiaSheet.documentNo, it.drawingNo);
+                    addParent(catiaSheet.documentNo+catiaSheet.version, it.drawingNo);
                 });
             }
         });
