@@ -107,7 +107,10 @@ public class DVPParser {
 
     public static void createTestObjects(){
         for(int row = first_row; row<all_cell.size(); row++){
-            tests.add(new Test(all_cell, row));
+            Test test = new Test(all_cell, row);
+            if(test.getTest_results().size() > 0) {
+                tests.add(test);
+            }
         }
     }
 
