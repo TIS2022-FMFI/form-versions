@@ -9,6 +9,7 @@ import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -18,7 +19,7 @@ import java.util.*;
 public class DVPParser {
     private static XSSFSheet sheet;
     private static List<CellRangeAddress> mergedRegions;
-    private static List<List<XSSFCell>> all_cell;
+    private static List<List<XSSFCell>> all_cell = new ArrayList<>();
     private static int first_row = 8;
     static List<Test> tests = new ArrayList<>();
 
@@ -63,39 +64,42 @@ public class DVPParser {
     }
 
 
-    public static void readXLSXFile(String file) throws IOException{
+    public static void readXLSXFile(String path) throws IOException{
+        File f = new File(path);
+        if(f.exists() && !f.isDirectory()) {
+            InputStream ExcelFileToRead = new FileInputStream(path);
+            XSSFWorkbook wb = new XSSFWorkbook(ExcelFileToRead);
 
-        InputStream ExcelFileToRead = new FileInputStream(file);
-        XSSFWorkbook wb = new XSSFWorkbook(ExcelFileToRead);
 
-
-        if(wb.getSheet("DVP internal") != null){
-            sheet = wb.getSheet("DVP internal");
-        }
-        else if(wb.getSheet("DVP") != null){
-            sheet = wb.getSheet("DVP");
-        }
-
-        XSSFRow row;
-        XSSFCell cell;
-
-        Iterator rows = sheet.rowIterator();
-        all_cell = new ArrayList<>();
-        mergedRegions = sheet.getMergedRegions();
-
-        while (rows.hasNext()){
-            row = (XSSFRow) rows.next();
-
-            Iterator cells = row.cellIterator();
-            List<XSSFCell> cell_list = new ArrayList<>();
-            all_cell.add(cell_list);
-
-            while (cells.hasNext()){
-                cell = (XSSFCell) cells.next();
-                add_cell(cell);
-
+            if (wb.getSheet("DVP internal") != null) {
+                sheet = wb.getSheet("DVP internal");
+            } else if (wb.getSheet("DVP") != null) {
+                sheet = wb.getSheet("DVP");
             }
+            if (sheet != null) {
+                XSSFRow row;
+                XSSFCell cell;
 
+                Iterator rows = sheet.rowIterator();
+                //all_cell = new ArrayList<>();
+                mergedRegions = sheet.getMergedRegions();
+
+                while (rows.hasNext()) {
+                    row = (XSSFRow) rows.next();
+
+                    Iterator cells = row.cellIterator();
+                    List<XSSFCell> cell_list = new ArrayList<>();
+                    all_cell.add(cell_list);
+
+                    while (cells.hasNext()) {
+                        cell = (XSSFCell) cells.next();
+                        add_cell(cell);
+
+                    }
+
+                }
+                createTestObjects();
+            }
         }
 
 
@@ -114,10 +118,8 @@ public class DVPParser {
     }
 
     public static void main(String[] args) throws IOException {
-        readXLSXFile("src/DVP_template_empty.xlsx");
-        createTestObjects();
-        print_all_tests();
-
+            readXLSXFile("src/excely/DVP_template_empty.xlsx");
+            print_all_tests();
     }
 
 
