@@ -7,6 +7,7 @@ import javafx.stage.Stage;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.Objects;
 
 public class Main extends Application {
     public static void main(String[] args) {
@@ -37,7 +38,7 @@ public class Main extends Application {
     public void start(Stage stage) throws Exception {
         User u = new User();
 
-        Parent root = FXMLLoader.load(getClass().getResource("xmlka/versionOne.fxml"));
+        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("xmlka/versionOne.fxml")));
         stage.setTitle("BogeParser " + "(Logged in as " + u.getName() + ")");
         stage.setScene(new Scene(root));
         stage.show();
