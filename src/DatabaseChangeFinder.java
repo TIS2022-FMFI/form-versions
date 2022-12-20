@@ -21,7 +21,7 @@ public class DatabaseChangeFinder {
     }
 
     public List<DatabaseChange> findAll() throws SQLException {
-        try (PreparedStatement s = DbContext.getConnection().prepareStatement("SELECT * FROM db_log")) {
+        try (PreparedStatement s = DbContext.getConnection().prepareStatement("SELECT * FROM db_log ORDER BY time DESC")) {
             try (ResultSet r = s.executeQuery()) {
                 List<DatabaseChange> elements = new ArrayList<>();
                 while (r.next()) {

@@ -46,22 +46,25 @@ public class UploadPdfController implements Initializable {
     public TextField devFromTextField;
 
     @FXML
-    public ImageView imageShowcase;
+    public ImageView imageShowcase = new ImageView();
 
     @FXML
     public Button mainPdfButton;
 
     @FXML
-    public Button subpartPdf;
+    public Button subpartPdf = new Button();
 
     @FXML
-    public Button inserToDB;
+    public Button inserToDB = new Button();
 
     @FXML
-    public Button clearAllElements;
+    public Button clearAllElements = new Button();
 
     @FXML
-    private TableView<CatiaSheet> tableView;
+    public TextField designationMainPdfTextField;
+
+    @FXML
+    private TableView<CatiaSheet> tableView = new TableView<>();
 
     @FXML
     private TableColumn<CatiaSheet, String> designation;
@@ -152,6 +155,7 @@ public class UploadPdfController implements Initializable {
         if (mainPdf != null) {
             CatiaComment h = mainPdf.getLastVersionHeader();
 
+            designationMainPdfTextField.setText(mainPdf.designation);
             verziaTextField.setText(h.version);
             komentTextArea.setText(h.changes);
             releaseTextField.setText(h.releaseDate);
@@ -257,6 +261,7 @@ public class UploadPdfController implements Initializable {
 
         createTable();
 
+        designationMainPdfTextField.setText("");
         verziaTextField.setText("");
         komentTextArea.setText("");
         releaseTextField.setText("");
