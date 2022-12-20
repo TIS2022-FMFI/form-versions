@@ -225,33 +225,13 @@ public class UploadPdfController implements Initializable {
     //TODO checkovanie ci subpart nema dalsi part
     public void insert() throws SQLException, IOException {
 
+        updateMainPdfFromFrontend();
         findParents(); // adds the parent-child connections
 
-        mainPdf.setImage(imageShowcase.getImage());
-        mainPdf.insertIntoPart(user.getName()); // inserts the main pdf
 
-        subpartsCatiaSheetList.forEach(cs -> { // inserts the parent-child connections
-            if (!cs.parents.isEmpty()) {
-                cs.parents.forEach(parent -> {
-                    try {
-                        cs.insertIntoBom(parent, user.getName());
-                    } catch (SQLException e) {
-                        e.printStackTrace();
-                    }
-                });
-            }
-            try {
-                cs.insertIntoBom(mainPdf.documentNo+mainPdf.version, user.getName());
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+        DatabaseTransactions dbt = new DatabaseTransactions();
+        dbt.insertPart(mainPdf, user.getName(), subpartsCatiaSheetList);
 
-            try {
-                cs.insertIntoPart(user.getName()); // inserts the subpart itself
-            } catch (SQLException | IOException e) {
-                e.printStackTrace();
-            }
-        });
         clearAll();
     }
 
@@ -268,7 +248,6 @@ public class UploadPdfController implements Initializable {
     public void addParent(String parent, String child) {
         subpartsCatiaSheetList.forEach(catiaSheet -> {
             if (catiaSheet.documentNo.equals(child)) {
-                System.out.println(parent);
                 catiaSheet.parents.add(parent);
             }
         });
@@ -292,4 +271,22 @@ public class UploadPdfController implements Initializable {
         clearAllElements.setDisable(true);
         subpartPdf.setDisable(true);
     }
+
+    public void updateMainPdfFromFrontend() {
+
+
+        //adds image from frontend
+        mainPdf.setImage(imageShowcase.getImage());
+
+        // changes the values in mainpdf instance from the frontend text boxes
+        mainPdf.version = verziaTextField.getText();
+        mainPdf.documentNo = docNoTextField.getText();
+        mainPdf.setLastHeaderDate(releaseTextField.getText());
+        mainPdf.setLastHeaderChange(komentTextArea.getText());
+        mainPdf.developedFromDocument = devFromTextField.getText();
+        mainPdf.designation = designationMainPdfTextField.getText();
+
+    }
+
+
 }
