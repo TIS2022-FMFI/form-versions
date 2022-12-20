@@ -38,12 +38,14 @@ public class CatiaSheet {
     public List<String> parents = new ArrayList<String>();
     public Image image;
 
-    public CatiaSheet(String dn, String vs, String dt, List<CatiaComment> cm, Image im) {
+    public CatiaSheet(String dn, String vs, String dt, List<CatiaComment> cm, Image im, String nm, String dvp) {
         version = vs;
         documentNo = dn;
         generated = dt;
         header = cm;
         image = im;
+        designation = nm;
+        developedFromDocument = dvp;
     }
 
     public CatiaSheet(List<String> lines) {
@@ -125,36 +127,63 @@ public class CatiaSheet {
 
     //TODO ked bude gui, tak pridat nahravanie obrazku
     public void insertIntoPart(String uid) throws SQLException, IOException {
-        DatabaseChange dc = new DatabaseChange(uid, "Uploaded " + documentNo + version + " to the database", new Timestamp(System.currentTimeMillis()));
-        dc.insert();
-        System.out.println(image);
-        if (image != null) {
-            BufferedImage bImage = SwingFXUtils.fromFXImage(image, null);
 
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            ImageIO.write(bImage, "png", baos);
-            byte[] bytes = baos.toByteArray();
+        if (!checkIfExistsInDatabase(this.documentNo+this.version)) {
 
-            try (PreparedStatement s = DbContext.getConnection().prepareStatement("INSERT INTO part (part_id, type, date, comment, image) VALUES (?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS)) {
-                s.setString(1, this.documentNo + this.version);
-                s.setString(2, getType());
-                s.setString(3, getLastHeaderDate());
-                s.setString(4, getLastHeaderChange());
-                s.setBytes(5, bytes);
-                s.executeUpdate();
-            }
+            editInDatabase(uid);
+
         } else {
-            try (PreparedStatement s = DbContext.getConnection().prepareStatement("INSERT INTO part (part_id, type, date, comment) VALUES (?,?,?,?)", Statement.RETURN_GENERATED_KEYS)) {
-                s.setString(1, this.documentNo + this.version);
-                s.setString(2, getType());
-                s.setString(3, getLastHeaderDate());
-                s.setString(4, getLastHeaderChange());
-                s.executeUpdate();
-            }
+            DatabaseChange dc = new DatabaseChange(uid, "Uploaded " + documentNo + version + " to the database", new Timestamp(System.currentTimeMillis()));
+            dc.insert();
+
+                try (PreparedStatement s = DbContext.getConnection().prepareStatement("INSERT INTO part (part_id, type, date, comment, image, developed_from, name) VALUES (?,?,?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS)) {
+                    s.setString(1, this.documentNo + this.version);
+                    s.setString(2, getType());
+                    s.setString(3, getLastHeaderDate());
+                    s.setString(4, getLastHeaderChange());
+                    s.setBytes(5, null);
+                    if (image != null) {
+                        BufferedImage bImage = SwingFXUtils.fromFXImage(image, null);
+                        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                        ImageIO.write(bImage, "png", baos);
+                        byte[] bytes = baos.toByteArray();
+                        s.setBytes(5, bytes);
+                    }
+                    s.setString(7, this.designation);
+                    s.setString(6, this.developedFromDocument);
+                    s.executeUpdate();
+                }
+
         }
 
 
 
+
+    }
+
+    public void editInDatabase(String uid) throws SQLException, IOException {
+        DatabaseChange dc = new DatabaseChange(uid, "Edited " + documentNo + version + " in the database", new Timestamp(System.currentTimeMillis()));
+        dc.insert();
+
+
+
+            try (PreparedStatement s = DbContext.getConnection().prepareStatement("UPDATE part SET type=?, date=?, comment=?, image=?, developed_from=?, name=? WHERE part_id = ?", Statement.RETURN_GENERATED_KEYS)) {
+                s.setString(7, this.documentNo + this.version);
+                s.setString(1, getType());
+                s.setString(2, getLastHeaderDate());
+                s.setString(3, getLastHeaderChange());
+                s.setBytes(4, null);
+                if (image != null) {
+                    BufferedImage bImage = SwingFXUtils.fromFXImage(image, null);
+                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                    ImageIO.write(bImage, "png", baos);
+                    byte[] bytes = baos.toByteArray();
+                    s.setBytes(4, bytes);
+                }
+                s.setString(6, this.designation);
+                s.setString(5, this.developedFromDocument);
+                s.executeUpdate();
+            }
 
     }
 
@@ -175,6 +204,10 @@ public class CatiaSheet {
             case "735": return "serial";
         }
         return "null";
+    }
+
+    public boolean checkIfExistsInDatabase(String id) throws SQLException {
+        return CatiaSheetFinder.getInstance().findWithId(id).size() == 0;
     }
 
     public CatiaComment getLastVersionHeader(){

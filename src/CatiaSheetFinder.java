@@ -1,4 +1,5 @@
 import javafx.embed.swing.SwingFXUtils;
+import javafx.scene.image.Image;
 
 import javax.imageio.ImageIO;
 import java.io.IOException;
@@ -31,7 +32,9 @@ public class CatiaSheetFinder {
                             r.getString(2).substring(r.getString(2).length() - 1),
                             r.getDate(4).toString(),
                             lsc,
-                            SwingFXUtils.toFXImage(ImageIO.read(r.getBlob(6).getBinaryStream()), null)
+                            SwingFXUtils.toFXImage(ImageIO.read(r.getBlob(6).getBinaryStream()), null),
+                            r.getString(8),
+                            r.getString(7)
                     );
                     elements.add(h);
                 }
@@ -45,17 +48,23 @@ public class CatiaSheetFinder {
 
     public List<CatiaSheet> findWithId(String id) throws SQLException {
         List<CatiaComment> lsc = new ArrayList<>();
+        Image img = null;
         try (PreparedStatement s = DbContext.getConnection().prepareStatement("SELECT * FROM part WHERE part_id = ?")) {
             s.setString(1, id);
             try (ResultSet r = s.executeQuery()) {
                 List<CatiaSheet> elements = new ArrayList<>();
                 while (r.next()) {
+                    if (r.getBlob(6) != null) {
+                        img = SwingFXUtils.toFXImage(ImageIO.read(r.getBlob(6).getBinaryStream()), null);
+                    }
                     CatiaSheet h = new CatiaSheet(
                             r.getString(2).substring(0, r.getString(2).length() - 1),
                             r.getString(2).substring(r.getString(2).length() - 1),
-                            r.getDate(4).toString(),
+                            r.getString(4),
                             lsc,
-                            SwingFXUtils.toFXImage(ImageIO.read(r.getBlob(6).getBinaryStream()), null)
+                            img,
+                            r.getString(8),
+                            r.getString(7)
                     );
                     elements.add(h);
                 }

@@ -1,3 +1,12 @@
+drop table if exists bom;
+drop table if exists coordinates;
+drop table if exists db_log;
+drop table if exists dvp_result;
+drop table if exists template;
+drop table if exists test_types;
+drop table if exists dvp cascade;
+drop table if exists part cascade;
+
 create table bom
 (
     id int auto_increment
@@ -26,6 +35,8 @@ create table part
     date varchar(30) not null,
     comment varchar(250) null,
     image longblob null,
+    developed_from varchar(30) null,
+    name varchar(30) null,
     constraint part_id_uindex
         unique (id)
 );
@@ -38,7 +49,7 @@ create table dvp
     id int auto_increment
         primary key,
     part_id int null,
-    date varchar(30) not null,
+    date date not null,
     aa varchar(100) null,
     constraint dvp_ibfk_1
         foreign key (part_id) references part (id)
@@ -100,4 +111,6 @@ create index dvp_id
 
 create index test_name
     on dvp_result (test_name);
+
+
 
