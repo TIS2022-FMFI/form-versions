@@ -66,6 +66,20 @@ public class CatiaSheetFinder {
         }
         return new ArrayList<CatiaSheet>();
     }
+
+    public List<String> findKiddosIds(String idParent) throws SQLException {
+        List<CatiaComment> lsc = new ArrayList<>();
+        try (PreparedStatement s = DbContext.getConnection().prepareStatement("SELECT * FROM bom WHERE part_id = ?")) {
+            s.setString(1, idParent);
+            try (ResultSet r = s.executeQuery()) {
+                List<String> elements = new ArrayList<>();
+                while (r.next()) {
+                    elements.add(r.getString(2));
+                }
+                return elements;
+            }
+        }
+    }
 }
 
 
