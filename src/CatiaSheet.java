@@ -162,15 +162,10 @@ public class CatiaSheet {
         DatabaseChange dc = new DatabaseChange(uid, "Assigned " + documentNo + version + " to " + bomid, new Timestamp(System.currentTimeMillis()));
         dc.insert();
         try (PreparedStatement s = DbContext.getConnection().prepareStatement("INSERT INTO bom (part_id, bom_id) VALUES (?,?)", Statement.RETURN_GENERATED_KEYS)) {
-            s.setString(2, this.documentNo);
+            s.setString(2, this.documentNo+this.version);
             s.setString(1, bomid);
             s.executeUpdate();
         }
-    }
-
-    public Date parseDate(String date) {
-        System.out.println(date.split("-")[0]+"-"+date.split("-")[2]+"-"+date.split("-")[1]);
-        return Date.valueOf(date.split("-")[0]+"-"+date.split("-")[2]+"-"+date.split("-")[1]);
     }
 
     public String getType() {
