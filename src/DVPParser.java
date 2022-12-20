@@ -114,7 +114,7 @@ public class DVPParser {
     }
 
     public static void main(String[] args) throws IOException {
-        readXLSXFile("src/DVP_template_empty.xlsx");
+        readXLSXFile("src/excely/DVP_template_empty.xlsx");
         createTestObjects();
         print_all_tests();
 
