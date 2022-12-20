@@ -30,14 +30,19 @@ public class Main extends Application {
             e.printStackTrace();
 
         }
+
         launch(args);
     }
     @Override
     public void start(Stage stage) throws Exception {
+        User u = new User();
+
         Parent root = FXMLLoader.load(getClass().getResource("xmlka/versionOne.fxml"));
-        stage.setTitle("BogeParser");
+        stage.setTitle("BogeParser " + "(Logged in as " + u.getName() + ")");
         stage.setScene(new Scene(root));
         stage.show();
     }
+
+
 
 }

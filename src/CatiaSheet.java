@@ -118,26 +118,27 @@ public class CatiaSheet {
                 line = new ArrayList<>(Arrays.asList(lines.get(index).split("\\s+")));
             }
         }
-        lastHeaderChange = header.get(header.size()-1).changes;
-        lastHeaderDate = header.get(header.size()-1).releaseDate;
+        lastHeaderChange = getLastVersionHeader().changes;
+        lastHeaderDate = getLastVersionHeader().releaseDate;
     }
 
+
     //TODO ked bude gui, tak pridat nahravanie obrazku
-    public void insertIntoPart() throws SQLException, IOException {
-        DatabaseChange dc = new DatabaseChange("1111", "Uploaded " + documentNo + version + " to the database", new Timestamp(System.currentTimeMillis()));
+    public void insertIntoPart(String uid) throws SQLException, IOException {
+        DatabaseChange dc = new DatabaseChange(uid, "Uploaded " + documentNo + version + " to the database", new Timestamp(System.currentTimeMillis()));
         dc.insert();
         if (image != null) {
             BufferedImage bImage = SwingFXUtils.fromFXImage(image, null);
 
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            ImageIO.write(bImage, "jpeg", baos);
+            ImageIO.write(bImage, "png", baos);
             byte[] bytes = baos.toByteArray();
 
             try (PreparedStatement s = DbContext.getConnection().prepareStatement("INSERT INTO part (part_id, type, date, comment, image) VALUES (?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS)) {
                 s.setString(1, this.documentNo + this.version);
                 s.setString(2, getType());
-                s.setString(3, this.header.get(header.size()-1).releaseDate);
-                s.setString(4, this.header.get(header.size()-1).changes);
+                s.setString(3, getLastHeaderDate());
+                s.setString(4, getLastHeaderChange());
                 s.setBytes(5, bytes);
                 s.executeUpdate();
             }
@@ -145,8 +146,8 @@ public class CatiaSheet {
             try (PreparedStatement s = DbContext.getConnection().prepareStatement("INSERT INTO part (part_id, type, date, comment) VALUES (?,?,?,?)", Statement.RETURN_GENERATED_KEYS)) {
                 s.setString(1, this.documentNo + this.version);
                 s.setString(2, getType());
-                s.setString(3, this.header.get(header.size()-1).releaseDate);
-                s.setString(4, this.header.get(header.size()-1).changes);
+                s.setString(3, getLastHeaderDate());
+                s.setString(4, getLastHeaderChange());
                 s.executeUpdate();
             }
         }
@@ -156,8 +157,8 @@ public class CatiaSheet {
 
     }
 
-    public void insertIntoBom(String bomid) throws SQLException {
-        DatabaseChange dc = new DatabaseChange("1111", "Assigned " + documentNo + version + " to " + bomid, new Timestamp(System.currentTimeMillis()));
+    public void insertIntoBom(String bomid, String uid) throws SQLException {
+        DatabaseChange dc = new DatabaseChange(uid, "Assigned " + documentNo + version + " to " + bomid, new Timestamp(System.currentTimeMillis()));
         dc.insert();
         try (PreparedStatement s = DbContext.getConnection().prepareStatement("INSERT INTO bom (part_id, bom_id) VALUES (?,?)", Statement.RETURN_GENERATED_KEYS)) {
             s.setString(2, this.documentNo+this.version);
@@ -175,7 +176,7 @@ public class CatiaSheet {
         return "null";
     }
 
-    public CatiaComment geLastVersionHeader(){
+    public CatiaComment getLastVersionHeader(){
         return header.get(header.size()-1);
     }
 

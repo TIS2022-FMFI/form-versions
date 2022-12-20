@@ -11,8 +11,9 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.text.Font?>
 
-<SplitPane dividerPositions="0.8477157360406091" orientation="VERTICAL" prefHeight="200.0" prefWidth="160.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="UploadPdfController">
+<SplitPane dividerPositions="0.8477157360406091" orientation="VERTICAL" prefHeight="861.0" prefWidth="1209.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="UploadPdfController">
     <items>
         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="511.0" prefWidth="1238.0">
             <children>
@@ -24,7 +25,6 @@
                                     <children>
                                         <TableView fx:id="tableView" prefHeight="540.0" prefWidth="1238.0">
                                             <columns>
-                                                <TableColumn fx:id="item" prefWidth="55.0" resizable="false" text="Item" />
                                                 <TableColumn fx:id="designation" prefWidth="130.0" resizable="false" text="Designation" />
                                                 <TableColumn fx:id="documentNo" minWidth="0.0" prefWidth="135.0" resizable="false" text="Drawing No." />
                                                 <TableColumn fx:id="version" prefWidth="60.0" text="Version" />
@@ -48,7 +48,7 @@
                                 <TextField fx:id="verziaTextField" layoutX="104.0" layoutY="20.0" prefHeight="31.0" prefWidth="774.0" />
                                 <TextField fx:id="releaseTextField" layoutX="104.0" layoutY="126.0" prefHeight="31.0" prefWidth="774.0" />
                                 <TextArea fx:id="komentTextArea" layoutX="104.0" layoutY="60.0" prefHeight="53.0" prefWidth="774.0" />
-                                <ImageView fx:id="imageShowcase" fitHeight="174.0" fitWidth="207.0" layoutX="946.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true" />
+                                <ImageView fx:id="imageShowcase" fitHeight="180.0" fitWidth="207.0" layoutX="970.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true" />
                                 <Button fx:id="imgButton" alignment="CENTER" layoutX="988.0" layoutY="204.0" mnemonicParsing="false" onAction="#showImage" prefHeight="18.0" prefWidth="122.0" text="insert image" />
                             </children>
                         </AnchorPane>
@@ -59,8 +59,8 @@
                                         <InnerShadow />
                                     </effect></Label>
                                 <Label layoutX="14.0" layoutY="45.0" text="Document No." />
-                                <TextField fx:id="docNo" layoutX="129.0" layoutY="40.0" prefHeight="30.0" prefWidth="319.0" />
-                                <TextField fx:id="devFrom" layoutX="735.0" layoutY="40.0" prefHeight="31.0" prefWidth="314.0" />
+                                <TextField fx:id="docNoTextField" layoutX="129.0" layoutY="40.0" prefHeight="30.0" prefWidth="319.0" />
+                                <TextField fx:id="devFromTextField" layoutX="735.0" layoutY="40.0" prefHeight="31.0" prefWidth="314.0" />
                                 <Label layoutX="573.0" layoutY="45.0" text="Developed from Doc. " />
                             </children></AnchorPane>
                     </items>
@@ -69,9 +69,23 @@
         </AnchorPane>
         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
             <children>
-                <Button fx:id="mainPdfButton" alignment="CENTER" layoutX="129.0" layoutY="31.0" mnemonicParsing="false" onAction="#loadMainPdf" prefHeight="60.0" prefWidth="175.0" text="Upload main pdf" />
-                <Button fx:id="inserToDB" alignment="CENTER" layoutX="711.0" layoutY="12.0" mnemonicParsing="false" onAction="#insert" prefHeight="92.0" prefWidth="174.0" text="insert to database" />
-                <Button fx:id="subpartPdf" layoutX="335.0" layoutY="31.0" mnemonicParsing="false" onAction="#loadSubpartPdf" prefHeight="57.0" prefWidth="187.0" text="Upload subpart pdfs" />
+                <Button fx:id="mainPdfButton" alignment="CENTER" layoutX="317.0" layoutY="31.0" mnemonicParsing="false" onAction="#loadMainPdf" prefHeight="60.0" prefWidth="220.0" text="Upload main pdf">
+               <font>
+                  <Font size="20.0" />
+               </font></Button>
+                <Button fx:id="inserToDB" alignment="CENTER" layoutX="912.0" layoutY="31.0" mnemonicParsing="false" onAction="#insert" prefHeight="60.0" prefWidth="220.0" text="insert to database">
+               <font>
+                  <Font size="21.0" />
+               </font></Button>
+                <Button fx:id="subpartPdf" layoutX="613.0" layoutY="31.0" mnemonicParsing="false" onAction="#loadSubpartPdf" prefHeight="60.0" prefWidth="220.0" text="Upload subpart pdfs">
+               <font>
+                  <Font size="20.0" />
+               </font></Button>
+            <Button fx:id="clearAllElements" layoutX="14.0" layoutY="37.0" mnemonicParsing="false" onAction="#clearAll" prefHeight="53.0" prefWidth="122.0" text="Clear All">
+               <font>
+                  <Font size="20.0" />
+               </font>
+            </Button>
             </children>
         </AnchorPane>
     </items>
