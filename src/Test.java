@@ -52,7 +52,9 @@ public class Test {
         for(XSSFCell cell: all_cell.get(row)){
             if(cell.getCellType() != CellType.BLANK && cell.getColumnIndex()>3){
                 TestResult testResult = new TestResult(all_cell, cell);
-                test_results.add(testResult);
+                if(!testResult.getTest_result().equals("")) {
+                    test_results.add(testResult);
+                }
             }
         }
     }
