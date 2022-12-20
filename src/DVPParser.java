@@ -67,8 +67,6 @@ public class DVPParser {
     public static void readXLSXFile(String path) throws IOException{
         File f = new File(path);
         if(f.exists() && !f.isDirectory()) {
-            // do something
-
             InputStream ExcelFileToRead = new FileInputStream(path);
             XSSFWorkbook wb = new XSSFWorkbook(ExcelFileToRead);
 
