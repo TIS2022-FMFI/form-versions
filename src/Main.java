@@ -36,10 +36,9 @@ public class Main extends Application {
     }
     @Override
     public void start(Stage stage) throws Exception {
-        User u = new User();
 
         Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("xmlka/versionOne.fxml")));
-        stage.setTitle("BogeParser " + "(Logged in as " + u.getName() + ")");
+        stage.setTitle("BogeParser (Logged in as dummyString)");
         stage.setScene(new Scene(root));
         stage.show();
     }
