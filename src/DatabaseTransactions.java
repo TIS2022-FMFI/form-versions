@@ -11,20 +11,14 @@ public class DatabaseTransactions {
             mainPdf.insertIntoPart(uid); // inserts the main pdf
 
             subpartsCatiaSheetList.forEach(cs -> { // inserts the parent-child connections
-                if (!cs.parents.isEmpty()) {
-                    cs.parents.forEach(parent -> {
-                        try {
-                            cs.insertIntoBom(parent, uid);
-                        } catch (SQLException e) {
-                            e.printStackTrace();
-                        }
-                    });
-                }
-                try {
-                    cs.insertIntoBom(mainPdf.documentNo+mainPdf.version, uid);
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
+                cs.parents.forEach(parent -> {
+                    try {
+                        cs.insertIntoBom(parent, uid);
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
+                });
+
 
                 try {
                     cs.insertIntoPart(uid); // inserts the subpart itself

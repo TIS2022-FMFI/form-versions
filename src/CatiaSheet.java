@@ -58,6 +58,8 @@ public class CatiaSheet {
         developedFromDocument = dvp;
     }
 
+    public CatiaSheet() {}
+
     public CatiaSheet(List<String> lines) {
         int index = lines.indexOf("Toleranzenangaben / Tolerances data");
         if (index >= 0 && lines.get(index + 1).equals("Erstellt")) {
@@ -201,13 +203,15 @@ public class CatiaSheet {
 
     }
 
-    public void insertIntoBom(String bomid, String uid) throws SQLException {
-        DatabaseChange dc = new DatabaseChange(uid, "Assigned " + documentNo + version + " to " + bomid, new Timestamp(System.currentTimeMillis()));
-        dc.insert();
-        try (PreparedStatement s = DbContext.getConnection().prepareStatement("INSERT INTO bom (part_id, bom_id) VALUES (?,?)", Statement.RETURN_GENERATED_KEYS)) {
-            s.setString(2, this.documentNo+this.version);
-            s.setString(1, bomid);
-            s.executeUpdate();
+    public void insertIntoBom(String parentId, String uid) throws SQLException {
+        if (!BomFinder.getInstance().findIfExistsPair(this.documentNo+this.version, parentId)) {
+            DatabaseChange dc = new DatabaseChange(uid, "Assigned " + documentNo + version + " to " + parentId, new Timestamp(System.currentTimeMillis()));
+            dc.insert();
+            try (PreparedStatement s = DbContext.getConnection().prepareStatement("INSERT INTO bom (child, parent) VALUES (?,?)", Statement.RETURN_GENERATED_KEYS)) {
+                s.setString(1, this.documentNo+this.version);
+                s.setString(2, parentId);
+                s.executeUpdate();
+            }
         }
     }
 

@@ -9,6 +9,7 @@ import java.nio.file.Paths;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.ResourceBundle;
 
 import javafx.collections.FXCollections;
@@ -246,21 +247,42 @@ public class UploadPdfController implements Initializable {
     }
 
     public void findParents() {
-        subpartsCatiaSheetList.forEach(catiaSheet -> {
-            if (!catiaSheet.items.isEmpty()) {
-                catiaSheet.items.forEach(it -> {
-                    addParent(catiaSheet.documentNo + catiaSheet.version, it.drawingNo);
-                });
+
+        subpartsCatiaSheetList.forEach(child -> {
+            if (checkIfParentExistsInMainPdf(child.documentNo)) {
+                addParent(mainPdf, child);
+            }
+            for (CatiaSheet parent : findParentInSubparts(child)) {
+                addParent(parent, child);
+
+
             }
         });
     }
 
-    public void addParent(String parent, String child) {
-        subpartsCatiaSheetList.forEach(catiaSheet -> {
-            if (catiaSheet.documentNo.equals(child)) {
-                catiaSheet.parents.add(parent);
+    public void addParent(CatiaSheet parent, CatiaSheet child) {
+        child.parents.add(parent.documentNo+parent.version);
+    }
+
+    public boolean checkIfParentExistsInMainPdf(String childId) {
+        for (BOM b : mainPdf.items) {
+            if (b.drawingNo.equals(childId)) {
+                return true;
             }
-        });
+        }
+        return false;
+    }
+
+    public List<CatiaSheet> findParentInSubparts(CatiaSheet child) {
+        List<CatiaSheet> parents = new ArrayList<>();
+        for (CatiaSheet cs : subpartsCatiaSheetList) {
+            for (BOM bom : cs.items) {
+                if (bom.drawingNo.equals(child.documentNo)) {
+                    parents.add(cs);
+                }
+            }
+        }
+        return parents;
     }
 
 
@@ -284,7 +306,6 @@ public class UploadPdfController implements Initializable {
     }
 
     public void updateMainPdfFromFrontend() {
-
 
         //adds image from frontend
         mainPdf.setImage(assemblyImageShowcase.getImage());
