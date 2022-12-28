@@ -255,6 +255,7 @@ public class UploadPdfController implements Initializable {
             for (CatiaSheet parent : findParentInSubparts(child)) {
                 addParent(parent, child);
 
+
             }
         });
     }
