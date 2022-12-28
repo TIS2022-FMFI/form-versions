@@ -262,7 +262,7 @@ public class UploadPdfController implements Initializable {
 
     public void addParent(CatiaSheet parent, CatiaSheet child) {
         child.parents.add(parent.documentNo+parent.version);
-    }
+    } 
 
     public boolean checkIfParentExistsInMainPdf(String childId) {
         for (BOM b : mainPdf.items) {
