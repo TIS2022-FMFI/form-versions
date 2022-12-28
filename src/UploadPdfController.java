@@ -104,12 +104,8 @@ public class UploadPdfController implements Initializable {
 
         tableView.setEditable(true);
         subpartPdf.setDisable(true);
-<<<<<<< HEAD
-//        imageShowcase.setImage(new Image("imgs\\qmark.png"));
-=======
         assemblyImgButton.setDisable(true);
         assemblyImageShowcase.setImage(new Image("imgs\\qmark.png"));
->>>>>>> main
         clearAllElements.setDisable(true);
 
 
@@ -251,20 +247,14 @@ public class UploadPdfController implements Initializable {
     }
 
     public void findParents() {
-<<<<<<< HEAD
+
         subpartsCatiaSheetList.forEach(child -> {
             if (checkIfParentExistsInMainPdf(child.documentNo)) {
                 addParent(mainPdf, child);
             }
             for (CatiaSheet parent : findParentInSubparts(child)) {
                 addParent(parent, child);
-=======
-        subpartsCatiaSheetList.forEach(catiaSheet -> {
-            if (!catiaSheet.items.isEmpty()) {
-                catiaSheet.items.forEach(it -> {
-                    addParent(catiaSheet.documentNo + catiaSheet.version, it.drawingNo);
-                });
->>>>>>> main
+
             }
         });
     }
@@ -308,12 +298,7 @@ public class UploadPdfController implements Initializable {
         releaseTextField.setText("");
         docNoTextField.setText("");
         devFromTextField.setText("");
-<<<<<<< HEAD
-//        imageShowcase.setImage(new Image("imgs\\qmark.png"));
-        imageShowcase.setImage(null);
-=======
         assemblyImageShowcase.setImage(new Image("imgs\\qmark.png"));
->>>>>>> main
         clearAllElements.setDisable(true);
         subpartPdf.setDisable(true);
         assemblyImgButton.setDisable(true);
