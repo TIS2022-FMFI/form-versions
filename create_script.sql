@@ -11,12 +11,12 @@ create table bom
 (
     id int auto_increment
         primary key,
-    bom_id varchar(20) null,
-    part_id varchar(20) null
+    parent varchar(20) null,
+    child varchar(20) null
 );
 
 create index part_id
-    on bom (part_id);
+    on bom (child);
 
 create table db_log
 (
@@ -30,13 +30,13 @@ create table db_log
 create table part
 (
     id int auto_increment,
-    part_id varchar(20) not null,
-    type varchar(20) not null,
-    date varchar(30) not null,
-    comment varchar(250) null,
-    image longblob null,
+    part_id varchar(20)        not null,
+    type varchar(20)           not null,
+    date varchar(30)           not null,
+    comment varchar(250)       null,
+    image longblob             null,
     developed_from varchar(30) null,
-    name varchar(30) null,
+    name varchar(30)           null,
     constraint part_id_uindex
         unique (id)
 );
@@ -111,6 +111,4 @@ create index dvp_id
 
 create index test_name
     on dvp_result (test_name);
-
-
 

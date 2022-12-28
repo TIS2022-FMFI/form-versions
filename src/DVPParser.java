@@ -23,6 +23,9 @@ public class DVPParser {
     private static int first_row = 8;
     static List<Test> tests = new ArrayList<>();
 
+    public DVPParser() {
+    }
+
 
     public static void add_cell(XSSFCell cell){
         boolean added = false;
@@ -64,7 +67,7 @@ public class DVPParser {
     }
 
 
-    public static void readXLSXFile(String path) throws IOException{
+    public void readXLSXFile(String path) throws IOException{
         File f = new File(path);
         if(f.exists() && !f.isDirectory()) {
             InputStream ExcelFileToRead = new FileInputStream(path);
@@ -115,14 +118,10 @@ public class DVPParser {
     }
 
     public static void print_all_tests(){
+        System.out.println(tests);
         for (Test test: tests){
             System.out.println(test.to_string());
         }
-    }
-
-    public static void main(String[] args) throws IOException {
-            readXLSXFile("src/excely/DVP_template_empty.xlsx");
-            print_all_tests();
     }
 
 

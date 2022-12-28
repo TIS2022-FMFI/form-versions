@@ -9,6 +9,7 @@ import java.nio.file.Paths;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.ResourceBundle;
 
 import javafx.collections.FXCollections;
@@ -46,7 +47,7 @@ public class UploadPdfController implements Initializable {
     public TextField devFromTextField;
 
     @FXML
-    public ImageView imageShowcase = new ImageView();
+    public ImageView assemblyImageShowcase = new ImageView();
 
     @FXML
     public Button mainPdfButton;
@@ -62,6 +63,7 @@ public class UploadPdfController implements Initializable {
 
     @FXML
     public TextField designationMainPdfTextField;
+
 
     @FXML
     private TableView<CatiaSheet> tableView = new TableView<>();
@@ -82,19 +84,19 @@ public class UploadPdfController implements Initializable {
     public TableColumn<CatiaSheet, String> lastHeaderChange;
 
     @FXML
-    Button imgButton;
+    public TableColumn<CatiaSheet, Button> componentImage;
 
+    @FXML
+    Button assemblyImgButton = new Button();
 
     CatiaSheet mainPdf = null;
 
     List<CatiaSheet> subpartsCatiaSheetList = new ArrayList<>();
-    ;
 
     FileChooser fc = new FileChooser();
 
     ObservableList<CatiaSheet> observableListItems;
 
-    User user;
 
     @Override
     public void initialize(URL arg0, ResourceBundle arg1) {
@@ -102,11 +104,15 @@ public class UploadPdfController implements Initializable {
 
         tableView.setEditable(true);
         subpartPdf.setDisable(true);
-        imageShowcase.setImage(new Image("imgs\\qmark.png"));
+<<<<<<< HEAD
+//        imageShowcase.setImage(new Image("imgs\\qmark.png"));
+=======
+        assemblyImgButton.setDisable(true);
+        assemblyImageShowcase.setImage(new Image("imgs\\qmark.png"));
+>>>>>>> main
         clearAllElements.setDisable(true);
 
 
-        user = new User();
     }
 
 
@@ -148,6 +154,10 @@ public class UploadPdfController implements Initializable {
             CatiaSheet c = catiaSheetStringCellEditEvent.getRowValue();
             c.setLastHeaderChange(catiaSheetStringCellEditEvent.getNewValue());
         });
+
+
+        componentImage.setCellValueFactory(new PropertyValueFactory<>("componentImgButton"));
+
         tableView.setItems(observableListItems);
     }
 
@@ -211,15 +221,20 @@ public class UploadPdfController implements Initializable {
         } else System.out.println("Failed to load");
         createTable();
         createHeaderFooter();
+        assemblyImgButton.setDisable(false);
 
 
     }
 
 
     public void showImage(ActionEvent actionEvent) {
-        Image image = Clipboard.getSystemClipboard().getImage();
-        imageShowcase.setImage(image);
-        clearAllElements.setDisable(false);
+//        Image image = Clipboard.getSystemClipboard().getImage();
+//        imageShowcase.setImage(image);
+//        clearAllElements.setDisable(false);
+        if (mainPdf != null) {
+            mainPdf.setImageFromExplorer();
+            assemblyImageShowcase.setImage(mainPdf.image);
+        }
     }
 
     //TODO checkovanie ci subpart nema dalsi part
@@ -230,27 +245,53 @@ public class UploadPdfController implements Initializable {
 
 
         DatabaseTransactions dbt = new DatabaseTransactions();
-        dbt.insertPart(mainPdf, user.getName(), subpartsCatiaSheetList);
+        dbt.insertPart(mainPdf, "dummyName", subpartsCatiaSheetList);
 
         clearAll();
     }
 
     public void findParents() {
+<<<<<<< HEAD
+        subpartsCatiaSheetList.forEach(child -> {
+            if (checkIfParentExistsInMainPdf(child.documentNo)) {
+                addParent(mainPdf, child);
+            }
+            for (CatiaSheet parent : findParentInSubparts(child)) {
+                addParent(parent, child);
+=======
         subpartsCatiaSheetList.forEach(catiaSheet -> {
             if (!catiaSheet.items.isEmpty()) {
                 catiaSheet.items.forEach(it -> {
-                    addParent(catiaSheet.documentNo+catiaSheet.version, it.drawingNo);
+                    addParent(catiaSheet.documentNo + catiaSheet.version, it.drawingNo);
                 });
+>>>>>>> main
             }
         });
     }
 
-    public void addParent(String parent, String child) {
-        subpartsCatiaSheetList.forEach(catiaSheet -> {
-            if (catiaSheet.documentNo.equals(child)) {
-                catiaSheet.parents.add(parent);
+    public void addParent(CatiaSheet parent, CatiaSheet child) {
+        child.parents.add(parent.documentNo+parent.version);
+    }
+
+    public boolean checkIfParentExistsInMainPdf(String childId) {
+        for (BOM b : mainPdf.items) {
+            if (b.drawingNo.equals(childId)) {
+                return true;
             }
-        });
+        }
+        return false;
+    }
+
+    public List<CatiaSheet> findParentInSubparts(CatiaSheet child) {
+        List<CatiaSheet> parents = new ArrayList<>();
+        for (CatiaSheet cs : subpartsCatiaSheetList) {
+            for (BOM bom : cs.items) {
+                if (bom.drawingNo.equals(child.documentNo)) {
+                    parents.add(cs);
+                }
+            }
+        }
+        return parents;
     }
 
 
@@ -267,16 +308,21 @@ public class UploadPdfController implements Initializable {
         releaseTextField.setText("");
         docNoTextField.setText("");
         devFromTextField.setText("");
-        imageShowcase.setImage(new Image("imgs\\qmark.png"));
+<<<<<<< HEAD
+//        imageShowcase.setImage(new Image("imgs\\qmark.png"));
+        imageShowcase.setImage(null);
+=======
+        assemblyImageShowcase.setImage(new Image("imgs\\qmark.png"));
+>>>>>>> main
         clearAllElements.setDisable(true);
         subpartPdf.setDisable(true);
+        assemblyImgButton.setDisable(true);
     }
 
     public void updateMainPdfFromFrontend() {
 
-
         //adds image from frontend
-        mainPdf.setImage(imageShowcase.getImage());
+        mainPdf.setImage(assemblyImageShowcase.getImage());
 
         // changes the values in mainpdf instance from the frontend text boxes
         mainPdf.version = verziaTextField.getText();
