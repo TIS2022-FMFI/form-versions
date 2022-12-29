@@ -189,10 +189,8 @@ public class MakeTemplateController implements Initializable{
     }
 
     public void change_template(ActionEvent e){
-        System.out.println("action");
         for(Template template: templates){
             if(template.template_name.equals(template_menu.getValue().toString())){
-                System.out.println("action template name");
                 set_parameters_from_template(template);
 
             }
@@ -208,7 +206,6 @@ public class MakeTemplateController implements Initializable{
                     result.getSelectionModel().clearSelection();
                 }
                 else if (result.getItems().get(j).toString().equals(template.result_names.get(i))) {
-                    System.out.println("action set ");
                     result.getSelectionModel().clearAndSelect(j);
                 }
             }
@@ -282,19 +279,14 @@ public class MakeTemplateController implements Initializable{
                         List<Template> old_templates = new ArrayList<>(templates);
                         for(Template old_temp: old_templates){
                             if(old_temp.template_name.equals(template.template_name)){
-                                System.out.println("removed1");
                                 templates.remove(old_temp);
-                                System.out.println("removed2");
                             }
                         }
-                        System.out.println("removed3");
                         template_menu.getItems().remove(template.template_name);
-                        System.out.println("removed4");
                     }
                     templates.add(template);
                     template_menu.getItems().add(template.template_name);
                     System.out.println(template.toString());
-                    System.out.println("temlates size "+templates.size()+" template names size "+template_menu.getItems().size());
                 }
             }
         }

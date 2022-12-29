@@ -50,17 +50,14 @@ public class Template {
         boolean is_valid = true;
 
         if(row_id.replace(" ", "").equals("")){
-            System.out.println("111");
             return false;
         }
         try{
             Integer.parseInt(row_id);
         } catch (NumberFormatException nfe) {
-            System.out.println("222");
             return false;
         }
         if(col_id.replace(" ", "").equals("")){
-            System.out.println("333");
             return false;
         }
         try{
@@ -69,21 +66,18 @@ public class Template {
             Integer length = col_id.length();
             for (int i = 0; i < length; i++){
                 if(col_id.charAt(i)<65 || (col_id.charAt(i)>90 && col_id.charAt(i)<97) || col_id.charAt(i)>122){
-                    System.out.println("444");
                     return false;
                 }
             }
         }
 
         if(sheet_id.replace(" ", "").equals("")){
-            System.out.println("555");
             return false;
         }
 
         try{
             Integer.parseInt(sheet_id);
         } catch (NumberFormatException nfe) {
-            System.out.println("666");
             return false;
         }
 
