@@ -225,7 +225,8 @@ public class MakeTemplateController implements Initializable{
             if (template.col_ids.size() <= i) {
                 col_id_field.clear();
             } else {
-                col_id_field.setText(template.col_ids.get(i).toString());
+                String col_id = get_column_name(template.col_ids.get(i));
+                col_id_field.setText(col_id);
             }
         }
         for(int i = 0; i < sheets.size(); i++) {
@@ -237,6 +238,16 @@ public class MakeTemplateController implements Initializable{
             }
         }
 
+    }
+
+    public static String get_column_name(int n){
+        StringBuilder result = new StringBuilder();
+        while (n > 0){
+            int index = (n - 1) % 26;
+            result.append((char)(index + 'A'));
+            n = (n - 1) / 26;
+        }
+        return result.reverse().toString();
     }
 
     public void fill_result_names(List<String> result_names, ChoiceBox choice_box){
