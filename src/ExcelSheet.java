@@ -11,7 +11,7 @@ public class ExcelSheet {
         listOfAllTests = tests;
     }
 
-    public static List<TestWrapper> generateTestWrappersForAllTest() {
+    public List<TestWrapper> generateTestWrappersForAllTest() {
         List<TestWrapper> testWrapperList = new ArrayList<>();
         listOfAllTests.forEach(test -> {
             test.getTest_results().forEach(testResult -> {
@@ -22,15 +22,15 @@ public class ExcelSheet {
         return testWrapperList;
     }
 
-    public static List<Test> getListOfAllTests() {
+    public List<Test> getListOfAllTests() {
         return listOfAllTests;
     }
 
-    public static void setListOfAllTests(List<Test> listOfAllTests) {
+    public void setListOfAllTests(List<Test> listOfAllTests) {
         ExcelSheet.listOfAllTests = listOfAllTests;
     }
 
-    public static void parseExcelFile(String path) throws IOException {
+    public void parseExcelFile(String path) throws IOException {
         DVPParser dvp = new DVPParser();
         dvp.readXLSXFile(path);
         listOfAllTests = dvp.getTests();
@@ -38,11 +38,5 @@ public class ExcelSheet {
 
 
 
-    public static void main(String[] args) throws IOException {
-        parseExcelFile("src\\excely\\DVP_template_empty.xlsx");
-        generateTestWrappersForAllTest().forEach(testWrapper -> {
-            System.out.println(testWrapper.toString().replace('\n', ' '));;
-        });
 
-    }
 }
