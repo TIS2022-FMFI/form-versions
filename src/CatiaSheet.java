@@ -6,6 +6,7 @@ import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.FileChooser;
+import javafx.util.Duration;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -513,6 +514,7 @@ public class CatiaSheet {
         imageView.setFitWidth(100);
         Tooltip tooltip = new Tooltip();
         tooltip.setGraphic(imageView);
+        tooltip.setShowDelay(Duration.millis(200));
 
         componentImgButton.setTooltip(tooltip);
     }

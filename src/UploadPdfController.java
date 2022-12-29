@@ -101,11 +101,10 @@ public class UploadPdfController implements Initializable {
     @Override
     public void initialize(URL arg0, ResourceBundle arg1) {
 
-
+        tableView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
         tableView.setEditable(true);
         subpartPdf.setDisable(true);
         assemblyImgButton.setDisable(true);
-        assemblyImageShowcase.setImage(new Image("imgs\\qmark.png"));
         clearAllElements.setDisable(true);
 
 
@@ -299,7 +298,6 @@ public class UploadPdfController implements Initializable {
         releaseTextField.setText("");
         docNoTextField.setText("");
         devFromTextField.setText("");
-        assemblyImageShowcase.setImage(new Image("imgs\\qmark.png"));
         clearAllElements.setDisable(true);
         subpartPdf.setDisable(true);
         assemblyImgButton.setDisable(true);
