@@ -9,6 +9,7 @@ import java.nio.file.Paths;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.ResourceBundle;
 
 import javafx.collections.FXCollections;
@@ -46,22 +47,26 @@ public class UploadPdfController implements Initializable {
     public TextField devFromTextField;
 
     @FXML
-    public ImageView imageShowcase;
+    public ImageView assemblyImageShowcase = new ImageView();
 
     @FXML
     public Button mainPdfButton;
 
     @FXML
-    public Button subpartPdf;
+    public Button subpartPdf = new Button();
 
     @FXML
-    public Button inserToDB;
+    public Button inserToDB = new Button();
 
     @FXML
-    public Button clearAllElements;
+    public Button clearAllElements = new Button();
 
     @FXML
-    private TableView<CatiaSheet> tableView;
+    public TextField designationMainPdfTextField;
+
+
+    @FXML
+    private TableView<CatiaSheet> tableView = new TableView<>();
 
     @FXML
     private TableColumn<CatiaSheet, String> designation;
@@ -79,31 +84,30 @@ public class UploadPdfController implements Initializable {
     public TableColumn<CatiaSheet, String> lastHeaderChange;
 
     @FXML
-    Button imgButton;
+    public TableColumn<CatiaSheet, Button> componentImage;
 
+    @FXML
+    Button assemblyImgButton = new Button();
 
     CatiaSheet mainPdf = null;
 
     List<CatiaSheet> subpartsCatiaSheetList = new ArrayList<>();
-    ;
 
     FileChooser fc = new FileChooser();
 
     ObservableList<CatiaSheet> observableListItems;
 
-    User user;
 
     @Override
     public void initialize(URL arg0, ResourceBundle arg1) {
 
-
+        tableView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
         tableView.setEditable(true);
         subpartPdf.setDisable(true);
-        imageShowcase.setImage(new Image("imgs\\qmark.png"));
+        assemblyImgButton.setDisable(true);
         clearAllElements.setDisable(true);
 
 
-        user = new User();
     }
 
 
@@ -145,6 +149,10 @@ public class UploadPdfController implements Initializable {
             CatiaSheet c = catiaSheetStringCellEditEvent.getRowValue();
             c.setLastHeaderChange(catiaSheetStringCellEditEvent.getNewValue());
         });
+
+
+        componentImage.setCellValueFactory(new PropertyValueFactory<>("componentImgButton"));
+
         tableView.setItems(observableListItems);
     }
 
@@ -152,6 +160,7 @@ public class UploadPdfController implements Initializable {
         if (mainPdf != null) {
             CatiaComment h = mainPdf.getLastVersionHeader();
 
+            designationMainPdfTextField.setText(mainPdf.designation);
             verziaTextField.setText(h.version);
             komentTextArea.setText(h.changes);
             releaseTextField.setText(h.releaseDate);
@@ -207,67 +216,72 @@ public class UploadPdfController implements Initializable {
         } else System.out.println("Failed to load");
         createTable();
         createHeaderFooter();
+        assemblyImgButton.setDisable(false);
 
 
     }
 
 
     public void showImage(ActionEvent actionEvent) {
-        Image image = Clipboard.getSystemClipboard().getImage();
-        imageShowcase.setImage(image);
-        clearAllElements.setDisable(false);
+//        Image image = Clipboard.getSystemClipboard().getImage();
+//        imageShowcase.setImage(image);
+//        clearAllElements.setDisable(false);
+        if (mainPdf != null) {
+            mainPdf.setImageFromExplorer();
+            assemblyImageShowcase.setImage(mainPdf.image);
+        }
     }
 
     //TODO checkovanie ci subpart nema dalsi part
     public void insert() throws SQLException, IOException {
 
+        updateMainPdfFromFrontend();
         findParents(); // adds the parent-child connections
 
-        mainPdf.setImage(imageShowcase.getImage());
-        mainPdf.insertIntoPart(user.getName()); // inserts the main pdf
 
-        subpartsCatiaSheetList.forEach(cs -> { // inserts the parent-child connections
-            if (!cs.parents.isEmpty()) {
-                cs.parents.forEach(parent -> {
-                    try {
-                        cs.insertIntoBom(parent, user.getName());
-                    } catch (SQLException e) {
-                        e.printStackTrace();
-                    }
-                });
-            }
-            try {
-                cs.insertIntoBom(mainPdf.documentNo+mainPdf.version, user.getName());
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+        DatabaseTransactions dbt = new DatabaseTransactions();
+        dbt.insertPart(mainPdf, "dummyName", subpartsCatiaSheetList);
 
-            try {
-                cs.insertIntoPart(user.getName()); // inserts the subpart itself
-            } catch (SQLException | IOException e) {
-                e.printStackTrace();
-            }
-        });
         clearAll();
     }
 
     public void findParents() {
-        subpartsCatiaSheetList.forEach(catiaSheet -> {
-            if (!catiaSheet.items.isEmpty()) {
-                catiaSheet.items.forEach(it -> {
-                    addParent(catiaSheet.documentNo+catiaSheet.version, it.drawingNo);
-                });
+
+        subpartsCatiaSheetList.forEach(child -> {
+            if (checkIfParentExistsInMainPdf(child.documentNo)) {
+                addParent(mainPdf, child);
+            }
+            for (CatiaSheet parent : findParentInSubparts(child)) {
+                addParent(parent, child);
+
+
             }
         });
     }
 
-    public void addParent(String parent, String child) {
-        subpartsCatiaSheetList.forEach(catiaSheet -> {
-            if (catiaSheet.documentNo.equals(child)) {
-                System.out.println(parent);
-                catiaSheet.parents.add(parent);
+    public void addParent(CatiaSheet parent, CatiaSheet child) {
+        child.parents.add(parent.documentNo+parent.version);
+    }
+
+    public boolean checkIfParentExistsInMainPdf(String childId) {
+        for (BOM b : mainPdf.items) {
+            if (b.drawingNo.equals(childId)) {
+                return true;
             }
-        });
+        }
+        return false;
+    }
+
+    public List<CatiaSheet> findParentInSubparts(CatiaSheet child) {
+        List<CatiaSheet> parents = new ArrayList<>();
+        for (CatiaSheet cs : subpartsCatiaSheetList) {
+            for (BOM bom : cs.items) {
+                if (bom.drawingNo.equals(child.documentNo)) {
+                    parents.add(cs);
+                }
+            }
+        }
+        return parents;
     }
 
 
@@ -278,13 +292,31 @@ public class UploadPdfController implements Initializable {
 
         createTable();
 
+        designationMainPdfTextField.setText("");
         verziaTextField.setText("");
         komentTextArea.setText("");
         releaseTextField.setText("");
         docNoTextField.setText("");
         devFromTextField.setText("");
-        imageShowcase.setImage(new Image("imgs\\qmark.png"));
         clearAllElements.setDisable(true);
         subpartPdf.setDisable(true);
+        assemblyImgButton.setDisable(true);
     }
+
+    public void updateMainPdfFromFrontend() {
+
+        //adds image from frontend
+        mainPdf.setImage(assemblyImageShowcase.getImage());
+
+        // changes the values in mainpdf instance from the frontend text boxes
+        mainPdf.version = verziaTextField.getText();
+        mainPdf.documentNo = docNoTextField.getText();
+        mainPdf.setLastHeaderDate(releaseTextField.getText());
+        mainPdf.setLastHeaderChange(komentTextArea.getText());
+        mainPdf.developedFromDocument = devFromTextField.getText();
+        mainPdf.designation = designationMainPdfTextField.getText();
+
+    }
+
+
 }
