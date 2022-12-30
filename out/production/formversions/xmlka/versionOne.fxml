@@ -136,11 +136,11 @@
 <!--            </children>-->
 <!--          </AnchorPane>-->
 <!--          <fx:include fx:id="logdb" source="dblog.fxml"/>-->
-            <fx:include fx:id="dblog" source="dblog.fxml"/>
-        </content>
-      </Tab>
+            <!--             <fx:include fx:id="dblog" source="dblog.fxml"/>-->
+                    </content>
+                  </Tab>
 
 
 
-  </tabs>
-</TabPane>
+              </tabs>
+            </TabPane>
