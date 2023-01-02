@@ -82,3 +82,6 @@ nb-configuration.xml
 ## OS X
 ##############################
 .DS_Store
+out/production/formversions/TestWrapper.class
+out/production/formversions/TestWrapper.class
+out/production/formversions/ExcelSheet.class

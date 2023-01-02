@@ -1,7 +1,6 @@
 drop table if exists bom;
 drop table if exists coordinates;
 drop table if exists db_log;
-drop table if exists dvp_result;
 drop table if exists template;
 drop table if exists test_types;
 drop table if exists dvp cascade;
@@ -27,36 +26,40 @@ create table db_log
     value varchar(100) not null
 );
 
+create table dvp
+(
+    id int auto_increment
+        primary key,
+    part_id varchar(100) null,
+    date varchar(100) not null,
+    aa varchar(100) null,
+    consumer_id varchar(100) null,
+    test_name varchar(100) null,
+    test_result varchar(100) null,
+    test_soll varchar(100) null,
+    test_soll_plus varchar(50) null,
+    test_soll_minus varchar(50) null
+);
+
+create index part_id
+    on dvp (part_id);
+
 create table part
 (
     id int auto_increment,
-    part_id varchar(20)        not null,
-    type varchar(20)           not null,
-    date varchar(30)           not null,
-    comment varchar(250)       null,
-    image longblob             null,
+    part_id varchar(20) not null,
+    type varchar(20) not null,
+    date varchar(30) not null,
+    comment varchar(250) null,
+    image longblob null,
     developed_from varchar(30) null,
-    name varchar(30)           null,
+    name varchar(30) null,
     constraint part_id_uindex
         unique (id)
 );
 
 alter table part
     add primary key (id);
-
-create table dvp
-(
-    id int auto_increment
-        primary key,
-    part_id int null,
-    date date not null,
-    aa varchar(100) null,
-    constraint dvp_ibfk_1
-        foreign key (part_id) references part (id)
-);
-
-create index part_id
-    on dvp (part_id);
 
 create table template
 (
@@ -92,23 +95,4 @@ create index table_id
 
 create index test_type
     on coordinates (test_type);
-
-create table dvp_result
-(
-    id int auto_increment
-        primary key,
-    dvp_id int null,
-    test_name int null,
-    result varchar(100) null,
-    constraint dvp_result_ibfk_1
-        foreign key (dvp_id) references dvp (id),
-    constraint dvp_result_ibfk_2
-        foreign key (test_name) references test_types (id)
-);
-
-create index dvp_id
-    on dvp_result (dvp_id);
-
-create index test_name
-    on dvp_result (test_name);
 
