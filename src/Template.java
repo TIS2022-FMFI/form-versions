@@ -1,9 +1,19 @@
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.WorkbookFactory;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import org.apache.poi.EncryptedDocumentException;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
 
 public class Template {
     String template_name = "";
@@ -117,4 +127,76 @@ public class Template {
         }
         return str;
     }
+
+    private String findResultFromWrapperList(List<TestWrapper> testWrapperList, String name) {
+        for (TestWrapper tw : testWrapperList) {
+            if (tw.getTestType().equalsIgnoreCase(name)) {
+                return tw.getTestResult();
+            }
+        }
+        return "";
+    }
+
+    public void export(String path, String partID) throws Exception {
+        try {
+            File xlsxFile = new File(path);
+            FileInputStream inputStream = new FileInputStream(xlsxFile);
+            Workbook workbook = WorkbookFactory.create(inputStream);
+
+            List<TestWrapper> testWrapperList = new ArrayList<>();      //TODO metoda, ktora mu aj da prvky a pouziva partID
+            TestWrapper tw1 = new TestWrapper("","","","","one","jeden","","","");
+            TestWrapper tw2 = new TestWrapper("","","","","two","dva","","","");
+            testWrapperList.add(tw1);
+            testWrapperList.add(tw2);
+
+            for (int i = 0; i < result_names.size(); i++) {
+                Sheet sheet = workbook.getSheetAt(sheet_ids.get(i));
+                Row r = sheet.getRow(row_ids.get(i));
+                try {
+                    Cell c = r.getCell(col_ids.get(i));
+                    c.setCellValue(findResultFromWrapperList(testWrapperList,result_names.get(i)));
+                } catch (NullPointerException e) {
+                    try {
+                        Cell c = r.createCell(col_ids.get(i));
+                        c.setCellValue(findResultFromWrapperList(testWrapperList,result_names.get(i)));
+                    } catch (NullPointerException e2) {
+                        Row r2 = sheet.createRow(row_ids.get(i));
+                        Cell c = r2.createCell(col_ids.get(i));
+                        c.setCellValue(findResultFromWrapperList(testWrapperList,result_names.get(i)));
+                    }
+                }
+            }
+
+            inputStream.close();
+            FileOutputStream os = new FileOutputStream(xlsxFile);
+            workbook.write(os);
+            workbook.close();
+            os.close();
+
+            System.out.println("Excel file has been updated successfully.");
+
+        } catch (EncryptedDocumentException | IOException e) {
+            System.err.println("Exception while updating an existing excel file.");
+            //e.printStackTrace();
+        }
+    }
+
+    public static void main(String[] args) throws Exception {
+        String template_name = "dummy";
+        List<String> result_names = new ArrayList<>();
+        result_names.add("one");
+        result_names.add("two");
+        List<Integer> row_ids = new ArrayList<>();
+        row_ids.add(0);
+        row_ids.add(1);
+        List<Integer> col_ids = new ArrayList<>();
+        col_ids.add(0);
+        col_ids.add(1);
+        List<Integer> sheet_ids = new ArrayList<>();
+        sheet_ids.add(0);
+        sheet_ids.add(0);
+        Template t = new Template(template_name,result_names,row_ids,col_ids,sheet_ids);
+        t.export("src/excely/dummy.xlsx", "123.456.789A");
+    }
+
 }
