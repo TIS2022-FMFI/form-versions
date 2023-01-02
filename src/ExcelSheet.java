@@ -1,4 +1,4 @@
-import javax.jnlp.ClipboardService;
+//import javax.jnlp.ClipboardService;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -7,8 +7,7 @@ public class ExcelSheet {
 
     public static List<Test> listOfAllTests = new ArrayList<>();
 
-    public ExcelSheet(List<Test> tests) {
-        listOfAllTests = tests;
+    public ExcelSheet() {
     }
 
     public List<TestWrapper> generateTestWrappersForAllTest() {
@@ -35,6 +34,7 @@ public class ExcelSheet {
         dvp.readXLSXFile(path);
         listOfAllTests = dvp.getTests();
     }
+
 
 
 

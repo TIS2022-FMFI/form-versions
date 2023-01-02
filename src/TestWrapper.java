@@ -145,4 +145,5 @@ public class TestWrapper {
     public void setSollMinus(String sollMinus) {
         this.sollMinus = sollMinus;
     }
+
 }

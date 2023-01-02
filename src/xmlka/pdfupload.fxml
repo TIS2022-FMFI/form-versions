@@ -14,79 +14,84 @@
 <?import javafx.scene.text.Font?>
 
 <SplitPane dividerPositions="0.8477157360406091" orientation="VERTICAL" prefHeight="861.0" prefWidth="1209.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="UploadPdfController">
-    <items>
-        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="511.0" prefWidth="1238.0">
-            <children>
-                <SplitPane dividerPositions="0.4638728323699422" layoutX="533.0" layoutY="194.0" orientation="VERTICAL" prefHeight="694.0" prefWidth="1238.0" AnchorPane.bottomAnchor="-30.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                    <items>
-                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
-                            <children>
-                                <Label layoutX="7.0" prefHeight="16.0" prefWidth="50.0" text="Header">
-                                    <effect>
-                                        <InnerShadow />
-                                    </effect></Label>
+             <items>
+               <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="511.0" prefWidth="1238.0">
+                 <children>
+                   <SplitPane dividerPositions="0.4638728323699422" layoutX="533.0" layoutY="194.0" orientation="VERTICAL" prefHeight="694.0" prefWidth="1238.0" AnchorPane.bottomAnchor="-30.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                     <items>
+                       <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="1236.0">
+                         <children>
+                           <Label layoutX="7.0" layoutY="32.0" prefHeight="16.0" prefWidth="50.0" text="Header">
+                             <effect>
+                               <InnerShadow />
+                             </effect></Label>
 
-                                <Label layoutX="8.0" layoutY="82.0" text="Version" />
-                                <Label layoutX="8.0" layoutY="138.0" text="Change" />
-                                <Label layoutX="8.0" layoutY="191.0" text="Release date" />
-                                <TextField fx:id="verziaTextField" layoutX="110.0" layoutY="77.0" prefHeight="31.0" prefWidth="774.0" />
-                                <TextField fx:id="releaseTextField" layoutX="111.0" layoutY="186.0" prefHeight="31.0" prefWidth="774.0" />
-                                <TextArea fx:id="komentTextArea" layoutX="111.0" layoutY="122.0" prefHeight="53.0" prefWidth="774.0" />
-                                <ImageView fx:id="imageShowcase" fitHeight="180.0" fitWidth="207.0" layoutX="978.0" layoutY="32.0" pickOnBounds="true" preserveRatio="true" />
-                                <Button fx:id="imgButton" alignment="CENTER" layoutX="1021.0" layoutY="267.0" mnemonicParsing="false" onAction="#showImage" prefHeight="18.0" prefWidth="122.0" text="insert image" />
-                                <Label layoutX="7.0" layoutY="246.0" text="Footer">
-                                    <effect>
+                           <Label layoutX="7.0" layoutY="108.0" text="Version" />
+                           <Label layoutX="7.0" layoutY="165.0" text="Change" />
+                           <Label layoutX="7.0" layoutY="217.0" text="Release date" />
+                           <TextField fx:id="verziaTextField" layoutX="110.0" layoutY="103.0" prefHeight="31.0" prefWidth="774.0" />
+                           <TextField fx:id="releaseTextField" layoutX="110.0" layoutY="212.0" prefHeight="31.0" prefWidth="774.0" />
+                           <TextArea fx:id="komentTextArea" layoutX="110.0" layoutY="149.0" prefHeight="53.0" prefWidth="774.0" />
+                           <ImageView fx:id="assemblyImageShowcase" fitHeight="180.0" fitWidth="207.0" layoutX="978.0" layoutY="39.0" pickOnBounds="true" preserveRatio="true" />
+                           <Button fx:id="assemblyImgButton" alignment="CENTER" layoutX="991.0" layoutY="268.0" mnemonicParsing="false" onAction="#showImage" prefHeight="31.0" prefWidth="181.0" text="Insert Assembly image" />
+                           <Label layoutX="7.0" layoutY="257.0" text="Footer">
+                             <effect>
+                               <InnerShadow />
+                             </effect></Label>
+                           <Label layoutX="7.0" layoutY="283.0" text="Document No." />
+                           <TextField fx:id="docNoTextField" layoutX="111.0" layoutY="278.0" prefHeight="31.0" prefWidth="250.0" />
+                           <Label layoutX="473.0" layoutY="283.0" text="Developed from Doc. " />
+                           <TextField fx:id="devFromTextField" layoutX="634.0" layoutY="278.0" prefHeight="31.0" prefWidth="250.0" />
+                           <Label layoutX="7.0" layoutY="66.0" text="Designation" />
+                           <TextField fx:id="designationMainPdfTextField" layoutX="111.0" layoutY="61.0" prefHeight="31.0" prefWidth="773.0" />
+                                    <Label layoutX="540.0" layoutY="4.0" text="Assembly part">
+                                      <effect>
                                         <InnerShadow />
-                                    </effect></Label>
-                                <Label layoutX="7.0" layoutY="272.0" text="Document No." />
-                                <TextField fx:id="docNoTextField" layoutX="118.0" layoutY="267.0" prefHeight="31.0" prefWidth="250.0" />
-                                <Label layoutX="473.0" layoutY="272.0" text="Developed from Doc. " />
-                                <TextField fx:id="devFromTextField" layoutX="634.0" layoutY="267.0" prefHeight="31.0" prefWidth="250.0" />
-                                <Label layoutX="9.0" layoutY="31.0" text="Designation" />
-                                <TextField fx:id="designationMainPdfTextField" layoutX="111.0" layoutY="26.0" prefHeight="31.0" prefWidth="773.0" />
-                            </children>
-                        </AnchorPane>
-                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="302.0" prefWidth="1236.0">
-                            <children>
-                                <StackPane AnchorPane.bottomAnchor="-217.0" AnchorPane.leftAnchor="-1.0" AnchorPane.rightAnchor="-1.0" AnchorPane.topAnchor="243.0" />
-                                <TableView fx:id="tableView" layoutX="-1.0" layoutY="33.0" prefHeight="481.0" prefWidth="1238.0">
-                                    <columns>
-                                        <TableColumn fx:id="designation" prefWidth="130.0" resizable="false" text="Designation" />
-                                        <TableColumn fx:id="documentNo" minWidth="0.0" prefWidth="135.0" resizable="false" text="Drawing No." />
-                                        <TableColumn fx:id="version" prefWidth="60.0" resizable="false" text="Version" />
-                                        <TableColumn fx:id="lastHeaderDate" prefWidth="88.0" resizable="false" text="Date" />
-                                        <TableColumn fx:id="lastHeaderChange" prefWidth="824.0" resizable="false" text="Change in BOM" />
-                                    </columns>
-                                </TableView>
-                                <Label layoutX="3.0" layoutY="4.0" text="Components part">
-                                    <effect>
-                                        <InnerShadow />
-                                    </effect></Label>
-                            </children></AnchorPane>
-                    </items>
-                </SplitPane>
-            </children>
-        </AnchorPane>
-        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
-            <children>
-                <Button fx:id="mainPdfButton" alignment="CENTER" layoutX="317.0" layoutY="31.0" mnemonicParsing="false" onAction="#loadMainPdf" prefHeight="60.0" prefWidth="220.0" text="Upload Assembly pdf">
-                    <font>
-                        <Font size="20.0" />
-                    </font></Button>
-                <Button fx:id="inserToDB" alignment="CENTER" layoutX="912.0" layoutY="31.0" mnemonicParsing="false" onAction="#insert" prefHeight="60.0" prefWidth="220.0" text="insert to database">
-                    <font>
-                        <Font size="21.0" />
-                    </font></Button>
-                <Button fx:id="subpartPdf" layoutX="613.0" layoutY="31.0" mnemonicParsing="false" onAction="#loadSubpartPdf" prefHeight="60.0" prefWidth="220.0" text="Upload component pdfs">
-                    <font>
-                        <Font size="20.0" />
-                    </font></Button>
-                <Button fx:id="clearAllElements" layoutX="14.0" layoutY="37.0" mnemonicParsing="false" onAction="#clearAll" prefHeight="53.0" prefWidth="122.0" text="Clear All">
-                    <font>
-                        <Font size="20.0" />
-                    </font>
-                </Button>
-            </children>
-        </AnchorPane>
-    </items>
-</SplitPane>
+                                      </effect></Label>
+                         </children>
+                       </AnchorPane>
+                       <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="302.0" prefWidth="1236.0">
+                         <children>
+                           <StackPane AnchorPane.bottomAnchor="-217.0" AnchorPane.leftAnchor="-1.0" AnchorPane.rightAnchor="-1.0" AnchorPane.topAnchor="243.0" />
+                           <TableView fx:id="tableView" layoutX="-1.0" layoutY="33.0" prefHeight="481.0" prefWidth="1300.0">
+                             <columns>
+                               <TableColumn fx:id="designation" prefWidth="130.0" resizable="false" text="Designation" />
+                               <TableColumn fx:id="documentNo" minWidth="0.0" prefWidth="135.0" resizable="false" text="Drawing No." />
+                               <TableColumn fx:id="version" prefWidth="60.0" resizable="false" text="Version" />
+                               <TableColumn fx:id="lastHeaderDate" prefWidth="88.0" resizable="false" text="Date" />
+                               <TableColumn fx:id="lastHeaderChange" prefWidth="693.0" resizable="false" text="Change in BOM" />
+                               <TableColumn fx:id="componentImage" minWidth="0.0" prefWidth="102.0" resizable="false" text="Image" />
+                             </columns>
+                           </TableView>
+                           <Label layoutX="540.0" layoutY="4.0" text="Components part">
+                             <effect>
+                               <InnerShadow />
+                             </effect></Label>
+                         </children></AnchorPane>
+                     </items>
+                   </SplitPane>
+                 </children>
+               </AnchorPane>
+               <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
+                 <children>
+                   <Button fx:id="mainPdfButton" alignment="CENTER" layoutX="317.0" layoutY="30.0" mnemonicParsing="false" onAction="#loadMainPdf" prefHeight="60.0" prefWidth="250.0" text="Upload Assembly pdf">
+                     <font>
+                       <Font size="20.0" />
+                     </font></Button>
+                   <Button fx:id="inserToDB" alignment="CENTER" layoutX="912.0" layoutY="30.0" mnemonicParsing="false" onAction="#insert" prefHeight="60.0" prefWidth="250.0" text="insert to database">
+                     <font>
+                       <Font size="21.0" />
+                     </font></Button>
+                   <Button fx:id="subpartPdf" layoutX="613.0" layoutY="30.0" mnemonicParsing="false" onAction="#loadSubpartPdf" prefHeight="60.0" prefWidth="250.0" text="Upload component pdfs">
+                     <font>
+                       <Font size="20.0" />
+                     </font></Button>
+                   <Button fx:id="clearAllElements" layoutX="14.0" layoutY="30.0" mnemonicParsing="false" onAction="#clearAll" prefHeight="60.0" prefWidth="122.0" text="Clear All">
+                     <font>
+                       <Font size="20.0" />
+                     </font>
+                   </Button>
+                 </children>
+               </AnchorPane>
+             </items>
+           </SplitPane>
