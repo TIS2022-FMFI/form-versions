@@ -184,7 +184,7 @@ public class Template {
     }
 
     public void insert(String uid) throws SQLException {
-        
+
         if (!TemplateFinder.getInstance().exists(template_name)) {
 
             DatabaseChange dc = new DatabaseChange(uid, "Uploaded a template named " + template_name + " to the database", new Timestamp(System.currentTimeMillis()));
