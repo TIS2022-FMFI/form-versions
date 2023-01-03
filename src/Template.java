@@ -1,19 +1,21 @@
+import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.awt.image.BufferedImage;
+import java.io.*;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import org.apache.poi.EncryptedDocumentException;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
+
+import javax.imageio.ImageIO;
 
 public class Template {
     String template_name = "";
@@ -181,6 +183,48 @@ public class Template {
         }
     }
 
+    public void insert(String uid) throws SQLException {
+        
+        if (!TemplateFinder.getInstance().exists(template_name)) {
+
+            DatabaseChange dc = new DatabaseChange(uid, "Uploaded a template named " + template_name + " to the database", new Timestamp(System.currentTimeMillis()));
+            dc.insert();
+
+            Integer databaseId;
+
+            try (PreparedStatement s = DbContext.getConnection().prepareStatement("INSERT INTO template (name) VALUES (?)", Statement.RETURN_GENERATED_KEYS)) {
+                s.setString(1, this.template_name);
+                s.executeUpdate();
+
+                try (ResultSet generatedKeys = s.getGeneratedKeys()) {
+                    if (generatedKeys.next()) {
+                        databaseId = Math.toIntExact(generatedKeys.getLong(1));
+                    }
+                    else {
+                        throw new SQLException("Creating user failed, no ID obtained.");
+                    }
+                }
+
+            }
+
+            for (int i = 0; i < result_names.size(); i++) {
+                try (PreparedStatement s = DbContext.getConnection().prepareStatement("INSERT INTO coordinates (table_id, row, col, sheet, test_type) VALUES (?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS)) {
+                    s.setInt(1, databaseId);
+                    s.setInt(2, row_ids.get(i));
+                    s.setInt(3, col_ids.get(i));
+                    s.setInt(4, sheet_ids.get(i));
+                    if (TestTypeFinder.getInstance().returnIdInTable(result_names.get(i)) == -1) {
+                        throw new SQLException("Wrong test name, nothing inserted");
+                    }
+                    s.setInt(5, TestTypeFinder.getInstance().returnIdInTable(result_names.get(i)));
+                    s.executeUpdate();
+                }
+            }
+        }
+
+
+    }
+
     public static void main(String[] args) throws Exception {
         String template_name = "dummy";
         List<String> result_names = new ArrayList<>();
@@ -196,7 +240,8 @@ public class Template {
         sheet_ids.add(0);
         sheet_ids.add(0);
         Template t = new Template(template_name,result_names,row_ids,col_ids,sheet_ids);
-        t.export("src/excely/dummy.xlsx", "123.456.789A");
+//        t.export("src/excely/dummy.xlsx", "123.456.789A");
+        t.insert("bogeman");
     }
 
 }

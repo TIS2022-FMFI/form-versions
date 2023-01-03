@@ -35,4 +35,16 @@ public class DatabaseTransactions {
         }
     }
 
+    public void insertTemplate(String uid, Template template) throws SQLException {
+        DbContext.getConnection().setAutoCommit(false);
+        try {
+            template.insert(uid);
+        } catch (SQLException e) {
+            DbContext.getConnection().rollback();
+            throw new RuntimeException(e);
+        } finally {
+            DbContext.getConnection().setAutoCommit(true);
+        }
+    }
+
 }

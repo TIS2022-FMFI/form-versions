@@ -8,10 +8,12 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 public class Main extends Application {
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException, SQLException {
 
         try {
             Connection connection = DriverManager.getConnection("jdbc:mariadb://localhost:3306/moja", "root", "root");
@@ -33,15 +35,11 @@ public class Main extends Application {
 
         }
 
-        ExcelSheet e = new ExcelSheet();
-        e.parseExcelFile("src\\excely\\EEFBC000.xlsx");
-        e.getAllTestNames();
 
         launch(args);
     }
     @Override
     public void start(Stage stage) throws Exception {
-
         Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("xmlka/versionOne.fxml")));
         stage.setTitle("BogeParser (Logged in as dummyString)");
         stage.setScene(new Scene(root));

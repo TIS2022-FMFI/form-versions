@@ -232,7 +232,6 @@ public class UploadPdfController implements Initializable {
         }
     }
 
-    //TODO checkovanie ci subpart nema dalsi part
     public void insert() throws SQLException, IOException {
 
         updateMainPdfFromFrontend();
