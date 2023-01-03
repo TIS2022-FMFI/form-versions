@@ -21,9 +21,11 @@ public class MakeTemplateController implements Initializable{
     @FXML
     private AnchorPane add_more;
     @FXML
-    private ComboBox template_menu;
+    private TextField template_menu;
     @FXML
     private Button add_more_button;
+    @FXML
+    private Button remove_one_button;
     @FXML
     private List<Label> label_results = new ArrayList<>();
     @FXML
@@ -41,62 +43,47 @@ public class MakeTemplateController implements Initializable{
     @FXML
     private List<TextField> sheets = new ArrayList<>();
     @FXML
-    Label label1, label2, label3, label4;
+    Label label1;
     @FXML
-    ChoiceBox choice_box1, choice_box2, choice_box3, choice_box4;
+    ChoiceBox choice_box1;
     @FXML
-    Label row_label1, row_label2, row_label3, row_label4;
+    Label row_label1;
     @FXML
-    TextField row1, row2, row3, row4;
+    TextField row1;
     @FXML
-    Label col_label1, col_label2, col_label3, col_label4;
+    Label col_label1;
     @FXML
-    TextField col1, col2, col3, col4;
+    TextField col1;
     @FXML
-    Label sheet_label1, sheet_label2, sheet_label3, sheet_label4;
+    Label sheet_label1;
     @FXML
-    TextField sheet1, sheet2, sheet3,sheet4;
+    TextField sheet1;
 
     FileChooser fc = new FileChooser();
 
-    List<Template> templates = new ArrayList<>();
+    Template template;
+    String path_to_excel = "";
 
 
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         label_results.add(label1);
-        label_results.add(label2);
-        label_results.add(label3);
-        label_results.add(label4);
+
         results.add(choice_box1);
-        results.add(choice_box2);
-        results.add(choice_box3);
-        results.add(choice_box4);
+
         row_labels.add(row_label1);
-        row_labels.add(row_label2);
-        row_labels.add(row_label3);
-        row_labels.add(row_label4);
+
         rows.add(row1);
-        rows.add(row2);
-        rows.add(row3);
-        rows.add(row4);
+
         col_labels.add(col_label1);
-        col_labels.add(col_label2);
-        col_labels.add(col_label3);
-        col_labels.add(col_label4);
+
         cols.add(col1);
-        cols.add(col2);
-        cols.add(col3);
-        cols.add(col4);
+
         sheet_labels.add(sheet_label1);
-        sheet_labels.add(sheet_label2);
-        sheet_labels.add(sheet_label3);
-        sheet_labels.add(sheet_label4);
+
         sheets.add(sheet1);
-        sheets.add(sheet2);
-        sheets.add(sheet3);
-        sheets.add(sheet4);
+
         List<String> res_names = new ArrayList<>();
         res_names.add("res1");
         res_names.add("res2");
@@ -180,64 +167,56 @@ public class MakeTemplateController implements Initializable{
         sheet.setPrefWidth(sheets.get(sheets.size()-1).getPrefWidth());
         add_more.getChildren().add(sheet);
         sheets.add(sheet);
-
+        System.out.println(label_results.size()+" "+ results.size()+" "+ row_labels.size()+" "+ rows.size());
         add_more_button.setLayoutY(add_more_button.getLayoutY()+49);
-
-
-
+        remove_one_button.setLayoutY(remove_one_button.getLayoutY()+49);
 
     }
 
-    public void change_template(ActionEvent e){
-        for(Template template: templates){
-            if(template.template_name.equals(template_menu.getValue().toString())){
-                set_parameters_from_template(template);
-
-            }
+    public void remove_one_contoller(){
+        if(results.size()<2){
+            return;
         }
+        add_more.getChildren().remove(label_results.get(label_results.size()-1));
+        label_results.remove(label_results.size()-1);
+
+        add_more.getChildren().remove(results.get(results.size()-1));
+        results.remove(results.size()-1);
+
+        add_more.getChildren().remove(row_labels.get(row_labels.size()-1));
+        row_labels.remove(row_labels.size()-1);
+
+        add_more.getChildren().remove(rows.get(rows.size()-1));
+        rows.remove(rows.size()-1);
+
+        add_more.getChildren().remove(col_labels.get(col_labels.size()-1));
+        col_labels.remove(col_labels.size()-1);
+
+        add_more.getChildren().remove(cols.get(cols.size()-1));
+        cols.remove(cols.size()-1);
+
+        add_more.getChildren().remove(sheet_labels.get(sheet_labels.size()-1));
+        sheet_labels.remove(sheet_labels.size()-1);
+
+        add_more.getChildren().remove(sheets.get(sheets.size()-1));
+        sheets.remove(sheets.size()-1);
+
+        System.out.println(label_results.size()+" "+ results.size()+" "+ row_labels.size()+" "+ rows.size());
+        add_more_button.setLayoutY(add_more_button.getLayoutY()-49);
+        remove_one_button.setLayoutY(remove_one_button.getLayoutY()-49);
 
     }
 
-    public void set_parameters_from_template(Template template){
-        for(int i = 0; i < results.size(); i++){
-            ChoiceBox result = results.get(i);
-            for(int j = 0; j < result.getItems().size(); j++) {
-                if(template.result_names.size() <= i){
-                    result.getSelectionModel().clearSelection();
-                }
-                else if (result.getItems().get(j).toString().equals(template.result_names.get(i))) {
-                    result.getSelectionModel().clearAndSelect(j);
-                }
-            }
-        }
-        for(int i = 0; i < rows.size(); i++){
-            TextField row_id_field = rows.get(i);
-            if(template.row_ids.size() <= i){
-                row_id_field.clear();
-            }
-            else{
-                row_id_field.setText(template.row_ids.get(i).toString());
-            }
 
+    public void reset_template(){
+        template_menu.clear();
+        results.get(0).getSelectionModel().clearSelection();
+        rows.get(0).clear();
+        cols.get(0).clear();
+        sheets.get(0).clear();
+        for(int i = results.size()-1; i > 0; i--){
+            remove_one_contoller();
         }
-        for(int i = 0; i < cols.size(); i++) {
-            TextField col_id_field = cols.get(i);
-            if (template.col_ids.size() <= i) {
-                col_id_field.clear();
-            } else {
-                String col_id = get_column_name(template.col_ids.get(i));
-                col_id_field.setText(col_id);
-            }
-        }
-        for(int i = 0; i < sheets.size(); i++) {
-            TextField sheet_id_field = sheets.get(i);
-            if (template.sheet_ids.size() <= i) {
-                sheet_id_field.clear();
-            } else {
-                sheet_id_field.setText(template.sheet_ids.get(i).toString());
-            }
-        }
-
     }
 
     public static String get_column_name(int n){
@@ -255,14 +234,13 @@ public class MakeTemplateController implements Initializable{
     }
 
     public void load_template(ActionEvent event){
-        fc.setTitle("Choose the subpart PDF files");
-        fc.setInitialDirectory(new File("src\\templates"));
+        fc.setTitle("Choose excel file");
         File selectedFile = fc.showOpenDialog(null);
 
         if (selectedFile != null) {
             try {
 
-                //mainPdf = PDFParser.parseFile(String.valueOf(selectedFile));
+                path_to_excel = selectedFile.getAbsolutePath();
 
             } catch (Exception e) {
                 e.printStackTrace();
@@ -271,7 +249,7 @@ public class MakeTemplateController implements Initializable{
     }
 
     public void create_template() {
-        if (template_menu.getValue() != null && !template_menu.getValue().toString().trim().equals("")) {
+        if (!template_menu.getText().replace(" ", "").equals("")) {
             int number_of_filled = 0;
             for (int i = 0; i < results.size(); i++) {
                 if (results.get(i).getValue() != null &&
@@ -283,20 +261,10 @@ public class MakeTemplateController implements Initializable{
                 }
             }
             if(number_of_filled > 0){
-                Template template = new Template(template_menu, results, rows, cols, sheets);
-                if(results.size()>0 && rows.size()==results.size() && rows.size() == cols.size() &&
-                        rows.size() == sheets.size()){
-                    if(template_menu.getItems().contains(template.template_name)){
-                        List<Template> old_templates = new ArrayList<>(templates);
-                        for(Template old_temp: old_templates){
-                            if(old_temp.template_name.equals(template.template_name)){
-                                templates.remove(old_temp);
-                            }
-                        }
-                        template_menu.getItems().remove(template.template_name);
-                    }
-                    templates.add(template);
-                    template_menu.getItems().add(template.template_name);
+                Template template = new Template(path_to_excel, template_menu, results, rows, cols, sheets);
+                if(template.result_names.size()>0 && template.row_ids.size()==template.result_names.size() &&
+                        template.row_ids.size() == template.col_ids.size() && rows.size() == sheets.size()){
+                    System.out.println("Template sa dá uložiť");
                     System.out.println(template.toString());
                 }
             }
