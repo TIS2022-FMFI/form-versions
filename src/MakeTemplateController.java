@@ -162,7 +162,6 @@ public class MakeTemplateController implements Initializable{
         sheet.setPrefWidth(sheets.get(sheets.size()-1).getPrefWidth());
         add_more.getChildren().add(sheet);
         sheets.add(sheet);
-        System.out.println(label_results.size()+" "+ results.size()+" "+ row_labels.size()+" "+ rows.size());
         add_more_button.setLayoutY(add_more_button.getLayoutY()+49);
         remove_one_button.setLayoutY(remove_one_button.getLayoutY()+49);
 
@@ -196,7 +195,6 @@ public class MakeTemplateController implements Initializable{
         add_more.getChildren().remove(sheets.get(sheets.size()-1));
         sheets.remove(sheets.size()-1);
 
-        System.out.println(label_results.size()+" "+ results.size()+" "+ row_labels.size()+" "+ rows.size());
         add_more_button.setLayoutY(add_more_button.getLayoutY()-49);
         remove_one_button.setLayoutY(remove_one_button.getLayoutY()-49);
 
@@ -247,8 +245,8 @@ public class MakeTemplateController implements Initializable{
         } else System.out.println("zle");
     }
 
-    public void create_template() {
-        if (!template_menu.getText().replace(" ", "").equals("")) {
+    public void create_template() throws SQLException {
+        if (!Objects.equals(path_to_excel, "") && !template_menu.getText().replace(" ", "").equals("")) {
             int number_of_filled = 0;
             for (int i = 0; i < results.size(); i++) {
                 if (results.get(i).getValue() != null &&
@@ -264,9 +262,11 @@ public class MakeTemplateController implements Initializable{
                 if(template.result_names.size()>0 && template.row_ids.size()==template.result_names.size() &&
                         template.row_ids.size() == template.col_ids.size() && rows.size() == sheets.size()){
                     System.out.println("Template sa dá uložiť");
-                    System.out.println(template.toString());
+                    DatabaseTransactions dbt = new DatabaseTransactions();
+                    dbt.insertTemplate("bogeman", template);
                 }
             }
+            reset_template();
         }
     }
 

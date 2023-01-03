@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<SplitPane dividerPositions="0.17336683417085427" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" orientation="VERTICAL" prefHeight="771.0" prefWidth="1238.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="MakeTemplateController">
+<SplitPane dividerPositions="0.17336683417085427" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" orientation="VERTICAL" prefHeight="771.0" prefWidth="1238.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="MakeTemplateController">
     <items>
         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
             <children>
@@ -19,7 +19,8 @@
                         <Font size="21.0" />
                     </font>
                 </Label>
-                <ComboBox fx:id="template_menu" editable="true" layoutX="187.0" layoutY="50.0" prefHeight="31.0" prefWidth="210.0" onAction="#change_template" />
+                <TextField fx:id="template_menu" layoutX="187.0" layoutY="50.0" prefHeight="31.0" prefWidth="210.0" />
+                <Button fx:id="clear_template" alignment="CENTER" layoutX="410.0" layoutY="50.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="125.0" text="Reset template" textAlignment="CENTER" wrapText="true" onAction="#reset_template"/>
             </children></AnchorPane>
         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="326.0" prefWidth="632.0">
             <children>
@@ -51,79 +52,13 @@
                                     </font>
                                 </Label>
                                 <TextField fx:id="sheet1" layoutX="693.0" layoutY="45.0" prefHeight="26.0" prefWidth="60.0" />
-                                <Label fx:id="label2" layoutX="34.0" layoutY="94.0" text="DVP result #2">
+
+                                <Button fx:id="add_more_button" layoutX="29.0" layoutY="94.0" mnemonicParsing="false" prefHeight="49.0" prefWidth="119.0" text="Add more +" onAction="#add_more_contoller">
                                     <font>
-                                        <Font size="18.0" />
+                                        <Font size="14.0" />
                                     </font>
-                                </Label>
-                                <ChoiceBox fx:id="choice_box2" layoutX="153.0" layoutY="94.0" prefHeight="26.0" prefWidth="190.0" />
-                                <Label fx:id="row_label2" layoutX="370.0" layoutY="94.0" text="Row">
-                                    <font>
-                                        <Font size="18.0" />
-                                    </font>
-                                </Label>
-                                <TextField fx:id="row2" layoutX="416.0" layoutY="94.0" prefHeight="26.0" prefWidth="60.0" />
-                                <Label fx:id="col_label2" layoutX="500.0" layoutY="94.0" text="Col">
-                                    <font>
-                                        <Font size="18.0" />
-                                    </font>
-                                </Label>
-                                <TextField fx:id="col2" layoutX="545.0" layoutY="94.0" prefHeight="26.0" prefWidth="60.0" />
-                                <Label fx:id="sheet_label2" layoutX="637.0" layoutY="94.0" text="Sheet">
-                                    <font>
-                                        <Font size="18.0" />
-                                    </font>
-                                </Label>
-                                <TextField fx:id="sheet2" layoutX="693.0" layoutY="94.0" prefHeight="26.0" prefWidth="60.0" />
-                                <Label fx:id="label3" layoutX="34.0" layoutY="145.0" text="DVP result #3">
-                                    <font>
-                                        <Font size="18.0" />
-                                    </font>
-                                </Label>
-                                <ChoiceBox fx:id="choice_box3" layoutX="153.0" layoutY="145.0" prefHeight="26.0" prefWidth="190.0" />
-                                <Label fx:id="row_label3" layoutX="370.0" layoutY="145.0" text="Row">
-                                    <font>
-                                        <Font size="18.0" />
-                                    </font>
-                                </Label>
-                                <TextField fx:id="row3" layoutX="416.0" layoutY="145.0" prefHeight="26.0" prefWidth="60.0" />
-                                <Label fx:id="col_label3" layoutX="500.0" layoutY="145.0" text="Col">
-                                    <font>
-                                        <Font size="18.0" />
-                                    </font>
-                                </Label>
-                                <TextField fx:id="col3" layoutX="545.0" layoutY="145.0" prefHeight="26.0" prefWidth="60.0" />
-                                <Label fx:id="sheet_label3" layoutX="637.0" layoutY="145.0" text="Sheet">
-                                    <font>
-                                        <Font size="18.0" />
-                                    </font>
-                                </Label>
-                                <TextField fx:id="sheet3" layoutX="693.0" layoutY="145.0" prefHeight="26.0" prefWidth="60.0" />
-                                <Label fx:id="label4" layoutX="34.0" layoutY="196.0" text="DVP result #4">
-                                    <font>
-                                        <Font size="18.0" />
-                                    </font>
-                                </Label>
-                                <ChoiceBox fx:id="choice_box4" layoutX="154.0" layoutY="196.0" prefHeight="26.0" prefWidth="190.0" />
-                                <Label fx:id="row_label4" layoutX="370.0" layoutY="196.0" text="Row">
-                                    <font>
-                                        <Font size="18.0" />
-                                    </font>
-                                </Label>
-                                <TextField fx:id="row4" layoutX="416.0" layoutY="196.0" prefHeight="26.0" prefWidth="60.0" />
-                                <Label fx:id="col_label4" layoutX="500.0" layoutY="196.0" text="Col">
-                                    <font>
-                                        <Font size="18.0" />
-                                    </font>
-                                </Label>
-                                <TextField fx:id="col4" layoutX="545.0" layoutY="196.0" prefHeight="26.0" prefWidth="60.0" />
-                                <Label fx:id="sheet_label4" layoutX="637.0" layoutY="196.0" text="Sheet">
-                                    <font>
-                                        <Font size="18.0" />
-                                    </font>
-                                </Label>
-                                <TextField fx:id="sheet4" layoutX="693.0" layoutY="196.0" prefHeight="26.0" prefWidth="60.0" />
-                                <Button fx:id="add_more_button" layoutX="29.0" layoutY="249.0" mnemonicParsing="false" prefHeight="49.0" prefWidth="119.0" text="Add more +" onAction="#add_more_contoller">
+                                </Button>
+                                <Button fx:id="remove_one_button" layoutX="170.0" layoutY="94.0" mnemonicParsing="false" prefHeight="49.0" prefWidth="119.0" text="Remove one -" onAction="#remove_one_contoller">
                                     <font>
                                         <Font size="14.0" />
                                     </font>

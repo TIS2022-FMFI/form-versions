@@ -2,11 +2,15 @@ import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
+import org.apache.poi.openxml4j.opc.OPCPackage;
+import org.apache.poi.poifs.filesystem.POIFSFileSystem;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 
 import java.awt.image.BufferedImage;
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,6 +18,7 @@ import org.apache.poi.EncryptedDocumentException;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import javax.imageio.ImageIO;
 
@@ -40,7 +45,7 @@ public class Template {
 
         for(int i = 0; i<results.size(); i++) {
             if (results.get(i).getValue() != null) {
-                String result_name = results.get(i).getValue().toString().replace(" ", "");
+                String result_name = results.get(i).getValue().toString();
                 String row_id = rows.get(i).getText().replace(" ", "");
                 String col_id = cols.get(i).getText().replace(" ", "");
                 String sheet_id = sheets.get(i).getText().replace(" ", "");
@@ -122,12 +127,13 @@ public class Template {
     @Override
     public String toString() {
 
-        String str = "Template: \n";
-        str+=template_name;
+        String str = "Template: ";
+        str+=template_name + "\n";
         for(int i = 0; i<result_names.size(); i++) {
-            str += " " + result_names.get(i) + " " + row_ids.get(i) + " " + col_ids.get(i) + " " + sheet_ids.get(i) + "\n";
+            str += result_names.get(i) + " " + row_ids.get(i) + " " + col_ids.get(i) + " " + sheet_ids.get(i) + "\n";
 
         }
+        str+=path_to_excel;
         return str;
     }
 
@@ -141,6 +147,15 @@ public class Template {
     }
 
     public void export(String path, String partID) throws Exception {
+
+        // TODO priprava kodu na citanie byte array z databazy na excel.
+
+        //                XSSFWorkbook workbook2 = new XSSFWorkbook(new ByteArrayInputStream(baos.toByteArray()));
+        //                FileOutputStream out = new FileOutputStream("newfile.xlsx");
+        //                workbook2.write(out);
+        //                out.close();
+
+
         try {
             File xlsxFile = new File(path);
             FileInputStream inputStream = new FileInputStream(xlsxFile);
@@ -193,8 +208,13 @@ public class Template {
 
             Integer databaseId;
 
-            try (PreparedStatement s = DbContext.getConnection().prepareStatement("INSERT INTO template (name) VALUES (?)", Statement.RETURN_GENERATED_KEYS)) {
+            try (PreparedStatement s = DbContext.getConnection().prepareStatement("INSERT INTO template (name, excel) VALUES (?,?)", Statement.RETURN_GENERATED_KEYS)) {
                 s.setString(1, this.template_name);
+                XSSFWorkbook workbook = new XSSFWorkbook(Files.newInputStream(Paths.get(path_to_excel)));
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                workbook.write(baos);
+                s.setBytes(2, baos.toByteArray());
+
                 s.executeUpdate();
 
                 try (ResultSet generatedKeys = s.getGeneratedKeys()) {
@@ -206,6 +226,8 @@ public class Template {
                     }
                 }
 
+            } catch (IOException e) {
+                throw new RuntimeException(e);
             }
 
             for (int i = 0; i < result_names.size(); i++) {
