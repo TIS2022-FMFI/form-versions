@@ -23,8 +23,10 @@ public class Template {
     List<Integer> row_ids = new ArrayList<>();
     List<Integer> col_ids = new ArrayList<>();
     List<Integer> sheet_ids = new ArrayList<>();
+    String path_to_excel = "";
 
-    public Template(String template_name, List<String> result_names, List<Integer> row_ids, List<Integer> col_ids, List<Integer> sheet_ids) {
+    public Template(String path_to_excel, String template_name, List<String> result_names, List<Integer> row_ids, List<Integer> col_ids, List<Integer> sheet_ids) {
+        this.path_to_excel = path_to_excel;
         this.template_name = template_name;
         this.result_names = result_names;
         this.row_ids = row_ids;
@@ -32,11 +34,11 @@ public class Template {
         this.sheet_ids = sheet_ids;
     }
 
-    public Template(ComboBox templateMenu, List<ChoiceBox> results, List<TextField> rows, List<TextField> cols, List<TextField> sheets) {
-        template_name = templateMenu.getValue().toString().trim();
+    public Template(String path_to_excel, TextField templateMenu, List<ChoiceBox> results, List<TextField> rows, List<TextField> cols, List<TextField> sheets) {
+        this.path_to_excel = path_to_excel;
+        this.template_name = templateMenu.getText().toString().trim();
 
         for(int i = 0; i<results.size(); i++) {
-            int number_of_filled = 0;
             if (results.get(i).getValue() != null) {
                 String result_name = results.get(i).getValue().toString().replace(" ", "");
                 String row_id = rows.get(i).getText().replace(" ", "");
@@ -52,7 +54,6 @@ public class Template {
                         col_ids.add(letter_to_number(col_id));
                     }
                     sheet_ids.add(Integer.parseInt(sheet_id));
-                    number_of_filled+=1;
                 }
             }
         }
@@ -226,6 +227,7 @@ public class Template {
     }
 
     public static void main(String[] args) throws Exception {
+        String path_to_excel = "src/excely/dummy.xlsx";
         String template_name = "dummy";
         List<String> result_names = new ArrayList<>();
         result_names.add("one");
@@ -239,9 +241,10 @@ public class Template {
         List<Integer> sheet_ids = new ArrayList<>();
         sheet_ids.add(0);
         sheet_ids.add(0);
-        Template t = new Template(template_name,result_names,row_ids,col_ids,sheet_ids);
 //        t.export("src/excely/dummy.xlsx", "123.456.789A");
+        Template t = new Template(path_to_excel, template_name,result_names,row_ids,col_ids,sheet_ids);
         t.insert("bogeman");
+        t.export("src/excely/dummy.xlsx", "123.456.789A");
     }
 
 }
