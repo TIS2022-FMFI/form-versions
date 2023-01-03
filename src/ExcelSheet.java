@@ -15,7 +15,7 @@ public class ExcelSheet {
         listOfAllTests.forEach(test -> {
             test.getTest_results().forEach(testResult -> {
                 testWrapperList.add(new TestWrapper(test.getDate(), test.getAA(), test.getDocument_nr(), test.getCustomer_nr(),
-                        testResult.getTest_type(), testResult.getTest_result(), testResult.getSoll(), testResult.getSoll_plus(), testResult.getSoll_minus()));
+                        testResult.getTest_type().replace('\n', ' '), testResult.getTest_result(), testResult.getSoll(), testResult.getSoll_plus(), testResult.getSoll_minus()));
             });
         });
         return testWrapperList;
@@ -33,6 +33,13 @@ public class ExcelSheet {
         DVPParser dvp = new DVPParser();
         dvp.readXLSXFile(path);
         listOfAllTests = dvp.getTests();
+    }
+
+    public void getAllTestNames() {
+        generateTestWrappersForAllTest().forEach(tst -> {
+            System.out.println(tst.getTestType());
+            System.out.println();
+        });
     }
 
 

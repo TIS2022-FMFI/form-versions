@@ -4,13 +4,14 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Objects;
 
 public class Main extends Application {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
 
         try {
             Connection connection = DriverManager.getConnection("jdbc:mariadb://localhost:3306/moja", "root", "root");
@@ -31,6 +32,10 @@ public class Main extends Application {
             e.printStackTrace();
 
         }
+
+        ExcelSheet e = new ExcelSheet();
+        e.parseExcelFile("src\\excely\\EEFBC000.xlsx");
+        e.getAllTestNames();
 
         launch(args);
     }

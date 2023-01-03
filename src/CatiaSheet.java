@@ -514,7 +514,7 @@ public class CatiaSheet {
         imageView.setFitWidth(100);
         Tooltip tooltip = new Tooltip();
         tooltip.setGraphic(imageView);
-        tooltip.setShowDelay(Duration.millis(200));
+//        tooltip.setShowDelay(Duration.millis(200));
 
         componentImgButton.setTooltip(tooltip);
     }

@@ -117,7 +117,7 @@ public class DVPParser {
         }
     }
 
-    public static void print_all_tests(){
+    public void print_all_tests(){
         System.out.println(tests);
         for (Test test: tests){
             System.out.println(test.to_string());

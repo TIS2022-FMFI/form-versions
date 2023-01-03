@@ -10,6 +10,7 @@ import javafx.scene.text.Font;
 import javafx.stage.FileChooser;
 
 import java.io.File;
+import java.sql.SQLException;
 import java.util.*;
 
 import java.net.URL;
@@ -97,19 +98,18 @@ public class MakeTemplateController implements Initializable{
         sheets.add(sheet2);
         sheets.add(sheet3);
         sheets.add(sheet4);
-        List<String> res_names = new ArrayList<>();
-        res_names.add("res1");
-        res_names.add("res2");
-        res_names.add("res3");
-        res_names.add("res4");
 
         for(ChoiceBox choice_box: results) {
-            fill_result_names(res_names, choice_box);
+            try {
+                fill_result_names(TestTypeFinder.getInstance().findAll(), choice_box);
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
         }
 
     }
     @FXML
-    public void add_more_contoller(){
+    public void add_more_contoller() throws SQLException {
         int idx = label_results.size()+1;
         Label label_result = new Label("DVP result #"+idx);
         label_result.setId("label"+idx);
@@ -126,12 +126,7 @@ public class MakeTemplateController implements Initializable{
         choice_box_result.setPrefWidth(results.get(results.size()-1).getPrefWidth());
         add_more.getChildren().add(choice_box_result);
         results.add(choice_box_result);
-        List<String> res_names = new ArrayList<>();
-        res_names.add("res1");
-        res_names.add("res2");
-        res_names.add("res3");
-        res_names.add("res4");
-        fill_result_names(res_names, choice_box_result);
+        fill_result_names(TestTypeFinder.getInstance().findAll(), choice_box_result);
 
         Label row_label = new Label("Row");
         row_label.setId("row_label"+idx);
@@ -255,8 +250,7 @@ public class MakeTemplateController implements Initializable{
     }
 
     public void load_template(ActionEvent event){
-        fc.setTitle("Choose the subpart PDF files");
-        fc.setInitialDirectory(new File("src\\templates"));
+        fc.setInitialDirectory(new File("src\\excely"));
         File selectedFile = fc.showOpenDialog(null);
 
         if (selectedFile != null) {

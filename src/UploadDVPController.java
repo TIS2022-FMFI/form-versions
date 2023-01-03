@@ -12,6 +12,7 @@ import javafx.stage.FileChooser;
 
 import java.io.File;
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -144,7 +145,14 @@ public class UploadDVPController implements Initializable {
 
     @FXML
     void insertToDB(ActionEvent event) {
-
+        observableListItems.forEach(testWrapper -> {
+            try {
+                testWrapper.insert("dummy");
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        });
+        clearDVPPage(event);
     }
 
     @FXML
