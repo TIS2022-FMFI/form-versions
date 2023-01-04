@@ -1,7 +1,5 @@
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
@@ -10,12 +8,14 @@ import javafx.scene.text.Font;
 import javafx.stage.FileChooser;
 
 import java.io.File;
+import java.sql.SQLException;
 import java.util.*;
 
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.stream.Collectors;
 
 public class MakeTemplateController implements Initializable{
     @FXML
@@ -62,10 +62,8 @@ public class MakeTemplateController implements Initializable{
     @FXML
     ChoiceBox template_menu_to_remove;
 
-
     FileChooser fc = new FileChooser();
 
-    Template template;
     String path_to_excel = "";
 
 
@@ -88,27 +86,26 @@ public class MakeTemplateController implements Initializable{
 
         sheets.add(sheet1);
 
-        List<String> res_names = new ArrayList<>();
-        res_names.add("res1");
-        res_names.add("res2");
-        res_names.add("res3");
-        res_names.add("res4");
 
         for(ChoiceBox choice_box: results) {
-            fill_choice_box(res_names, choice_box);
+
+            try {
+                fill_choice_box(TestTypeFinder.getInstance().findAll(), choice_box);
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+
         }
 
-        List<String> Temp_names = new ArrayList<>();
-        Temp_names.add("Temp1");
-        Temp_names.add("Temp2");
-        Temp_names.add("Temp3");
-        Temp_names.add("Temp4");
-        //TODO dostane list templatov z DB a zavola sa fill_choice_box(temp_names,template_menu_to_remove);
-        fill_choice_box(Temp_names,template_menu_to_remove);
+        try {
+            fill_choice_box(TemplateFinder.getInstance().findAll().stream().map(it -> it.template_name).collect(Collectors.toList()), template_menu_to_remove);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
 
     }
     @FXML
-    public void add_more_contoller(){
+    public void add_more_contoller() throws SQLException {
         int idx = label_results.size()+1;
         Label label_result = new Label("DVP result #"+idx);
         label_result.setId("label"+idx);
@@ -125,12 +122,8 @@ public class MakeTemplateController implements Initializable{
         choice_box_result.setPrefWidth(results.get(results.size()-1).getPrefWidth());
         add_more.getChildren().add(choice_box_result);
         results.add(choice_box_result);
-        List<String> res_names = new ArrayList<>();
-        res_names.add("res1");
-        res_names.add("res2");
-        res_names.add("res3");
-        res_names.add("res4");
-        fill_choice_box(res_names, choice_box_result);
+        fill_choice_box(TestTypeFinder.getInstance().findAll(), choice_box_result);
+
 
         Label row_label = new Label("Row");
         row_label.setId("row_label"+idx);
@@ -179,7 +172,6 @@ public class MakeTemplateController implements Initializable{
         sheet.setPrefWidth(sheets.get(sheets.size()-1).getPrefWidth());
         add_more.getChildren().add(sheet);
         sheets.add(sheet);
-        System.out.println(label_results.size()+" "+ results.size()+" "+ row_labels.size()+" "+ rows.size());
         add_more_button.setLayoutY(add_more_button.getLayoutY()+49);
         remove_one_button.setLayoutY(remove_one_button.getLayoutY()+49);
 
@@ -213,15 +205,16 @@ public class MakeTemplateController implements Initializable{
         add_more.getChildren().remove(sheets.get(sheets.size()-1));
         sheets.remove(sheets.size()-1);
 
-        System.out.println(label_results.size()+" "+ results.size()+" "+ row_labels.size()+" "+ rows.size());
         add_more_button.setLayoutY(add_more_button.getLayoutY()-49);
         remove_one_button.setLayoutY(remove_one_button.getLayoutY()-49);
 
     }
 
-    public void remove_template(){
+    public void remove_template() throws SQLException {
         String template_to_remove = template_menu_to_remove.getSelectionModel().getSelectedItem().toString();
-        //TODO dostane list templatov z DB a zavola sa fill_choice_box(temp_names,template_menu_to_remove);
+        DatabaseTransactions dbt = new DatabaseTransactions();
+        dbt.deleteTemplate("dummy", TemplateFinder.getInstance().findByName(template_to_remove));
+        fill_choice_box(TemplateFinder.getInstance().findAll().stream().map(it -> it.template_name).collect(Collectors.toList()), template_menu_to_remove);
         System.out.println(template_to_remove);
     }
 
@@ -251,7 +244,11 @@ public class MakeTemplateController implements Initializable{
     }
 
     public void load_template(ActionEvent event){
+
+        fc.setInitialDirectory(new File("src\\excely"));
+
         fc.setTitle("Choose excel file");
+
         File selectedFile = fc.showOpenDialog(null);
 
         if (selectedFile != null) {
@@ -265,8 +262,8 @@ public class MakeTemplateController implements Initializable{
         } else System.out.println("zle");
     }
 
-    public void create_template() {
-        if (!template_menu.getText().replace(" ", "").equals("")) {
+    public void create_template() throws SQLException {
+        if (!Objects.equals(path_to_excel, "") && !template_menu.getText().replace(" ", "").equals("")) {
             int number_of_filled = 0;
             for (int i = 0; i < results.size(); i++) {
                 if (results.get(i).getValue() != null &&
@@ -281,11 +278,13 @@ public class MakeTemplateController implements Initializable{
                 Template template = new Template(path_to_excel, template_menu, results, rows, cols, sheets);
                 if(template.result_names.size()>0 && template.row_ids.size()==template.result_names.size() &&
                         template.row_ids.size() == template.col_ids.size() && rows.size() == sheets.size()){
-                    //TODO dostane list templatov z DB a zavola sa fill_choice_box(temp_names,template_menu_to_remove);
                     System.out.println("Template sa dá uložiť");
-                    System.out.println(template.toString());
+                    DatabaseTransactions dbt = new DatabaseTransactions();
+                    dbt.insertTemplate("bogeman", template);
+                    fill_choice_box(TemplateFinder.getInstance().findAll().stream().map(it -> it.template_name).collect(Collectors.toList()), template_menu_to_remove);
                 }
             }
+            reset_template();
         }
     }
 

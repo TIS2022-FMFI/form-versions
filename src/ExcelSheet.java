@@ -5,7 +5,7 @@ import java.util.List;
 
 public class ExcelSheet {
 
-    public static List<Test> listOfAllTests = new ArrayList<>();
+    public List<Test> listOfAllTests = new ArrayList<>();
 
     public ExcelSheet() {
     }
@@ -15,7 +15,7 @@ public class ExcelSheet {
         listOfAllTests.forEach(test -> {
             test.getTest_results().forEach(testResult -> {
                 testWrapperList.add(new TestWrapper(test.getDate(), test.getAA(), test.getDocument_nr(), test.getCustomer_nr(),
-                        testResult.getTest_type(), testResult.getTest_result(), testResult.getSoll(), testResult.getSoll_plus(), testResult.getSoll_minus()));
+                        testResult.getTest_type().replace('\n', ' '), testResult.getTest_result(), testResult.getSoll(), testResult.getSoll_plus(), testResult.getSoll_minus()));
             });
         });
         return testWrapperList;
@@ -26,14 +26,23 @@ public class ExcelSheet {
     }
 
     public void setListOfAllTests(List<Test> listOfAllTests) {
-        ExcelSheet.listOfAllTests = listOfAllTests;
+        this.listOfAllTests = listOfAllTests;
     }
 
     public void parseExcelFile(String path) throws IOException {
         DVPParser dvp = new DVPParser();
         dvp.readXLSXFile(path);
+        System.out.println("dvp " + dvp.getTests().size());
         listOfAllTests = dvp.getTests();
     }
+
+    public void getAllTestNames() {
+        generateTestWrappersForAllTest().forEach(tst -> {
+            System.out.println(tst.getTestType());
+            System.out.println();
+        });
+    }
+
 
 
 

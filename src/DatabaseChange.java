@@ -1,5 +1,3 @@
-import org.bouncycastle.util.Times;
-
 import java.sql.*;
 
 public class DatabaseChange {
@@ -35,17 +33,5 @@ public class DatabaseChange {
 
     public Timestamp getTimestamp() {
         return timestamp;
-    }
-
-    public void setWorkerId(String workerId) {
-        this.workerId = workerId;
-    }
-
-    public void setChange(String change) {
-        this.change = change;
-    }
-
-    public void setTimestamp(Timestamp timestamp) {
-        this.timestamp = timestamp;
     }
 }

@@ -1,4 +1,5 @@
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableArray;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -12,7 +13,8 @@ import javafx.stage.FileChooser;
 
 import java.io.File;
 import java.net.URL;
-import java.util.List;
+import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 public class UploadDVPController implements Initializable {
@@ -138,13 +140,18 @@ public class UploadDVPController implements Initializable {
 
     @FXML
     void clearDVPPage(ActionEvent event) {
-        tableViewDVP.getItems().clear();
-        observableListItems.clear();
+        observableListItems.removeAll(observableListItems);
+//        tableViewDVP.getItems().clear();
+        System.out.println(observableListItems.size());
+        System.out.println(observableListItems);
     }
 
     @FXML
-    void insertToDB(ActionEvent event) {
+    void insertToDB(ActionEvent event) throws SQLException {
 
+        DatabaseTransactions dbt = new DatabaseTransactions();
+        dbt.insertTestWrapperList("dummy", observableListItems);
+        clearDVPPage(event);
     }
 
     @FXML
@@ -159,9 +166,10 @@ public class UploadDVPController implements Initializable {
 
                 ExcelSheet e = new ExcelSheet();
                 e.parseExcelFile(selectedFile.getAbsolutePath());
+                System.out.println("e list tests " + e.getListOfAllTests().size());
                 observableListItems = FXCollections.observableArrayList(e.generateTestWrappersForAllTest());
+                System.out.println(observableListItems.size());
                 createTable();
-
 
             } catch (Exception e) {
                 e.printStackTrace();

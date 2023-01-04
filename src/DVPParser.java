@@ -1,8 +1,4 @@
-import org.apache.poi.ss.format.CellFormatType;
-import org.apache.poi.ss.usermodel.CellType;
-import org.apache.poi.ss.usermodel.CellValue;
 import org.apache.poi.ss.usermodel.DateUtil;
-import org.apache.poi.ss.usermodel.FormulaEvaluator;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFRow;
@@ -17,17 +13,17 @@ import java.util.*;
 
 
 public class DVPParser {
-    private static XSSFSheet sheet;
-    private static List<CellRangeAddress> mergedRegions;
-    private static List<List<XSSFCell>> all_cell = new ArrayList<>();
-    private static int first_row = 8;
-    static List<Test> tests = new ArrayList<>();
+    private XSSFSheet sheet;
+    private List<CellRangeAddress> mergedRegions;
+    private List<List<XSSFCell>> all_cell = new ArrayList<>();
+    private int first_row = 8;
+    List<Test> tests = new ArrayList<>();
 
     public DVPParser() {
     }
 
 
-    public static void add_cell(XSSFCell cell){
+    public void add_cell(XSSFCell cell){
         boolean added = false;
         for(CellRangeAddress mergedRegion: mergedRegions) {
             if (mergedRegion.isInRange(cell)) {
@@ -47,7 +43,7 @@ public class DVPParser {
         return tests;
     }
 
-    private static XSSFCell copyCell(XSSFCell srcCell, XSSFCell cell) {
+    private XSSFCell copyCell(XSSFCell srcCell, XSSFCell cell) {
         if (srcCell!=null) {
             switch (srcCell.getCellType()) {
                 case BOOLEAN:
@@ -111,7 +107,7 @@ public class DVPParser {
 
     }
 
-    public static void createTestObjects(){
+    public void createTestObjects(){
         for(int row = first_row; row<all_cell.size(); row++){
             Test test = new Test(all_cell, row);
             if(test.getTest_results().size() > 0) {
@@ -120,7 +116,7 @@ public class DVPParser {
         }
     }
 
-    public static void print_all_tests(){
+    public void print_all_tests(){
         System.out.println(tests);
         for (Test test: tests){
             System.out.println(test.to_string());
