@@ -29,7 +29,11 @@ public class Template {
     List<Integer> col_ids = new ArrayList<>();
     List<Integer> sheet_ids = new ArrayList<>();
     String path_to_excel = "";
+    int databaseId;
+    XSSFWorkbook emptyTable;
 
+
+    public Template() {}
     public Template(String path_to_excel, String template_name, List<String> result_names, List<Integer> row_ids, List<Integer> col_ids, List<Integer> sheet_ids) {
         this.path_to_excel = path_to_excel;
         this.template_name = template_name;
@@ -37,6 +41,12 @@ public class Template {
         this.row_ids = row_ids;
         this.col_ids = col_ids;
         this.sheet_ids = sheet_ids;
+    }
+
+    public Template(String name, int dbId, XSSFWorkbook table) {
+        this.template_name = name;
+        this.databaseId = dbId;
+        this.emptyTable = table;
     }
 
     public Template(String path_to_excel, TextField templateMenu, List<ChoiceBox> results, List<TextField> rows, List<TextField> cols, List<TextField> sheets) {
@@ -210,6 +220,7 @@ public class Template {
 
             try (PreparedStatement s = DbContext.getConnection().prepareStatement("INSERT INTO template (name, excel) VALUES (?,?)", Statement.RETURN_GENERATED_KEYS)) {
                 s.setString(1, this.template_name);
+
                 XSSFWorkbook workbook = new XSSFWorkbook(Files.newInputStream(Paths.get(path_to_excel)));
                 ByteArrayOutputStream baos = new ByteArrayOutputStream();
                 workbook.write(baos);
@@ -236,6 +247,7 @@ public class Template {
                     s.setInt(2, row_ids.get(i));
                     s.setInt(3, col_ids.get(i));
                     s.setInt(4, sheet_ids.get(i));
+                    System.out.println(result_names.get(i));
                     if (TestTypeFinder.getInstance().returnIdInTable(result_names.get(i)) == -1) {
                         throw new SQLException("Wrong test name, nothing inserted");
                     }
@@ -246,6 +258,21 @@ public class Template {
         }
 
 
+    }
+
+    public void delete(String uid) throws SQLException {
+
+        DatabaseChange dc = new DatabaseChange(uid, "Deleted a template named " + template_name + " from the database", new Timestamp(System.currentTimeMillis()));
+        dc.insert();
+
+        try (PreparedStatement s = DbContext.getConnection().prepareStatement("DELETE FROM template WHERE name = ? ")) {
+            s.setString(1, template_name);
+            s.executeUpdate();
+        }
+    }
+
+    public void setDatabaseId(int databaseId) {
+        this.databaseId = databaseId;
     }
 
     public static void main(String[] args) throws Exception {

@@ -13,7 +13,7 @@
   <tabs>
     <Tab text="Upload pdf file">
          <content>
-                 <fx:include fx:id="jednotka" source="pdfupload.fxml"/>
+                 <fx:include fx:id="jednotka" source="pdfUpload.fxml"/>
 <!--           <SplitPane dividerPositions="0.8477157360406091" orientation="VERTICAL" prefHeight="861.0" prefWidth="1209.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">-->
 <!--             <items>-->
 <!--               <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="511.0" prefWidth="1238.0">-->
@@ -104,7 +104,7 @@
     <Tab text="Upload dvp table">
       <content>
 <!--        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />-->
-          <fx:include fx:id="dvojka" source="dvpupload.fxml"/>
+          <fx:include fx:id="dvojka" source="dvpUpload.fxml"/>
       </content>
 
 
@@ -121,7 +121,7 @@
       <Tab text="Make a template">
         <content>
           <!--<AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />-->
-          <fx:include fx:id="stvorka" source="stvrtytab.fxml"/>
+          <fx:include fx:id="stvorka" source="templateMaker.fxml"/>
         </content>
       </Tab>
 
@@ -135,8 +135,8 @@
 <!--                  <Button layoutX="584.0" layoutY="14.0" mnemonicParsing="false" onAction="#refresh" text="Refresh" />-->
 <!--            </children>-->
 <!--          </AnchorPane>-->
-<!--          <fx:include fx:id="logdb" source="dblog.fxml"/>-->
-            <!--             <fx:include fx:id="dblog" source="dblog.fxml"/>-->
+<!--          <fx:include fx:id="logdb" source="dbLog.fxml"/>-->
+                         <fx:include fx:id="dblog" source="dbLog.fxml"/>
                     </content>
                   </Tab>
 

@@ -45,7 +45,7 @@ public class TestWrapper {
 
     public void insert(String uid) throws SQLException {
         if (isNotInDatabase(this)) {
-            DatabaseChange dc = new DatabaseChange(uid, "Uploaded a test for" + documentNr + " to the database at ", new Timestamp(System.currentTimeMillis()));
+            DatabaseChange dc = new DatabaseChange(uid, "Uploaded a test for " + documentNr + " to the database at ", new Timestamp(System.currentTimeMillis()));
             dc.insert();
             try (PreparedStatement s = DbContext.getConnection().prepareStatement("INSERT INTO dvp (part_id, date, aa, consumer_id, test_name, test_result, test_soll, test_soll_plus, test_soll_minus) VALUES (?,?,?,?,?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS)) {
                 s.setString(1, this.documentNr);

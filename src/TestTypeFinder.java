@@ -43,6 +43,23 @@ public class TestTypeFinder {
             }
         }
     }
+
+    public String returnTestName(int id) throws SQLException {
+        try (PreparedStatement s = DbContext.getConnection().prepareStatement("SELECT * FROM test_types WHERE id = ?")) {
+            s.setInt(1, id);
+            try (ResultSet r = s.executeQuery()) {
+                List<String> elements = new ArrayList<>();
+                while (r.next()) {
+                    elements.add(r.getString(2));
+                }
+                if (elements.size() == 1) {
+                    return elements.get(0);
+                } else {
+                    return "null";
+                }
+            }
+        }
+    }
 }
 
 

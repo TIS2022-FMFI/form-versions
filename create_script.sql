@@ -84,7 +84,7 @@ create table coordinates
     sheet     int not null,
     test_type int null,
     constraint coordinates_ibfk_1
-        foreign key (table_id) references template (id),
+        foreign key (table_id) references template (id) on delete cascade,
     constraint coordinates_ibfk_2
         foreign key (test_type) references test_types (id)
 );

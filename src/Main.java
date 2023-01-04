@@ -19,9 +19,6 @@ public class Main extends Application {
 
             if (connection != null) {
                 DbContext.setConnection(connection);
-
-
-
             } else {
                 System.out.println("Failed to make connection!");
             }
@@ -30,14 +27,13 @@ public class Main extends Application {
             throw new RuntimeException(e);
         } catch (Exception e) {
             e.printStackTrace();
-
         }
 
         launch(args);
     }
     @Override
     public void start(Stage stage) throws Exception {
-        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("xmlka/versionOne.fxml")));
+        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("xmlka/main.fxml")));
         stage.setTitle("BogeParser (Logged in as dummyString)");
         stage.setScene(new Scene(root));
         stage.show();
