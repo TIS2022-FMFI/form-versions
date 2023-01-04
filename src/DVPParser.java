@@ -79,6 +79,9 @@ public class DVPParser {
             } else if (wb.getSheet("DVP") != null) {
                 sheet = wb.getSheet("DVP");
             }
+            else{
+                System.out.println("Nenašiel sa sheet s názvom DVP alebo DVP Internal");
+            }
             if (sheet != null) {
                 XSSFRow row;
                 XSSFCell cell;
