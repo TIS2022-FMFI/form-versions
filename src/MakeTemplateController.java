@@ -59,6 +59,10 @@ public class MakeTemplateController implements Initializable{
     @FXML
     TextField sheet1;
 
+    @FXML
+    ChoiceBox template_menu_to_remove;
+
+
     FileChooser fc = new FileChooser();
 
     Template template;
@@ -91,8 +95,16 @@ public class MakeTemplateController implements Initializable{
         res_names.add("res4");
 
         for(ChoiceBox choice_box: results) {
-            fill_result_names(res_names, choice_box);
+            fill_choice_box(res_names, choice_box);
         }
+
+        List<String> Temp_names = new ArrayList<>();
+        Temp_names.add("Temp1");
+        Temp_names.add("Temp2");
+        Temp_names.add("Temp3");
+        Temp_names.add("Temp4");
+        //TODO dostane list templatov z DB a zavola sa fill_choice_box(temp_names,template_menu_to_remove);
+        fill_choice_box(Temp_names,template_menu_to_remove);
 
     }
     @FXML
@@ -118,7 +130,7 @@ public class MakeTemplateController implements Initializable{
         res_names.add("res2");
         res_names.add("res3");
         res_names.add("res4");
-        fill_result_names(res_names, choice_box_result);
+        fill_choice_box(res_names, choice_box_result);
 
         Label row_label = new Label("Row");
         row_label.setId("row_label"+idx);
@@ -207,6 +219,11 @@ public class MakeTemplateController implements Initializable{
 
     }
 
+    public void remove_template(){
+        String template_to_remove = template_menu_to_remove.getSelectionModel().getSelectedItem().toString();
+        //TODO dostane list templatov z DB a zavola sa fill_choice_box(temp_names,template_menu_to_remove);
+        System.out.println(template_to_remove);
+    }
 
     public void reset_template(){
         template_menu.clear();
@@ -229,7 +246,7 @@ public class MakeTemplateController implements Initializable{
         return result.reverse().toString();
     }
 
-    public void fill_result_names(List<String> result_names, ChoiceBox choice_box){
+    public void fill_choice_box(List<String> result_names, ChoiceBox choice_box){
         choice_box.setItems(FXCollections.observableArrayList(result_names));
     }
 
@@ -264,6 +281,7 @@ public class MakeTemplateController implements Initializable{
                 Template template = new Template(path_to_excel, template_menu, results, rows, cols, sheets);
                 if(template.result_names.size()>0 && template.row_ids.size()==template.result_names.size() &&
                         template.row_ids.size() == template.col_ids.size() && rows.size() == sheets.size()){
+                    //TODO dostane list templatov z DB a zavola sa fill_choice_box(temp_names,template_menu_to_remove);
                     System.out.println("Template sa dá uložiť");
                     System.out.println(template.toString());
                 }
