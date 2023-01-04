@@ -17,7 +17,7 @@ public class TestResult {
     private List<List<XSSFCell>> all_cell;
     private int soll_row_idx = 4;
     private int test_name_row_idx = 1;
-    private int first_col_of_sol = 10;
+    private int first_col_of_soll = 10;
     private int col;
 
 
@@ -29,7 +29,7 @@ public class TestResult {
         soll = get_string_value_from_cell(get_cell(soll_row_idx, col));
         soll_plus = get_string_value_from_cell(get_cell(soll_row_idx+1, col));
         soll_minus = get_string_value_from_cell(get_cell(soll_row_idx+2, col));
-        if( col<first_col_of_sol){
+        if( col<first_col_of_soll){
             soll = "";
             soll_plus = "";
             soll_minus = "";
