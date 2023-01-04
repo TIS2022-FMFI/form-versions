@@ -26,11 +26,11 @@ public class TestWrapperFinder {
                             r.getString(4),
                             r.getString(2),
                             r.getString(5),
+                            TestTypeFinder.getInstance().returnTestName(r.getInt(10)),
                             r.getString(6),
                             r.getString(7),
                             r.getString(8),
-                            r.getString(9),
-                            r.getString(10)
+                            r.getString(9)
                     );
                     elements.add(h);
                 }
@@ -51,11 +51,11 @@ public class TestWrapperFinder {
                             r.getString(4),
                             r.getString(2),
                             r.getString(5),
+                            TestTypeFinder.getInstance().returnTestName(r.getInt(10)),
                             r.getString(6),
                             r.getString(7),
                             r.getString(8),
-                            r.getString(9),
-                            r.getString(10)
+                            r.getString(9)
                     );
                     if (!map.containsKey(date)) {
                         map.put(date, new ArrayList<>());

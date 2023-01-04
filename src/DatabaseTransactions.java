@@ -1,3 +1,5 @@
+import org.bouncycastle.asn1.tsp.TSTInfo;
+
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
@@ -54,6 +56,34 @@ public class DatabaseTransactions {
         } catch (SQLException e) {
             DbContext.getConnection().rollback();
             throw new RuntimeException(e);
+        } finally {
+            DbContext.getConnection().setAutoCommit(true);
+        }
+    }
+
+    public void insertTestWrapper(String uid, TestWrapper testWrapper) throws SQLException {
+        DbContext.getConnection().setAutoCommit(false);
+        try {
+            testWrapper.insert(uid);
+        } catch (SQLException e) {
+            DbContext.getConnection().rollback();
+            throw new RuntimeException(e);
+        } finally {
+            DbContext.getConnection().setAutoCommit(true);
+        }
+    }
+
+    public void insertTestWrapperList(String uid, List<TestWrapper> ltw) throws SQLException {
+
+        DbContext.getConnection().setAutoCommit(false);
+        try {
+            ltw.forEach(testWrapper -> {
+                try {
+                    testWrapper.insert(uid);
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
+            });
         } finally {
             DbContext.getConnection().setAutoCommit(true);
         }

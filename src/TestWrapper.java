@@ -32,16 +32,16 @@ public class TestWrapper {
         if (isNotInDatabase(this)) {
             DatabaseChange dc = new DatabaseChange(uid, "Uploaded a test for " + documentNr + " to the database at ", new Timestamp(System.currentTimeMillis()));
             dc.insert();
-            try (PreparedStatement s = DbContext.getConnection().prepareStatement("INSERT INTO dvp (part_id, date, aa, consumer_id, test_name, test_result, test_soll, test_soll_plus, test_soll_minus) VALUES (?,?,?,?,?,?,?,?,?)")) {
+            try (PreparedStatement s = DbContext.getConnection().prepareStatement("INSERT INTO dvp (part_id, date, aa, consumer_id, test_result, test_soll, test_soll_plus, test_soll_minus, test_type_id) VALUES (?,?,?,?,?,?,?,?,?)")) {
                 s.setString(1, this.documentNr);
                 s.setString(2, this.date);
                 s.setString(3, this.AA);
                 s.setString(4, this.customerNr);
-                s.setString(5, this.testType);
-                s.setString(6, this.testResult);
-                s.setString(7, this.soll);
-                s.setString(8, this.sollPlus);
-                s.setString(9, this.sollMinus);
+                s.setString(5, this.testResult);
+                s.setString(6, this.soll);
+                s.setString(7, this.sollPlus);
+                s.setString(8, this.sollMinus);
+                s.setInt(9, TestTypeFinder.getInstance().returnIdInTable(this.testType));
                 s.executeUpdate();
             }
         }
@@ -56,7 +56,7 @@ public class TestWrapper {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         TestWrapper that = (TestWrapper) o;
-        return Objects.equals(date, that.date) && Objects.equals(AA, that.AA) && Objects.equals(documentNr, that.documentNr) && Objects.equals(customerNr, that.customerNr) && Objects.equals(testType, that.testType) && Objects.equals(testResult, that.testResult) && Objects.equals(soll, that.soll) && Objects.equals(sollPlus, that.sollPlus) && Objects.equals(sollMinus, that.sollMinus);
+        return date.equals(that.date) && AA.equals(that.AA) && documentNr.equals(that.documentNr) && customerNr.equals(that.customerNr) && testType.equals(that.testType) && testResult.equals(that.testResult) && soll.equals(that.soll) && sollPlus.equals(that.sollPlus) && sollMinus.equals(that.sollMinus);
     }
 
     public String getDate() {

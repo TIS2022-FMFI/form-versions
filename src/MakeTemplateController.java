@@ -240,7 +240,6 @@ public class MakeTemplateController implements Initializable{
     }
 
     public void fill_choice_box(List<String> result_names, ChoiceBox choice_box){
-        System.out.println(" skr skr");
         choice_box.setItems(FXCollections.observableArrayList(result_names));
     }
 

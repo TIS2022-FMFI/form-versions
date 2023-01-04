@@ -5,7 +5,7 @@ import java.util.List;
 
 public class ExcelSheet {
 
-    public static List<Test> listOfAllTests = new ArrayList<>();
+    public List<Test> listOfAllTests = new ArrayList<>();
 
     public ExcelSheet() {
     }
@@ -26,12 +26,13 @@ public class ExcelSheet {
     }
 
     public void setListOfAllTests(List<Test> listOfAllTests) {
-        ExcelSheet.listOfAllTests = listOfAllTests;
+        this.listOfAllTests = listOfAllTests;
     }
 
     public void parseExcelFile(String path) throws IOException {
         DVPParser dvp = new DVPParser();
         dvp.readXLSXFile(path);
+        System.out.println("dvp " + dvp.getTests().size());
         listOfAllTests = dvp.getTests();
     }
 
