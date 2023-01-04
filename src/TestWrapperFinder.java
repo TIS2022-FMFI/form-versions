@@ -41,12 +41,10 @@ public class TestWrapperFinder {
 
     public HashMap<String, List<TestWrapper>> findTestsForPart(String partId) throws SQLException {
         HashMap<String, List<TestWrapper>> map = new HashMap<>();
-
         try (PreparedStatement s = DbContext.getConnection().prepareStatement("SELECT * FROM dvp WHERE part_id = ?")) {
             s.setString(1, partId);
             try (ResultSet r = s.executeQuery()) {
                 while (r.next()) {
-
                     String date = r.getString(3);
                     TestWrapper h = new TestWrapper(
                             r.getString(3),
@@ -63,10 +61,10 @@ public class TestWrapperFinder {
                         map.put(date, new ArrayList<>());
                     }
                     map.get(date).add(h);
-
                 }
                 return map;
             }
         }
     }
+
 }

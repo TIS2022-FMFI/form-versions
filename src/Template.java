@@ -1,13 +1,8 @@
-import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
-import org.apache.poi.openxml4j.opc.OPCPackage;
-import org.apache.poi.poifs.filesystem.POIFSFileSystem;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 
-import java.awt.image.BufferedImage;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -19,8 +14,6 @@ import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-
-import javax.imageio.ImageIO;
 
 public class Template {
     String template_name = "";
@@ -178,7 +171,7 @@ public class Template {
             testWrapperList.add(tw2);
 
             for (int i = 0; i < result_names.size(); i++) {
-                Sheet sheet = workbook.getSheetAt(sheet_ids.get(i));
+                Sheet sheet = emptyTable.getSheetAt(sheet_ids.get(i));
                 Row r = sheet.getRow(row_ids.get(i));
                 try {
                     Cell c = r.getCell(col_ids.get(i));
@@ -197,8 +190,8 @@ public class Template {
 
             inputStream.close();
             FileOutputStream os = new FileOutputStream(xlsxFile);
-            workbook.write(os);
-            workbook.close();
+            emptyTable.write(os);
+            emptyTable.close();
             os.close();
 
             System.out.println("Excel file has been updated successfully.");

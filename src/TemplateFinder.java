@@ -1,8 +1,6 @@
-import org.apache.poi.ss.formula.functions.T;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import java.io.ByteArrayInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -77,7 +75,6 @@ public class TemplateFinder {
                                                 r.getInt(1),
                                                 new XSSFWorkbook(new ByteArrayInputStream(r.getBytes(3))));
                     elements.add(t);
-
                 }
                 if (elements.size() == 1) return elements.get(0);
             } catch (IOException e) {

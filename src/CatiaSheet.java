@@ -1,17 +1,12 @@
 import javafx.embed.swing.SwingFXUtils;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.scene.control.Button;
 import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.FileChooser;
-import javafx.util.Duration;
 
 import javax.imageio.ImageIO;
-import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.awt.image.RenderedImage;
 import java.io.*;
 import java.net.URL;
 import java.sql.*;
@@ -35,18 +30,18 @@ public class CatiaSheet {
     public String generated = "";
     public String responsible = "";
     public String developedFromDocument = "";
+
     public String size = "";
     public String designation = "";
     public String designation2 = "";
     public String sheet = "";
     public String of = "";
     public String documentNo = "";
+
     public String version = "";
     public List<BOM> items = new ArrayList<>();
-
     public List<String> parents = new ArrayList<>();
     public Image image;
-
     public Button componentImgButton = new Button("Upload");
 
     public CatiaSheet(String dn, String vs, String dt, List<CatiaComment> cm, Image im, String nm, String dvp) {
@@ -142,7 +137,6 @@ public class CatiaSheet {
     }
 
 
-    //TODO ked bude gui, tak pridat nahravanie obrazku
     public void insertIntoPart(String uid) throws SQLException, IOException {
 
         if (!checkIfExistsInDatabase(this.documentNo+this.version)) {
@@ -150,6 +144,7 @@ public class CatiaSheet {
             editInDatabase(uid);
 
         } else {
+
             DatabaseChange dc = new DatabaseChange(uid, "Uploaded " + documentNo + version + " to the database", new Timestamp(System.currentTimeMillis()));
             dc.insert();
 
@@ -172,36 +167,28 @@ public class CatiaSheet {
                 }
 
         }
-
-
-
-
     }
 
     public void editInDatabase(String uid) throws SQLException, IOException {
         DatabaseChange dc = new DatabaseChange(uid, "Edited " + documentNo + version + " in the database", new Timestamp(System.currentTimeMillis()));
         dc.insert();
-
-
-
-            try (PreparedStatement s = DbContext.getConnection().prepareStatement("UPDATE part SET type=?, date=?, comment=?, image=?, developed_from=?, name=? WHERE part_id = ?", Statement.RETURN_GENERATED_KEYS)) {
-                s.setString(7, this.documentNo + this.version);
-                s.setString(1, getType());
-                s.setString(2, getLastHeaderDate());
-                s.setString(3, getLastHeaderChange());
-                s.setBytes(4, null);
-                if (image != null) {
-                    BufferedImage bImage = SwingFXUtils.fromFXImage(image, null);
-                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                    ImageIO.write(bImage, "png", baos);
-                    byte[] bytes = baos.toByteArray();
-                    s.setBytes(4, bytes);
-                }
-                s.setString(6, this.designation);
-                s.setString(5, this.developedFromDocument);
-                s.executeUpdate();
+        try (PreparedStatement s = DbContext.getConnection().prepareStatement("UPDATE part SET type=?, date=?, comment=?, image=?, developed_from=?, name=? WHERE part_id = ?", Statement.RETURN_GENERATED_KEYS)) {
+            s.setString(7, this.documentNo + this.version);
+            s.setString(1, getType());
+            s.setString(2, getLastHeaderDate());
+            s.setString(3, getLastHeaderChange());
+            s.setBytes(4, null);
+            if (image != null) {
+                BufferedImage bImage = SwingFXUtils.fromFXImage(image, null);
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                ImageIO.write(bImage, "png", baos);
+                byte[] bytes = baos.toByteArray();
+                s.setBytes(4, bytes);
             }
-
+            s.setString(6, this.designation);
+            s.setString(5, this.developedFromDocument);
+            s.executeUpdate();
+        }
     }
 
     public void insertIntoBom(String parentId, String uid) throws SQLException {
@@ -233,110 +220,6 @@ public class CatiaSheet {
         return header.get(header.size()-1);
     }
 
-    public List<CatiaComment> getHeader() {
-        return header;
-    }
-
-    public void setHeader(List<CatiaComment> header) {
-        this.header = header;
-    }
-
-    public String getMaterial() {
-        return material;
-    }
-
-    public void setMaterial(String material) {
-        this.material = material;
-    }
-
-    public String getSurfaceProtection() {
-        return surfaceProtection;
-    }
-
-    public void setSurfaceProtection(String surfaceProtection) {
-        this.surfaceProtection = surfaceProtection;
-    }
-
-    public String getCalculatedMass() {
-        return calculatedMass;
-    }
-
-    public void setCalculatedMass(String calculatedMass) {
-        this.calculatedMass = calculatedMass;
-    }
-
-    public String getMaterialNo() {
-        return materialNo;
-    }
-
-    public void setMaterialNo(String materialNo) {
-        this.materialNo = materialNo;
-    }
-
-    public String getVersion2() {
-        return version2;
-    }
-
-    public void setVersion2(String version2) {
-        this.version2 = version2;
-    }
-
-    public List<String> getToleranceData() {
-        return toleranceData;
-    }
-
-    public void setToleranceData(List<String> toleranceData) {
-        this.toleranceData = toleranceData;
-    }
-
-    public String getExternalDocumentNo() {
-        return externalDocumentNo;
-    }
-
-    public void setExternalDocumentNo(String externalDocumentNo) {
-        this.externalDocumentNo = externalDocumentNo;
-    }
-
-    public String getTechnInfo() {
-        return technInfo;
-    }
-
-    public void setTechnInfo(String technInfo) {
-        this.technInfo = technInfo;
-    }
-
-    public String getScale() {
-        return scale;
-    }
-
-    public void setScale(String scale) {
-        this.scale = scale;
-    }
-
-    public String getGenerated() {
-        return generated;
-    }
-
-    public void setGenerated(String generated) {
-        this.generated = generated;
-    }
-
-    public String getResponsible() {
-        return responsible;
-    }
-
-    public void setResponsible(String responsible) {
-        this.responsible = responsible;
-    }
-
-    public String getDevelopedFromDocument() {
-        return developedFromDocument;
-    }
-
-    public void setDevelopedFromDocument(String developedFromDocument) {
-        this.developedFromDocument = developedFromDocument;
-    }
-
     public String getSize() {
         return size;
     }
@@ -345,60 +228,16 @@ public class CatiaSheet {
         this.size = size;
     }
 
-    public String getDesignation() {
-        return designation;
-    }
-
     public void setDesignation(String designation) {
         this.designation = designation;
-    }
-
-    public String getDesignation2() {
-        return designation2;
-    }
-
-    public void setDesignation2(String designation2) {
-        this.designation2 = designation2;
-    }
-
-    public String getSheet() {
-        return sheet;
-    }
-
-    public void setSheet(String sheet) {
-        this.sheet = sheet;
-    }
-
-    public String getOf() {
-        return of;
-    }
-
-    public void setOf(String of) {
-        this.of = of;
-    }
-
-    public String getDocumentNo() {
-        return documentNo;
     }
 
     public void setDocumentNo(String documentNo) {
         this.documentNo = documentNo;
     }
 
-    public String getVersion() {
-        return version;
-    }
-
     public void setVersion(String version) {
         this.version = version;
-    }
-
-    public List<BOM> getItems() {
-        return items;
-    }
-
-    public void setItems(List<BOM> items) {
-        this.items = items;
     }
 
     public String getLastHeaderChange() {
@@ -415,14 +254,6 @@ public class CatiaSheet {
 
     public void setLastHeaderDate(String lastHeaderDate) {
         this.lastHeaderDate = lastHeaderDate;
-    }
-
-    public Button getComponentImgButton() {
-        return componentImgButton;
-    }
-
-    public void setComponentImgButton(Button componentImgButton) {
-        this.componentImgButton = componentImgButton;
     }
 
     public void print() {
@@ -471,18 +302,6 @@ public class CatiaSheet {
         }
     }
 
-    public List<String> getParents() {
-        return parents;
-    }
-
-    public void setParents(List<String> parents) {
-        this.parents = parents;
-    }
-
-    public Image getImage() {
-        return image;
-    }
-
     public void setImage(Image image) {
         this.image = image;
     }
@@ -501,10 +320,10 @@ public class CatiaSheet {
                 componentImgButton.setText("Re-upload");
                 setTooltip();
 
-
             } catch (Exception e) {
                 e.printStackTrace();
             }
+
         } else System.out.println("zle");
     }
 
