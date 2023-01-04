@@ -107,4 +107,27 @@ public class TestWrapper {
         this.sollMinus = sollMinus;
     }
 
+    public String getAA() {
+        return AA;
+    }
+
+    public String getDocumentNr() {
+        return documentNr;
+    }
+
+    public String getCustomerNr() {
+        return customerNr;
+    }
+
+    public String getSoll() {
+        return soll;
+    }
+
+    public String getSollPlus() {
+        return sollPlus;
+    }
+
+    public String getSollMinus() {
+        return sollMinus;
+    }
 }
