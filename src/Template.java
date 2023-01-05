@@ -149,7 +149,7 @@ public class Template {
         return "";
     }
 
-    public void export(String path, String partID) throws Exception {
+    public void export(String path, List<TestWrapper> testWrapperList) throws Exception {
 
         // TODO priprava kodu na citanie byte array z databazy na excel.
 
@@ -162,13 +162,6 @@ public class Template {
         try {
             File xlsxFile = new File(path);
             FileInputStream inputStream = new FileInputStream(xlsxFile);
-            Workbook workbook = WorkbookFactory.create(inputStream);
-
-            List<TestWrapper> testWrapperList = new ArrayList<>();      //TODO metoda, ktora mu aj da prvky a pouziva partID
-            TestWrapper tw1 = new TestWrapper("","","","","one","jeden","","","");
-            TestWrapper tw2 = new TestWrapper("","","","","two","dva","","","");
-            testWrapperList.add(tw1);
-            testWrapperList.add(tw2);
 
             for (int i = 0; i < result_names.size(); i++) {
                 Sheet sheet = emptyTable.getSheetAt(sheet_ids.get(i));
@@ -198,7 +191,6 @@ public class Template {
 
         } catch (EncryptedDocumentException | IOException e) {
             System.err.println("Exception while updating an existing excel file.");
-            //e.printStackTrace();
         }
     }
 
