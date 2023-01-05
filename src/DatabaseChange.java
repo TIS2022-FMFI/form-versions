@@ -1,11 +1,25 @@
 import java.sql.*;
 
+/**
+ * Class for a Database Change value. Holds information about the ID of the user who
+ * did the change, the change itself and a timestamp.
+ *
+ * @author Jacob Kristof
+ * @version 1.0
+ */
 public class DatabaseChange {
 
     private String workerId;
     private String change;
     private Timestamp timestamp;
 
+    /**
+     * Constructor containing all three class variables
+     *
+     * @param w ID of the user
+     * @param c information about the change
+     * @param t the timestamp
+     */
     public DatabaseChange(String w, String c, Timestamp t) {
         workerId = w;
         change = c;
@@ -26,11 +40,9 @@ public class DatabaseChange {
     public String getWorkerId() {
         return workerId;
     }
-
     public String getChange() {
         return change;
     }
-
     public Timestamp getTimestamp() {
         return timestamp;
     }

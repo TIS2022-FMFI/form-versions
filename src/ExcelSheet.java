@@ -1,7 +1,12 @@
-//import javax.jnlp.ClipboardService;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+/**
+ * Class that contains all tests of one Excel DVP file, with functions to generate TestWrapper instances
+ * @author Jacob Kristof
+ * @version 1.0
+ */
 
 public class ExcelSheet {
 
@@ -10,6 +15,11 @@ public class ExcelSheet {
     public ExcelSheet() {
     }
 
+    /**
+     * Generate instances of TestWrapper for each and every test in the listOfAllTests
+     *
+     * @return the list of new instances of TestWrapper
+     */
     public List<TestWrapper> generateTestWrappersForAllTest() {
         List<TestWrapper> testWrapperList = new ArrayList<>();
         listOfAllTests.forEach(test -> {
@@ -21,30 +31,20 @@ public class ExcelSheet {
         return testWrapperList;
     }
 
-    public List<Test> getListOfAllTests() {
-        return listOfAllTests;
-    }
-
-    public void setListOfAllTests(List<Test> listOfAllTests) {
-        this.listOfAllTests = listOfAllTests;
-    }
-
+    /**
+     * Uses DVPParser to get all tests from the given Excel file and saves them in listOfAllTests
+     *
+     * @param path the path to the Excel file
+     * @throws IOException the io exception
+     */
     public void parseExcelFile(String path) throws IOException {
         DVPParser dvp = new DVPParser();
         dvp.readXLSXFile(path);
-        System.out.println("dvp " + dvp.getTests().size());
         listOfAllTests = dvp.getTests();
     }
 
-    public void getAllTestNames() {
-        generateTestWrappersForAllTest().forEach(tst -> {
-            System.out.println(tst.getTestType());
-            System.out.println();
-        });
+    public List<Test> getListOfAllTests() {
+        return listOfAllTests;
     }
-
-
-
-
 
 }
