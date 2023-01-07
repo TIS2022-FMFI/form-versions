@@ -140,7 +140,7 @@ public class UploadDVPController implements Initializable {
 
     @FXML
     void clearDVPPage(ActionEvent event) {
-        observableListItems.removeAll(observableListItems);
+        observableListItems.removeAll();
 //        tableViewDVP.getItems().clear();
         System.out.println(observableListItems.size());
         System.out.println(observableListItems);
