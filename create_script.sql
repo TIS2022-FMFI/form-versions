@@ -2,9 +2,11 @@ drop table if exists bom;
 drop table if exists coordinates;
 drop table if exists db_log;
 drop table if exists template;
+drop table if exists test_result cascade;
+drop table if exists test cascade;
 drop table if exists dvp cascade;
-drop table if exists test_types cascade;
 drop table if exists part cascade;
+drop table if exists test_types cascade;
 
 create table bom
 (
@@ -47,6 +49,18 @@ create table template
         primary key,
     name  varchar(100) not null,
     excel longblob     null
+);
+
+create table test
+(
+    id          int auto_increment
+        primary key,
+    date        varchar(50)  null,
+    customer_id varchar(50)  null,
+    aa          varchar(100) null,
+    part_id     varchar(20)  null,
+    constraint id
+        unique (id)
 );
 
 create table test_types
@@ -97,6 +111,24 @@ create table dvp
 
 create index part_id
     on dvp (part_id);
+
+create table test_result
+(
+    test_type       int         null,
+    test_result     varchar(50) null,
+    test_soll       varchar(100) null,
+    test_soll_plus  varchar(50) null,
+    test_soll_minus varchar(50) null,
+    id              int auto_increment
+        primary key,
+    test_id         int         null,
+    constraint test_id_fk
+        foreign key (test_id) references test (id),
+    constraint test_type
+        foreign key (test_type) references test_types (id)
+);
+
+
 
 
 

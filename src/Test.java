@@ -1,7 +1,13 @@
 import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.DateUtil;
 import org.apache.poi.xssf.usermodel.XSSFCell;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.sql.*;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -89,6 +95,50 @@ public class Test {
             }
         }
         return null;
+    }
+
+    public void insert(String uid) throws SQLException {
+
+            DatabaseChange dc = new DatabaseChange(uid, "Uploaded a test for " + this.date + " to the database", new Timestamp(System.currentTimeMillis()));
+            dc.insert();
+
+            int databaseId;
+
+            try (PreparedStatement s = DbContext.getConnection().prepareStatement("INSERT INTO test (date, customer_id, aa, part_id) VALUES (?,?,?,?)", Statement.RETURN_GENERATED_KEYS)) {
+                s.setString(1, this.date);
+                s.setString(2, this.getCustomer_nr());
+                s.setString(3, getAA());
+                s.setString(4, getDocument_nr());
+                s.executeUpdate();
+
+                try (ResultSet generatedKeys = s.getGeneratedKeys()) {
+                    if (generatedKeys.next()) {
+                        databaseId = Math.toIntExact(generatedKeys.getLong(1));
+                    }
+                    else {
+                        throw new SQLException("Creating user failed, no ID obtained.");
+                    }
+                }
+
+            }
+
+
+        for (TestResult testResult : test_results) {
+            try (PreparedStatement s = DbContext.getConnection().prepareStatement("INSERT INTO test_result (test_type, test_result, test_soll, test_soll_plus, test_soll_minus, test_id) VALUES (?,?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS)) {
+                s.setString(2, testResult.getTest_result());
+                s.setString(3, testResult.getSoll());
+                s.setString(4, testResult.getSoll_plus());
+                s.setString(5, testResult.getSoll_minus());
+                if (TestTypeFinder.getInstance().returnIdInTable(testResult.getTest_type().replace('\n', ' ')) == -1) {
+                    throw new SQLException("Wrong test name (" + testResult.getTest_type().replace('\n', ' ') + "), nothing inserted");
+                }
+                s.setInt(1, TestTypeFinder.getInstance().returnIdInTable(testResult.getTest_type().replace('\n', ' ')));
+                s.setInt(6, databaseId);
+                System.out.println(testResult.getSoll());
+                s.executeUpdate();
+            }
+        }
+
     }
 
     public String to_string() {

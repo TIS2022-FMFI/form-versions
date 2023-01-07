@@ -60,6 +60,8 @@ public class UploadDVPController implements Initializable {
 
     ObservableList<TestWrapper> observableListItems;
 
+    ExcelSheet excelSheet;
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         tableViewDVP.setEditable(true);
@@ -140,17 +142,16 @@ public class UploadDVPController implements Initializable {
 
     @FXML
     void clearDVPPage(ActionEvent event) {
-        observableListItems.removeAll(observableListItems);
-//        tableViewDVP.getItems().clear();
+        tableViewDVP.getItems().clear();
+        excelSheet = new ExcelSheet();
         System.out.println(observableListItems.size());
         System.out.println(observableListItems);
     }
 
     @FXML
     void insertToDB(ActionEvent event) throws SQLException {
-
         DatabaseTransactions dbt = new DatabaseTransactions();
-        dbt.insertTestWrapperList("dummy", observableListItems);
+        dbt.insertTestList("dummy", excelSheet.listOfAllTests);
         clearDVPPage(event);
     }
 
@@ -163,14 +164,11 @@ public class UploadDVPController implements Initializable {
 
         if (selectedFile != null) {
             try {
-
-                ExcelSheet e = new ExcelSheet();
-                e.parseExcelFile(selectedFile.getAbsolutePath());
-                System.out.println("e list tests " + e.getListOfAllTests().size());
-                observableListItems = FXCollections.observableArrayList(e.generateTestWrappersForAllTest());
+                excelSheet = new ExcelSheet();
+                excelSheet.parseExcelFile(selectedFile.getAbsolutePath());
+                observableListItems = FXCollections.observableArrayList(excelSheet.generateTestWrappersForAllTest());
                 System.out.println(observableListItems.size());
                 createTable();
-
             } catch (Exception e) {
                 e.printStackTrace();
             }
