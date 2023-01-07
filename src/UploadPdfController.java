@@ -102,7 +102,7 @@ public class UploadPdfController implements Initializable {
     }
 
 
-    public void createTable() {
+    private void createTable() {
 
         designation.setCellValueFactory(new PropertyValueFactory<>("designation"));
         designation.setCellFactory(TextFieldTableCell.forTableColumn());

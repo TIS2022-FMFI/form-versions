@@ -11,7 +11,8 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.*;
 
-public class Main extends Application {
+public class Main  extends Application{
+    Stage mainStage;
     public static void main(String[] args) throws IOException, SQLException {
 
         try {
@@ -37,9 +38,12 @@ public class Main extends Application {
         launch(args);
 
 
+
     }
+
     @Override
     public void start(Stage stage) throws Exception {
+        mainStage = stage;
         Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("xmlka/main.fxml")));
         stage.setTitle("BogeParser (Logged in as dummyString)");
         stage.setScene(new Scene(root));
@@ -47,5 +51,11 @@ public class Main extends Application {
     }
 
 
+    public Stage getMainStage() {
+        return mainStage;
+    }
 
+    public void setMainStage(Stage mainStage) {
+        this.mainStage = mainStage;
+    }
 }
