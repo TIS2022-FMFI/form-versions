@@ -30,10 +30,6 @@ public class Main  extends Application{
         } catch (Exception e) {
             e.printStackTrace();
         }
-        TestWrapper tst1 = new TestWrapper("sf", "s", "s", "44", "wrwe", "33", "df", "qrqwr", "qwrq");
-        TestWrapper tst3 = new TestWrapper("sf", "s", "s", "44", "wrwe", "33", "df", "qrqwr", "qwrq");
-        System.out.println(tst1.equals(tst3));
-        System.out.println(tst3.equals(tst1));
 
         launch(args);
 

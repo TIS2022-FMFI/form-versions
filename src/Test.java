@@ -26,6 +26,8 @@ public class Test {
 
     private List<List<XSSFCell>> all_cell;
 
+    public int databaseId;
+
     public String getDate() {
         return date;
     }
@@ -44,6 +46,15 @@ public class Test {
 
     public List<TestResult> getTest_results() {
         return test_results;
+    }
+
+    public Test(String date, String AA, String document_nr, String customer_nr, List<TestResult> test_results, int dbid) {
+        this.date = date;
+        this.AA = AA;
+        Document_nr = document_nr;
+        Customer_nr = customer_nr;
+        this.test_results = test_results;
+        this.databaseId = dbid;
     }
 
     public Test(List<List<XSSFCell>> all_cell0, int row) {
@@ -139,6 +150,10 @@ public class Test {
             }
         }
 
+    }
+
+    public void addTestToListOfTests(TestResult test) {
+        test_results.add(test);
     }
 
     public String to_string() {

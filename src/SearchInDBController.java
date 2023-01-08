@@ -12,9 +12,11 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Objects;
 import java.util.ResourceBundle;
+import java.util.stream.Collectors;
 
 public class SearchInDBController implements Initializable {
 
@@ -103,16 +105,16 @@ public class SearchInDBController implements Initializable {
 
     }
 
-    public List<String> getDBInfoPartListView(String part){    //vrati z db List vsetkych partov z historie
-        return null;
+    public List<String> getDBInfoPartListView(String part) throws SQLException {    //vrati z db List vsetkych partov z historie
+        return CatiaSheetFinder.getInstance().findHistoryForPart(part).stream().map(it -> it.designation + it.documentNo).collect(Collectors.toList());
     }
 
-    public List<String> getDBInfoBOMListView(String selectedPart){ //vráti z db List vsetkych BOM partov
-        return null;
+    public List<String> getDBInfoBOMListView(String selectedPart) throws SQLException { //vráti z db List vsetkych BOM partov
+        return CatiaSheetFinder.getInstance().findBomFOrPart(selectedPart);
     }
 
-    public String getDBInfoPartComment(String selectedPart){   //vrati komentar selected z databazy
-        return null;
+    public String getDBInfoPartComment(String selectedPart) throws SQLException {   //vrati komentar selected z databazy
+        return CatiaSheetFinder.getInstance().findWithId(selectedPart).get(0).lastHeaderChange;
     }
 
     public void showDVPScene(ActionEvent actionEvent) throws IOException {
@@ -183,10 +185,12 @@ public class SearchInDBController implements Initializable {
 
     }
 
+    public List<Test> getAllTestsForPart(String partID) { return null; }
 
     public ObservableList<TestWrapper> getDVPTableFromDB(String partID){ // toto ta krasne poprosinkám urobiť kubko cmuq
         return null;
     }
+
 
     public void exportDVPOfPartToTemplate(ActionEvent actionEvent) {
     }
