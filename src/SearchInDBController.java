@@ -1,3 +1,4 @@
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -185,10 +186,14 @@ public class SearchInDBController implements Initializable {
 
     }
 
-    public List<Test> getAllTestsForPart(String partID) { return null; }
+    public List<Test> getAllTestsForPart(String partID) throws SQLException {
+        return TestFinder.getInstance().findTestsForPart(partID);
+    }
 
-    public ObservableList<TestWrapper> getDVPTableFromDB(String partID){ // toto ta krasne poprosinkám urobiť kubko cmuq
-        return null;
+    public ObservableList<TestWrapper> getDVPTableFromDB(String partID) throws SQLException { // toto ta krasne poprosinkám urobiť kubko cmuq
+        ExcelSheet e = new ExcelSheet();
+        e.setListOfAllTests(getAllTestsForPart(partID));
+        return FXCollections.observableArrayList(e.generateTestWrappersForAllTest());
     }
 
 

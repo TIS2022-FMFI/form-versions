@@ -47,4 +47,7 @@ public class ExcelSheet {
         return listOfAllTests;
     }
 
+    public void setListOfAllTests(List<Test> listOfAllTests) {
+        this.listOfAllTests = listOfAllTests;
+    }
 }
