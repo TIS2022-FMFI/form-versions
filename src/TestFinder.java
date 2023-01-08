@@ -50,6 +50,12 @@ public class TestFinder {
         }
     }
 
+    /**
+     * Find all results for a given test and assignem to it.
+     *
+     * @param test the test we want to add results to
+     * @throws SQLException the sql exception
+     */
     public void addResultsToTest(Test test) throws SQLException{
         try (PreparedStatement s = DbContext.getConnection().prepareStatement("SELECT * FROM test_result WHERE test_id = ?")) {
             s.setInt(1, test.databaseId);

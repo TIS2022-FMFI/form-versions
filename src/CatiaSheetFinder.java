@@ -2,6 +2,9 @@ import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.image.Image;
 
 import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.awt.image.RenderedImage;
+import java.io.File;
 import java.io.IOException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -54,7 +57,8 @@ public class CatiaSheetFinder {
                 List<CatiaSheet> elements = new ArrayList<>();
                 while (r.next()) {
                     if (r.getBlob(6) != null) {
-                        img = SwingFXUtils.toFXImage(ImageIO.read(r.getBlob(6).getBinaryStream()), null);
+                        BufferedImage imag = ImageIO.read(r.getBlob(6).getBinaryStream());
+                        img = SwingFXUtils.toFXImage(imag, null);
                     }
                     CatiaSheet h = new CatiaSheet(
                             r.getString(2).substring(0, r.getString(2).length() - 1),
