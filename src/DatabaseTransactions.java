@@ -89,4 +89,20 @@ public class DatabaseTransactions {
         }
     }
 
+    public void insertTestList(String uid, List<Test> ltw) throws SQLException {
+
+        DbContext.getConnection().setAutoCommit(false);
+        try {
+            ltw.forEach(test -> {
+                try {
+                    test.insert(uid);
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
+            });
+        } finally {
+            DbContext.getConnection().setAutoCommit(true);
+        }
+    }
+
 }

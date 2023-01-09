@@ -275,7 +275,7 @@ public class UploadPdfController implements Initializable {
     }
 
 
-    public void clearAll() {
+    public void clearAll() throws SQLException {
         if (observableListItems != null) observableListItems.clear();
         if (subpartsCatiaSheetList != null) subpartsCatiaSheetList.clear();
         mainPdf = null;
@@ -291,6 +291,7 @@ public class UploadPdfController implements Initializable {
         clearAllElements.setDisable(true);
         subpartPdf.setDisable(true);
         assemblyImgButton.setDisable(true);
+        assemblyImageShowcase.setImage(null);
     }
 
     public void updateMainPdfFromFrontend() {

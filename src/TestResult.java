@@ -143,4 +143,12 @@ public class TestResult {
         }
         return string_value;
     }
+
+    public TestResult(String test_type, String test_result, String soll, String soll_plus, String soll_minus) {
+        this.test_type = test_type;
+        this.test_result = test_result;
+        this.soll = soll;
+        this.soll_plus = soll_plus;
+        this.soll_minus = soll_minus;
+    }
 }

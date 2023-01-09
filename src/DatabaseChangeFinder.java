@@ -4,10 +4,15 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Class for finding instances of DatabaseChange stored in the database
+ *
+ * @author Jacob Kristof
+ * @version 1.0
+ */
 public class DatabaseChangeFinder {
 
     private static final DatabaseChangeFinder INSTANCE = new DatabaseChangeFinder();
-
     public static DatabaseChangeFinder getInstance() {
         return INSTANCE;
     }
@@ -15,6 +20,12 @@ public class DatabaseChangeFinder {
     private DatabaseChangeFinder() {
     }
 
+    /**
+     * Find all changes stored in the database and return them as a list of DatabaseChange instances
+     *
+     * @return the list of all changes as instances of DatabaseChange
+     * @throws SQLException the sql exception
+     */
     public List<DatabaseChange> findAll() throws SQLException {
         try (PreparedStatement s = DbContext.getConnection().prepareStatement("SELECT * FROM db_log ORDER BY time DESC")) {
             try (ResultSet r = s.executeQuery()) {
@@ -31,7 +42,6 @@ public class DatabaseChangeFinder {
             }
         }
     }
-
 }
 
 

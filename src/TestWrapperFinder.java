@@ -5,10 +5,15 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+/**
+ * Class for finding instances of TestWrapper stored in the database
+ *
+ * @author Jacob Kristof
+ * @version 1.0
+ */
 public class TestWrapperFinder {
 
     private static final TestWrapperFinder INSTANCE = new TestWrapperFinder();
-
     public static TestWrapperFinder getInstance() {
         return INSTANCE;
     }
@@ -16,6 +21,12 @@ public class TestWrapperFinder {
     private TestWrapperFinder() {
     }
 
+    /**
+     * Finds all instances of TestWrapper stored in the database
+     *
+     * @return the list of all instances
+     * @throws SQLException the sql exception
+     */
     public List<TestWrapper> findAll() throws SQLException {
         try (PreparedStatement s = DbContext.getConnection().prepareStatement("SELECT * FROM dvp")) {
             try (ResultSet r = s.executeQuery()) {
@@ -39,6 +50,13 @@ public class TestWrapperFinder {
         }
     }
 
+    /**
+     * Find all tests in the database for a certain part.
+     *
+     * @param partId the ID of the part we want tests for
+     * @return the map of all tests, where key is the date and list of values are instances of TestWrapper
+     * @throws SQLException the sql exception
+     */
     public HashMap<String, List<TestWrapper>> findTestsForPart(String partId) throws SQLException {
         HashMap<String, List<TestWrapper>> map = new HashMap<>();
         try (PreparedStatement s = DbContext.getConnection().prepareStatement("SELECT * FROM dvp WHERE part_id = ?")) {

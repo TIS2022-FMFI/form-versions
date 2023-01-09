@@ -1,8 +1,14 @@
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Timestamp;
-import java.util.Objects;
 
+/**
+ * Class for holding all information for one test - merged info from Test and TestResult, used for showing data in
+ * frontend and for inserting into dataabse
+ *
+ * @author Jacob Kristof
+ * @version 1.0
+ */
 public class TestWrapper {
 
     private String date;
@@ -16,6 +22,19 @@ public class TestWrapper {
     private String sollMinus;
 
 
+    /**
+     * Constructor with all class variables
+     *
+     * @param date       the date
+     * @param AA         the AA
+     * @param documentNr the document number/designation number
+     * @param customerNr the customer number
+     * @param testType   the test type
+     * @param testResult the test result
+     * @param soll       the soll
+     * @param sollPlus   the soll plus
+     * @param sollMinus  the soll minus
+     */
     public TestWrapper(String date, String AA, String documentNr, String customerNr, String testType, String testResult, String soll, String sollPlus, String sollMinus) {
         this.date = date;
         this.AA = AA;
@@ -47,6 +66,13 @@ public class TestWrapper {
         }
     }
 
+    /**
+     * Checks whether is the test in the databse already.
+     *
+     * @param test the instance of the test we want to look up
+     * @return true/false reagrding the status
+     * @throws SQLException the sql exception
+     */
     public boolean isNotInDatabase(TestWrapper test) throws SQLException {
         return (!TestWrapperFinder.getInstance().findAll().contains(test));
     }
@@ -62,71 +88,52 @@ public class TestWrapper {
     public String getDate() {
         return date;
     }
-
     public void setDate(String date) {
         this.date = date;
     }
-
     public void setAA(String AA) {
         this.AA = AA;
     }
-
     public void setDocumentNr(String documentNr) {
         this.documentNr = documentNr;
     }
-
     public void setCustomerNr(String customerNr) {
         this.customerNr = customerNr;
     }
-
     public String getTestType() {
         return testType;
     }
-
     public void setTestType(String testType) {
         this.testType = testType;
     }
-
     public String getTestResult() {
         return testResult;
     }
-
     public void setTestResult(String testResult) {
         this.testResult = testResult;
     }
-
     public void setSoll(String soll) {
         this.soll = soll;
     }
-
     public void setSollPlus(String sollPlus) {
         this.sollPlus = sollPlus;
     }
-
     public void setSollMinus(String sollMinus) {
         this.sollMinus = sollMinus;
     }
-
     public String getAA() {
         return AA;
     }
-
     public String getDocumentNr() {
         return documentNr;
     }
-
     public String getCustomerNr() {
         return customerNr;
     }
-
     public String getSoll() {
         return soll;
     }
-
-    public String getSollPlus() {
-        return sollPlus;
-    }
-
+    public String getSollPlus() { return sollPlus; }
     public String getSollMinus() {
         return sollMinus;
     }
