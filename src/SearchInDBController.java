@@ -97,17 +97,12 @@ public class SearchInDBController implements Initializable {
             partIDInput.textProperty().addListener(v -> {
                 //sem treba nakodit select z databazy na konkretny search
                 System.out.println(partIDInput.getText());   // <- v partIDInput je pri zmene nacitany konkretny string s ktorym mozes pracovat kubko aby si hladal v DB
-
             });
         }
-
-
-
-
     }
 
     public List<String> getDBInfoPartListView(String part) throws SQLException {    //vrati z db List vsetkych partov z historie
-        return CatiaSheetFinder.getInstance().findHistoryForPart(part).stream().map(it -> it.designation + it.documentNo).collect(Collectors.toList());
+        return CatiaSheetFinder.getInstance().findHistoryForPart(part).stream().map(it -> it.documentNo + it.version).collect(Collectors.toList());
     }
 
     public List<String> getDBInfoBOMListView(String selectedPart) throws SQLException { //vráti z db List vsetkych BOM partov
