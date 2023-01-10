@@ -82,8 +82,11 @@ public class CatiaSheetFinder {
     public List<CatiaSheet> findHistoryForPart(String partID) throws SQLException {
         List<CatiaComment> lsc = new ArrayList<>();
         Image img = null;
+        System.out.println(partID.split("\\.")[1].substring(1));
+        System.out.println(partID.split("\\.")[2]);
+        System.out.println(partID.split("\\.")[3].substring(0,3));
         try (PreparedStatement s = DbContext.getConnection().prepareStatement("SELECT * FROM part WHERE part_id REGEXP ? OR developed_from REGEXP ?")) {
-            String rgx = "'[0-9]{3}[.][0-9]" + partID.split("\\.")[1].substring(1) + "[.]" + partID.split("\\.")[2] + "[.]" + partID.split("\\.")[3].substring(0,3) + "[A-Z]'";
+            String rgx = "[0-9]{3}[.][0-9]" + partID.split("\\.")[1].substring(1) + "[.]" + partID.split("\\.")[2] + "[.]" + partID.split("\\.")[3].substring(0,3);
             s.setString(1, rgx);
             s.setString(2, rgx);
             try (ResultSet r = s.executeQuery()) {
