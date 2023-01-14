@@ -9,6 +9,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -95,7 +96,6 @@ public class SearchInDBController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         if (partIDInput != null) {
             partIDInput.textProperty().addListener(v -> {
-                //sem treba nakodit select z databazy na konkretny search
                 System.out.println(partIDInput.getText());   // <- v partIDInput je pri zmene nacitany konkretny string s ktorym mozes pracovat kubko aby si hladal v DB
             });
         }
@@ -110,7 +110,17 @@ public class SearchInDBController implements Initializable {
     }
 
     public String getDBInfoPartComment(String selectedPart) throws SQLException {   //vrati komentar selected z databazy
-        return CatiaSheetFinder.getInstance().findWithId(selectedPart).get(0).lastHeaderChange;
+        if (CatiaSheetFinder.getInstance().findWithId(selectedPart).size() > 0) {
+            return CatiaSheetFinder.getInstance().findWithId(selectedPart).get(0).lastHeaderChange;
+        }
+        return "";
+    }
+
+    public Image getSelectedPartImage(String partId) throws SQLException {
+        if (CatiaSheetFinder.getInstance().findWithId(partId).size() > 0) {
+            return CatiaSheetFinder.getInstance().findWithId(partId).get(0).image;
+        }
+        return null;
     }
 
     public void showDVPScene(ActionEvent actionEvent) throws IOException {

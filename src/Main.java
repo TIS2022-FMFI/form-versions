@@ -4,6 +4,8 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -15,7 +17,15 @@ public class Main  extends Application{
     public static void main(String[] args) throws IOException, SQLException {
 
         try {
-            Connection connection = DriverManager.getConnection("jdbc:mariadb://localhost:3306/moja", "root", "root");
+//            Connection connection = DriverManager.getConnection("jdbc:mariadb://localhost:3306/moja", "root", "root");
+
+            java.util.Properties prop = new Properties();
+            prop.loadFromXML(Files.newInputStream(Paths.get("./conf.xml")));
+            Connection connection = DriverManager.getConnection(
+                    prop.getProperty("database"),
+                    prop.getProperty("user"),
+                    prop.getProperty("password"));
+
             System.out.println("Success");
 
             if (connection != null) {
@@ -29,6 +39,7 @@ public class Main  extends Application{
         } catch (Exception e) {
             e.printStackTrace();
         }
+
 
         launch(args);
 
