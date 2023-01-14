@@ -44,11 +44,12 @@ public class CatiaSheet {
     public Image image;
     public Button componentImgButton = new Button("Upload");
 
-    public CatiaSheet(String dn, String vs, String dt, List<CatiaComment> cm, Image im, String nm, String dvp) {
+    public CatiaSheet(String dn, String vs, String dt, String lstchng, String lstdt, Image im, String nm, String dvp) {
         version = vs;
         documentNo = dn;
         generated = dt;
-        header = cm;
+        lastHeaderDate = lstdt;
+        lastHeaderChange = lstchng;
         image = im;
         designation = nm;
         developedFromDocument = dvp;
