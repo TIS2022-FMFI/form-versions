@@ -50,6 +50,7 @@ public class Main  extends Application{
     @Override
     public void start(Stage stage) throws Exception {
         mainStage = stage;
+
         Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("xmlka/main.fxml")));
         stage.setTitle("BogeParser (Logged in as dummyString)");
         stage.setScene(new Scene(root));

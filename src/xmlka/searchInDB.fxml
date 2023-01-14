@@ -1,19 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="SearchInDBController">
+<AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="850.0" prefWidth="1210.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="SearchInDBController">
     <children>
-        <Label layoutX="39.0" layoutY="46.0" text="Part ID" />
-        <TextField fx:id="partIDInput" layoutX="266.0" layoutY="41.0" prefHeight="31.0" prefWidth="706.0" />
-        <Label layoutX="39.0" layoutY="122.0" text="Part History" />
-        <Label layoutX="696.0" layoutY="122.0" text="Part BOM" />
-        <ListView fx:id="partHistoryListView" layoutX="39.0" layoutY="167.0" prefHeight="400.0" prefWidth="500.0" />
-        <ListView fx:id="BOMListView" layoutX="660.0" layoutY="167.0" prefHeight="400.0" prefWidth="500.0" AnchorPane.rightAnchor="50.0" />
-        <TextArea fx:id="partComment" layoutX="39.0" layoutY="632.0" prefHeight="147.0" prefWidth="800.0" />
-        <Button fx:id="showDVPForPartButton" layoutX="972.0" layoutY="646.0" mnemonicParsing="false" onAction="#showDVPScene" prefHeight="120.0" prefWidth="190.0" text="Show DVP table for selected part" textAlignment="CENTER" wrapText="true" />
+        <Label layoutX="39.0" layoutY="102.0" text="Part ID" />
+        <TextField fx:id="partIDInput" layoutX="123.0" layoutY="97.0" prefHeight="31.0" prefWidth="500.0" />
+        <Label layoutX="39.0" layoutY="276.0" text="Part History" />
+        <Label layoutX="660.0" layoutY="276.0" text="Part BOM" />
+        <ListView fx:id="partHistoryListView" layoutX="39.0" layoutY="315.0" prefHeight="333.0" prefWidth="500.0" />
+        <ListView fx:id="BOMListView" layoutX="660.0" layoutY="315.0" prefHeight="333.0" prefWidth="500.0" AnchorPane.rightAnchor="50.0" />
+        <TextArea fx:id="partComment" layoutX="39.0" layoutY="686.0" prefHeight="100.0" prefWidth="800.0" />
+        <Button fx:id="showDVPForPartButton" layoutX="970.0" layoutY="686.0" mnemonicParsing="false" onAction="#showDVP" prefHeight="100.0" prefWidth="190.0" text="Show DVP table for selected part" textAlignment="CENTER" wrapText="true" />
+      <ImageView fx:id="currImageForPart" fitHeight="212.0" fitWidth="329.0" layoutX="831.0" layoutY="64.0" pickOnBounds="true" preserveRatio="true" />
+      <Label layoutX="921.0" layoutY="34.0" text="Image of selected part" />
     </children></AnchorPane>
