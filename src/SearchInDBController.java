@@ -9,6 +9,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -113,6 +114,13 @@ public class SearchInDBController implements Initializable {
             return CatiaSheetFinder.getInstance().findWithId(selectedPart).get(0).lastHeaderChange;
         }
         return "";
+    }
+
+    public Image getSelectedPartImage(String partId) throws SQLException {
+        if (CatiaSheetFinder.getInstance().findWithId(partId).size() > 0) {
+            return CatiaSheetFinder.getInstance().findWithId(partId).get(0).image;
+        }
+        return null;
     }
 
     public void showDVPScene(ActionEvent actionEvent) throws IOException {
