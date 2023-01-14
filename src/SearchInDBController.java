@@ -16,9 +16,8 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
-import java.util.List;
-import java.util.Objects;
-import java.util.ResourceBundle;
+import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public class SearchInDBController implements Initializable {
@@ -51,6 +50,8 @@ public class SearchInDBController implements Initializable {
     //odtialto dolu je druha Scene
 
 
+    public Map<String, List<Test>> testsForCurrentSearch;
+
 
 
     ////////////////////////////////////////////////
@@ -64,6 +65,9 @@ public class SearchInDBController implements Initializable {
                 //sem treba nakodit select z databazy na konkretny search
                 System.out.println(partIDInput.getText());   // <- v partIDInput je pri zmene nacitany konkretny string s ktorym mozes pracovat kubko aby si hladal v DB
                 try {
+
+
+
 
                     partHistoryListView.getItems().clear();
                     BOMListView.getItems().clear();
@@ -93,6 +97,7 @@ public class SearchInDBController implements Initializable {
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }
+
             });
         }
     }
@@ -169,6 +174,32 @@ public class SearchInDBController implements Initializable {
 //
 //    }
 
+
+
+    public void getAllTestsSorted(String partID) throws SQLException {
+        testsForCurrentSearch = getAllTestsForPart(partID).stream().collect(Collectors.groupingBy(Test::getDate));
+    }
+
+    public ObservableList<String> getDatesForAllTests() {
+        List<String> dates = new ArrayList<>();
+        testsForCurrentSearch.forEach((date, test) -> {
+            for (int i = 0; i < test.size(); i++) {
+                dates.add(test.get(i).getDate() + "#" + i);
+            }
+        });
+        System.out.println(dates);
+        return FXCollections.observableArrayList(dates);
+    }
+
+    public ObservableList<TestWrapper> getTestFromSelected(String selectedTest) {
+        ExcelSheet e = new ExcelSheet();
+        List<Test> tst = new ArrayList<>();
+        tst.add(testsForCurrentSearch.get(selectedTest.split("#")[0]).get(Integer.parseInt(selectedTest.split("#")[1])));
+        e.setListOfAllTests(tst);
+        return FXCollections.observableArrayList(e.generateTestWrappersForAllTest());
+    }
+
+    public void exportDVPOfPartToTemplate(ActionEvent actionEvent) {}
 
 
 
