@@ -57,7 +57,6 @@ public class CatiaSheetFinder {
                 try (ResultSet r = s.executeQuery()) {
                     List<CatiaSheet> elements = new ArrayList<>();
                     while (r.next()) {
-                        System.out.println("aaa");
                         if (r.getBlob(6) != null) {
                             BufferedImage imag = ImageIO.read(r.getBlob(6).getBinaryStream());
                             img = SwingFXUtils.toFXImage(imag, null);
