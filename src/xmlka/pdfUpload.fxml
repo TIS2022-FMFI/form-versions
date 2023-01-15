@@ -13,7 +13,7 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.text.Font?>
 
-<SplitPane dividerPositions="0.8477157360406091" orientation="VERTICAL" prefHeight="861.0" prefWidth="1209.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="UploadPdfController">
+<SplitPane dividerPositions="0.8477157360406091" orientation="VERTICAL" prefHeight="850.0" prefWidth="1210.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="UploadPdfController">
              <items>
                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="511.0" prefWidth="1238.0">
                  <children>

@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 
-<SplitPane dividerPositions="0.8223350253807107" orientation="VERTICAL" prefHeight="755.0" prefWidth="1084.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="UploadDVPController">
+<SplitPane dividerPositions="0.8223350253807107" orientation="VERTICAL" prefHeight="850.0" prefWidth="1210.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="UploadDVPController">
     <items>
         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
             <children>
@@ -28,11 +28,11 @@
         </AnchorPane>
         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
             <children>
-                <HBox layoutX="125.0" layoutY="40.0" spacing="200.0">
+                <HBox layoutX="104.0" layoutY="29.0" spacing="200.0">
                     <children>
-                        <Button fx:id="cleaDVP" mnemonicParsing="false" onAction="#clearDVPPage" prefHeight="60.0" prefWidth="150.0" text="Clear All" />
-                        <Button fx:id="uploadDVP" mnemonicParsing="false" onAction="#loadDVP" prefHeight="60.0" prefWidth="150.0" text="Upload dvp" />
-                        <Button fx:id="insetToDBDVP" mnemonicParsing="false" onAction="#insertToDB" prefHeight="60.0" prefWidth="150.0" text="insert to DB" />
+                        <Button fx:id="cleaDVP" mnemonicParsing="false" onAction="#clearDVPPage" prefHeight="90.0" prefWidth="200.0" text="Clear All" />
+                        <Button fx:id="uploadDVP" mnemonicParsing="false" onAction="#loadDVP" prefHeight="90.0" prefWidth="200.0" text="Upload dvp" />
+                        <Button fx:id="insetToDBDVP" mnemonicParsing="false" onAction="#insertToDB" prefHeight="90.0" prefWidth="200.0" text="insert to DB" />
                     </children>
                 </HBox>
             </children>

@@ -40,6 +40,8 @@ public class SearchInDBController implements Initializable {
     @FXML
     public ImageView currImageForPart;
 
+    public String currClickedOn;
+
 
 
 
@@ -50,7 +52,7 @@ public class SearchInDBController implements Initializable {
     //odtialto dolu je druha Scene
 
 
-    public Map<String, List<Test>> testsForCurrentSearch;
+
 
 
 
@@ -126,85 +128,24 @@ public class SearchInDBController implements Initializable {
 
 
 
-//    public void showDVPScene(ActionEvent actionEvent) throws IOException {
-//
-//        System.out.println("im here");
-//
-//        Parent root =  FXMLLoader.load(Objects.requireNonNull(getClass().getResource("xmlka/showDVPForPartXML.fxml")));
-//        Scene scene = new Scene(root);
-//        Stage thisStage = (Stage) showDVPForPartButton.getScene().getWindow();
-//        thisStage.setScene(scene);
-//
-//
-//    }
-
-
     public void fillPartHistoryListview() throws SQLException {
-        String selected = partHistoryListView.getSelectionModel().getSelectedItem();
+        currClickedOn = partHistoryListView.getSelectionModel().getSelectedItem();
         BOMListView.getItems().clear();
-        BOMListView.getItems().addAll(getDBInfoBOMListView(selected));
-        partComment.setText(getDBInfoPartComment(selected));
-        currImageForPart.setImage(getSelectedPartImage(selected));
+        BOMListView.getItems().addAll(getDBInfoBOMListView(currClickedOn));
+        partComment.setText(getDBInfoPartComment(currClickedOn));
+        currImageForPart.setImage(getSelectedPartImage(currClickedOn));
     }
 
     public void fillPartBOMListview() throws SQLException {
-        String selected = BOMListView.getSelectionModel().getSelectedItem();
-        partComment.setText(getDBInfoPartComment(selected));
-        currImageForPart.setImage(getSelectedPartImage(selected));
+        currClickedOn = BOMListView.getSelectionModel().getSelectedItem();
+        partComment.setText(getDBInfoPartComment(currClickedOn));
+        currImageForPart.setImage(getSelectedPartImage(currClickedOn));
     }
-
-
-
-
-
-
-
-
-
-
-    //odtialto dolu funkcionalita druhej sceny kde sa riesia dvpcka
-
-
-
-//    public void returnToSearchPage(ActionEvent actionEvent) throws IOException {
-//        Parent root =  FXMLLoader.load(Objects.requireNonNull(getClass().getResource("xmlka/main.fxml")));
-//        Scene scene = new Scene(root);
-//        Stage thisStage = (Stage) returnToSearchButton.getScene().getWindow();
-//        thisStage.setScene(scene);
-//
-//    }
-
-
-
-    public void getAllTestsSorted(String partID) throws SQLException {
-        testsForCurrentSearch = getAllTestsForPart(partID).stream().collect(Collectors.groupingBy(Test::getDate));
-    }
-
-    public ObservableList<String> getDatesForAllTests() {
-        List<String> dates = new ArrayList<>();
-        testsForCurrentSearch.forEach((date, test) -> {
-            for (int i = 0; i < test.size(); i++) {
-                dates.add(test.get(i).getDate() + "#" + i);
-            }
-        });
-        System.out.println(dates);
-        return FXCollections.observableArrayList(dates);
-    }
-
-    public ObservableList<TestWrapper> getTestFromSelected(String selectedTest) {
-        ExcelSheet e = new ExcelSheet();
-        List<Test> tst = new ArrayList<>();
-        tst.add(testsForCurrentSearch.get(selectedTest.split("#")[0]).get(Integer.parseInt(selectedTest.split("#")[1])));
-        e.setListOfAllTests(tst);
-        return FXCollections.observableArrayList(e.generateTestWrappersForAllTest());
-    }
-
-    public void exportDVPOfPartToTemplate(ActionEvent actionEvent) {}
-
-
 
     public void showDVP(ActionEvent actionEvent) {
-        State.getTextField().setText(partIDInput.getText());
-        MainController.switchTab(1);
+        if (currClickedOn != null) {
+            State.getTextField().setText(currClickedOn);
+            MainController.switchTab(1);
+        }
     }
 }

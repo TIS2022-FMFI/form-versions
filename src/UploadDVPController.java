@@ -20,7 +20,7 @@ import java.util.ResourceBundle;
 public class UploadDVPController implements Initializable {
 
     @FXML
-    private TableView<TestWrapper> tableViewDVP = new TableView<>();
+    private TableView<TestWrapper> tableViewDVP;
 
     @FXML
     private TableColumn<TestWrapper, String> docNumDVP;
@@ -49,14 +49,6 @@ public class UploadDVPController implements Initializable {
     @FXML
     private TableColumn<TestWrapper, String> minusDVP;
 
-    @FXML
-    private Button cleaDVP;
-
-    @FXML
-    private Button uploadDVP;
-
-    @FXML
-    private Button insetToDBDVP;
 
     ObservableList<TestWrapper> observableListItems;
 

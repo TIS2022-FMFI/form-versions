@@ -104,6 +104,7 @@ public class TemplateFinder {
                     Template t = new Template(r.getString(2),
                                                 r.getInt(1),
                                                 new XSSFWorkbook(new ByteArrayInputStream(r.getBytes(3))));
+                    setCoordinatesForTemplate(t);
                     elements.add(t);
                 }
                 if (elements.size() == 1) return elements.get(0);
