@@ -3,8 +3,12 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonBar;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.Dialog;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
+import javafx.util.Pair;
 import jfxtras.styles.jmetro.JMetro;
 import jfxtras.styles.jmetro.Style;
 
@@ -28,8 +32,6 @@ public class Main  extends Application{
                     prop.getProperty("database"),
                     prop.getProperty("user"),
                     prop.getProperty("password"));
-
-
             if (connection != null) {
                 System.out.println("Success");
                 DbContext.setConnection(connection);
@@ -42,45 +44,47 @@ public class Main  extends Application{
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-
         launch(args);
-
-
-
     }
 
     @Override
     public void start(Stage stage) throws Exception {
 
-
+        stage.setResizable(false);
         User.identifyYourself();
-        if (User.isRes()){
-        User.setName("bogeman");
+
+        if (User.getRes() == 1){
             mainStage = stage;
-
             Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("xmlka/main.fxml")));
-
             stage.getIcons().add(new Image(Objects.requireNonNull(Main.class.getResourceAsStream("imgs/logo.png"))));
             Scene s = new Scene(root);
             JMetro jMetro = new JMetro(Style.LIGHT);
             jMetro.setScene(s);
-
-
-
-
-            stage.setTitle("BogeParser (Logged in as "+User.getName()+")");
+            stage.setTitle("BogeParser (Logged in as " + User.getName() + ")");
             stage.setScene(s);
             stage.show();
 
 
         }
-        else {
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setHeaderText("Wrong login information! Please try again.");
-            alert.showAndWait();
-            start(stage);
+        else if (User.getRes() == 0) {
+            ButtonType log = new ButtonType("login again", ButtonBar.ButtonData.OK_DONE);
+            Alert alert = new Alert(Alert.AlertType.NONE,"Wrong user login information, please try again !" ,log);
+            Optional<ButtonType> result = alert.showAndWait();
 
+            if (result.isPresent() && result.get() == log) {
+                start(stage);
+            }
+        }
+
+        else{
+            ButtonType log = new ButtonType("login again", ButtonBar.ButtonData.OK_DONE);
+            ButtonType exit = new ButtonType("exit", ButtonBar.ButtonData.OK_DONE);
+            Alert alert = new Alert(Alert.AlertType.NONE,"Are you sure you want to exit ?" ,log, exit);
+            Optional<ButtonType> result = alert.showAndWait();
+
+            if (result.orElse(exit) == log) {
+                start(stage);
+            }
         }
     }
 

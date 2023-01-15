@@ -29,6 +29,9 @@ public class SearchInDVPController implements Initializable {
     public TextField showingDVPForPartTextField;
 
     @FXML
+    public Button exportToTemplateButton;
+
+    @FXML
     private ComboBox<String> dateDropdown;
 
     @FXML
@@ -159,11 +162,8 @@ public class SearchInDVPController implements Initializable {
             }
 
         });
-
-
         minusDVPSearch.setCellValueFactory(new PropertyValueFactory<>("sollMinus"));
         minusDVPSearch.setCellFactory(TextFieldTableCell.forTableColumn());
-
         minusDVPSearch.setOnEditCommit(testWrapperStringCellEditEvent -> {
             int index = tableViewDVPSearch.getSelectionModel().getSelectedIndex();
             TestWrapper tw = tableViewDVPSearch.getItems().get(index);
@@ -179,8 +179,6 @@ public class SearchInDVPController implements Initializable {
             }
 
         });
-
-
         tableViewDVPSearch.setItems(observableListItems);
     }
 
@@ -188,6 +186,7 @@ public class SearchInDVPController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         tableViewDVPSearch.setEditable(true);
+
         if (showingDVPForPartTextField != null) {
             State.setTextField(showingDVPForPartTextField);
 
@@ -197,8 +196,6 @@ public class SearchInDVPController implements Initializable {
                     observableListItems = getTestFromSelected(dateDropdown.getSelectionModel().getSelectedItem());
                     createTable();
                 }
-
-
             });
 
             showingDVPForPartTextField.textProperty().addListener(v -> {
