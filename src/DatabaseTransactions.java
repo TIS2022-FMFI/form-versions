@@ -14,16 +14,16 @@ import java.util.List;
 
 public class DatabaseTransactions {
 
-    public void insertPart(CatiaSheet mainPdf, String uid, List<CatiaSheet> subpartsCatiaSheetList) throws SQLException, IOException {
+    public void insertPart(CatiaSheet mainPdf, List<CatiaSheet> subpartsCatiaSheetList) throws SQLException, IOException {
 
         DbContext.getConnection().setAutoCommit(false);
         try {
-            mainPdf.insertIntoPart(uid); // inserts the main pdf
+            mainPdf.insertIntoPart(); // inserts the main pdf
 
             subpartsCatiaSheetList.forEach(cs -> { // inserts the parent-child connections
                 cs.parents.forEach(parent -> {
                     try {
-                        cs.insertIntoBom(parent, uid);
+                        cs.insertIntoBom(parent);
                     } catch (SQLException e) {
                         e.printStackTrace();
                     }
@@ -31,7 +31,7 @@ public class DatabaseTransactions {
 
 
                 try {
-                    cs.insertIntoPart(uid); // inserts the subpart itself
+                    cs.insertIntoPart(); // inserts the subpart itself
 
                 } catch (SQLException | IOException e) {
                     e.printStackTrace();
@@ -51,9 +51,9 @@ public class DatabaseTransactions {
         }
     }
 
-    public void editPartComment(String partID, String comm, String uid) throws SQLException {
+    public void editPartComment(String partID, String comm) throws SQLException {
         DbContext.getConnection().setAutoCommit(false);
-        DatabaseChange dc = new DatabaseChange(uid, "Edited " + partID + " in the database", new Timestamp(System.currentTimeMillis()));
+        DatabaseChange dc = new DatabaseChange(User.getName(), "Edited " + partID + " in the database", new Timestamp(System.currentTimeMillis()));
         dc.insert();
         try (PreparedStatement s = DbContext.getConnection().prepareStatement("UPDATE part SET comment=? WHERE part_id = ?", Statement.RETURN_GENERATED_KEYS)) {
             s.setString(1, comm);
@@ -72,12 +72,12 @@ public class DatabaseTransactions {
         }
     }
 
-    public void editTestWrapper(TestWrapper tw, Test test, TestResult testResult, String uid) throws SQLException {
+    public void editTestWrapper(TestWrapper tw, Test test, TestResult testResult) throws SQLException {
         DbContext.getConnection().setAutoCommit(false);
-        DatabaseChange dc = new DatabaseChange(uid, "Edited a test for " + test.getDocument_nr() + " in the database", new Timestamp(System.currentTimeMillis()));
+        DatabaseChange dc = new DatabaseChange(User.getName(), "Edited a test for " + test.getDocument_nr() + " in the database", new Timestamp(System.currentTimeMillis()));
         dc.insert();
         try {
-            tw.editInDatabase(uid, test, testResult);
+            tw.editInDatabase(test, testResult);
 
 
         } catch (SQLException e) {
@@ -95,10 +95,10 @@ public class DatabaseTransactions {
     }
 
 
-    public void insertTemplate(String uid, Template template) throws SQLException {
+    public void insertTemplate(Template template) throws SQLException {
         DbContext.getConnection().setAutoCommit(false);
         try {
-            template.insert(uid);
+            template.insert();
         } catch (SQLException e) {
             DbContext.getConnection().rollback();
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -113,10 +113,10 @@ public class DatabaseTransactions {
         }
     }
 
-    public void deleteTemplate(String uid, Template template) throws SQLException {
+    public void deleteTemplate(Template template) throws SQLException {
         DbContext.getConnection().setAutoCommit(false);
         try {
-            template.delete(uid);
+            template.delete();
         } catch (SQLException e) {
             DbContext.getConnection().rollback();
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -131,41 +131,13 @@ public class DatabaseTransactions {
         }
     }
 
-    public void insertTestWrapper(String uid, TestWrapper testWrapper) throws SQLException {
-        DbContext.getConnection().setAutoCommit(false);
-        try {
-            testWrapper.insert(uid);
-        } catch (SQLException e) {
-            DbContext.getConnection().rollback();
-            throw new RuntimeException(e);
-        } finally {
-            DbContext.getConnection().setAutoCommit(true);
-        }
-    }
-
-    public void insertTestWrapperList(String uid, List<TestWrapper> ltw) throws SQLException {
-
-        DbContext.getConnection().setAutoCommit(false);
-        try {
-            ltw.forEach(testWrapper -> {
-                try {
-                    testWrapper.insert(uid);
-                } catch (SQLException e) {
-                    throw new RuntimeException(e);
-                }
-            });
-        } finally {
-            DbContext.getConnection().setAutoCommit(true);
-        }
-    }
-
-    public void insertTestList(String uid, List<Test> ltw) throws SQLException {
+    public void insertTestList(List<Test> ltw) throws SQLException {
 
         DbContext.getConnection().setAutoCommit(false);
         try {
             ltw.forEach(test -> {
                 try {
-                    test.insert(uid);
+                    test.insert();
                 } catch (SQLException e) {
                     Alert alert = new Alert(Alert.AlertType.INFORMATION);
                     alert.setHeaderText("Upload not succesful!");

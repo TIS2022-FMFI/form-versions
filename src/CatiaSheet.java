@@ -138,15 +138,15 @@ public class CatiaSheet {
     }
 
 
-    public void insertIntoPart(String uid) throws SQLException, IOException {
+    public void insertIntoPart() throws SQLException, IOException {
 
         if (!checkIfExistsInDatabase(this.documentNo+this.version)) {
 
-            editInDatabase(uid);
+            editInDatabase();
 
         } else {
 
-            DatabaseChange dc = new DatabaseChange(uid, "Uploaded " + documentNo + version + " to the database", new Timestamp(System.currentTimeMillis()));
+            DatabaseChange dc = new DatabaseChange(User.getName(), "Uploaded " + documentNo + version + " to the database", new Timestamp(System.currentTimeMillis()));
             dc.insert();
 
                 try (PreparedStatement s = DbContext.getConnection().prepareStatement("INSERT INTO part (part_id, type, date, comment, image, developed_from, name) VALUES (?,?,?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS)) {
@@ -170,11 +170,12 @@ public class CatiaSheet {
         }
     }
 
-    public void editInDatabase(String uid) throws SQLException, IOException {
-        DatabaseChange dc = new DatabaseChange(uid, "Edited " + documentNo + version + " in the database", new Timestamp(System.currentTimeMillis()));
+    public void editInDatabase() throws SQLException, IOException {
+        DatabaseChange dc = new DatabaseChange(User.getName(), "Edited " + documentNo + version + " in the database", new Timestamp(System.currentTimeMillis()));
         dc.insert();
-        try (PreparedStatement s = DbContext.getConnection().prepareStatement("UPDATE part SET type=?, date=?, comment=?, image=?, developed_from=?, name=? WHERE part_id = ?", Statement.RETURN_GENERATED_KEYS)) {
+        try (PreparedStatement s = DbContext.getConnection().prepareStatement("UPDATE part SET type=?, date=?, comment=?, image=?, developed_from=?, name=?, part_id = ? WHERE part_id = ?", Statement.RETURN_GENERATED_KEYS)) {
             s.setString(7, this.documentNo + this.version);
+            s.setString(8, this.documentNo + this.version);
             s.setString(1, getType());
             s.setString(2, getLastHeaderDate());
             s.setString(3, getLastHeaderChange());
@@ -192,9 +193,9 @@ public class CatiaSheet {
         }
     }
 
-    public void insertIntoBom(String parentId, String uid) throws SQLException {
+    public void insertIntoBom(String parentId) throws SQLException {
         if (!BomFinder.getInstance().findIfExistsPair(this.documentNo+this.version, parentId)) {
-            DatabaseChange dc = new DatabaseChange(uid, "Assigned " + documentNo + version + " to " + parentId, new Timestamp(System.currentTimeMillis()));
+            DatabaseChange dc = new DatabaseChange(User.getName(), "Assigned " + documentNo + version + " to " + parentId, new Timestamp(System.currentTimeMillis()));
             dc.insert();
             try (PreparedStatement s = DbContext.getConnection().prepareStatement("INSERT INTO bom (child, parent) VALUES (?,?)", Statement.RETURN_GENERATED_KEYS)) {
                 s.setString(1, this.documentNo+this.version);

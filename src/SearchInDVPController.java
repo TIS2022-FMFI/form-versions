@@ -111,7 +111,7 @@ public class SearchInDVPController implements Initializable {
                 dbt.editTestWrapper(tw, testsForCurrentSearch.get(dateDropdown.getSelectionModel().getSelectedItem().split("#")[0])
                                 .get(Integer.parseInt(dateDropdown.getSelectionModel().getSelectedItem().split("#")[1])),
                         findTestResultInTestByName(testsForCurrentSearch.get(dateDropdown.getSelectionModel().getSelectedItem().split("#")[0])
-                                .get(Integer.parseInt(dateDropdown.getSelectionModel().getSelectedItem().split("#")[1])), tw.getTestType()), "dummy");
+                                .get(Integer.parseInt(dateDropdown.getSelectionModel().getSelectedItem().split("#")[1])), tw.getTestType()));
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
@@ -133,7 +133,7 @@ public class SearchInDVPController implements Initializable {
                 dbt.editTestWrapper(tw, testsForCurrentSearch.get(dateDropdown.getSelectionModel().getSelectedItem().split("#")[0])
                                 .get(Integer.parseInt(dateDropdown.getSelectionModel().getSelectedItem().split("#")[1])),
                         findTestResultInTestByName(testsForCurrentSearch.get(dateDropdown.getSelectionModel().getSelectedItem().split("#")[0])
-                                .get(Integer.parseInt(dateDropdown.getSelectionModel().getSelectedItem().split("#")[1])), tw.getTestType()), "dummy");
+                                .get(Integer.parseInt(dateDropdown.getSelectionModel().getSelectedItem().split("#")[1])), tw.getTestType()));
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
@@ -153,7 +153,7 @@ public class SearchInDVPController implements Initializable {
                 dbt.editTestWrapper(tw, testsForCurrentSearch.get(dateDropdown.getSelectionModel().getSelectedItem().split("#")[0])
                                 .get(Integer.parseInt(dateDropdown.getSelectionModel().getSelectedItem().split("#")[1])),
                         findTestResultInTestByName(testsForCurrentSearch.get(dateDropdown.getSelectionModel().getSelectedItem().split("#")[0])
-                                .get(Integer.parseInt(dateDropdown.getSelectionModel().getSelectedItem().split("#")[1])), tw.getTestType()), "dummy");
+                                .get(Integer.parseInt(dateDropdown.getSelectionModel().getSelectedItem().split("#")[1])), tw.getTestType()));
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
@@ -173,7 +173,7 @@ public class SearchInDVPController implements Initializable {
                 dbt.editTestWrapper(tw, testsForCurrentSearch.get(dateDropdown.getSelectionModel().getSelectedItem().split("#")[0])
                                 .get(Integer.parseInt(dateDropdown.getSelectionModel().getSelectedItem().split("#")[1])),
                         findTestResultInTestByName(testsForCurrentSearch.get(dateDropdown.getSelectionModel().getSelectedItem().split("#")[0])
-                                .get(Integer.parseInt(dateDropdown.getSelectionModel().getSelectedItem().split("#")[1])), tw.getTestType()), "dummy");
+                                .get(Integer.parseInt(dateDropdown.getSelectionModel().getSelectedItem().split("#")[1])), tw.getTestType()));
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }

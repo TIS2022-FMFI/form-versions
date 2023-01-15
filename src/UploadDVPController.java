@@ -143,7 +143,7 @@ public class UploadDVPController implements Initializable {
     @FXML
     void insertToDB(ActionEvent event) throws SQLException {
         DatabaseTransactions dbt = new DatabaseTransactions();
-        dbt.insertTestList("dummy", excelSheet.listOfAllTests);
+        dbt.insertTestList(excelSheet.listOfAllTests);
         clearDVPPage(event);
     }
 

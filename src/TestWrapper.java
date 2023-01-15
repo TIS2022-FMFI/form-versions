@@ -53,8 +53,8 @@ public class TestWrapper {
         this.sollMinus = sollMinus;
     }
 
-    public void editInDatabase(String uid, Test test, TestResult testResult) throws SQLException {
-        DatabaseChange dc = new DatabaseChange(uid, "Edited test for " + test.getDocument_nr() + " in the database", new Timestamp(System.currentTimeMillis()));
+    public void editInDatabase(Test test, TestResult testResult) throws SQLException {
+        DatabaseChange dc = new DatabaseChange(User.getName(), "Edited test for " + test.getDocument_nr() + " in the database", new Timestamp(System.currentTimeMillis()));
         dc.insert();
         System.out.println(this.soll + " " + this.sollPlus + " " + this.sollMinus);
         try (PreparedStatement s = DbContext.getConnection().prepareStatement("UPDATE test_result " +
@@ -71,36 +71,6 @@ public class TestWrapper {
         }
 
 
-    }
-
-    public void insert(String uid) throws SQLException {
-        if (isNotInDatabase(this)) {
-            DatabaseChange dc = new DatabaseChange(uid, "Uploaded a test for " + documentNr + " to the database at ", new Timestamp(System.currentTimeMillis()));
-            dc.insert();
-            try (PreparedStatement s = DbContext.getConnection().prepareStatement("INSERT INTO dvp (part_id, date, aa, consumer_id, test_result, test_soll, test_soll_plus, test_soll_minus, test_type_id) VALUES (?,?,?,?,?,?,?,?,?)")) {
-                s.setString(1, this.documentNr);
-                s.setString(2, this.date);
-                s.setString(3, this.AA);
-                s.setString(4, this.customerNr);
-                s.setString(5, this.testResult);
-                s.setString(6, this.soll);
-                s.setString(7, this.sollPlus);
-                s.setString(8, this.sollMinus);
-                s.setInt(9, TestTypeFinder.getInstance().returnIdInTable(this.testType));
-                s.executeUpdate();
-            }
-        }
-    }
-
-    /**
-     * Checks whether is the test in the databse already.
-     *
-     * @param test the instance of the test we want to look up
-     * @return true/false reagrding the status
-     * @throws SQLException the sql exception
-     */
-    public boolean isNotInDatabase(TestWrapper test) throws SQLException {
-        return (!TestWrapperFinder.getInstance().findAll().contains(test));
     }
 
     @Override

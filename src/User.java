@@ -6,7 +6,7 @@ import java.sql.SQLException;
 
 public class User {
 
-    static String name;
+    private static String name;
 
     public static String getName() {
         return name;
@@ -16,7 +16,7 @@ public class User {
         User.name = name;
     }
 
-    public static boolean findUserInDatabase(String password) throws SQLException {
+    public static boolean findUserInDatabaseAndCheckPassword(String password) throws SQLException {
         try (PreparedStatement s = DbContext.getConnection().prepareStatement("SELECT * FROM users WHERE mail = ?")) {
             s.setString(1, name);
             try (ResultSet r = s.executeQuery()) {

@@ -152,16 +152,7 @@ public class Template {
 
     public void export(String path, List<TestWrapper> testWrapperList) throws Exception {
 
-        // TODO priprava kodu na citanie byte array z databazy na excel.
-
-        //                XSSFWorkbook workbook2 = new XSSFWorkbook(new ByteArrayInputStream(baos.toByteArray()));
-        //                FileOutputStream out = new FileOutputStream("newfile.xlsx");
-        //                workbook2.write(out);
-        //                out.close();
-
-
         try {
-            System.out.println(testWrapperList + " jouojo");
             FileOutputStream out = new FileOutputStream(path);
             emptyTable.write(out);
 
@@ -187,7 +178,6 @@ public class Template {
                 }
             }
 
-
             inputStream.close();
             FileOutputStream os = new FileOutputStream(xlsxFile);
             emptyTable.write(os);
@@ -201,11 +191,11 @@ public class Template {
         }
     }
 
-    public void insert(String uid) throws SQLException {
+    public void insert() throws SQLException {
 
         if (!TemplateFinder.getInstance().exists(template_name)) {
 
-            DatabaseChange dc = new DatabaseChange(uid, "Uploaded a template named " + template_name + " to the database", new Timestamp(System.currentTimeMillis()));
+            DatabaseChange dc = new DatabaseChange(User.getName(), "Uploaded a template named " + template_name + " to the database", new Timestamp(System.currentTimeMillis()));
             dc.insert();
 
             int databaseId;
@@ -252,9 +242,9 @@ public class Template {
 
     }
 
-    public void delete(String uid) throws SQLException {
+    public void delete() throws SQLException {
 
-        DatabaseChange dc = new DatabaseChange(uid, "Deleted a template named " + template_name + " from the database", new Timestamp(System.currentTimeMillis()));
+        DatabaseChange dc = new DatabaseChange(User.getName(), "Deleted a template named " + template_name + " from the database", new Timestamp(System.currentTimeMillis()));
         dc.insert();
 
         try (PreparedStatement s = DbContext.getConnection().prepareStatement("DELETE FROM template WHERE name = ? ")) {
@@ -284,7 +274,6 @@ public class Template {
         sheet_ids.add(0);
 //        t.export("src/excely/dummy.xlsx", "123.456.789A");
         Template t = new Template(path_to_excel, template_name,result_names,row_ids,col_ids,sheet_ids);
-        t.insert("bogeman");
 //        t.export("src/excely/dummy.xlsx", "123.456.789A");
     }
 
