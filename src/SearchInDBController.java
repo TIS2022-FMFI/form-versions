@@ -139,6 +139,11 @@ public class SearchInDBController implements Initializable {
         currImageForPart.setImage(getSelectedPartImage(selected));
     }
 
+    public void showDVP(ActionEvent actionEvent) {
+        State.getTextField().setText(partIDInput.getText());
+        MainController.switchTab(1);
+    }
+
 
 
 
