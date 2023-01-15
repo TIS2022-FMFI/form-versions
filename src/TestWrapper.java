@@ -1,5 +1,11 @@
+import javafx.embed.swing.SwingFXUtils;
+
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.sql.Timestamp;
 
 /**
@@ -45,6 +51,26 @@ public class TestWrapper {
         this.soll = soll;
         this.sollPlus = sollPlus;
         this.sollMinus = sollMinus;
+    }
+
+    public void editInDatabase(String uid, Test test, TestResult testResult) throws SQLException {
+        DatabaseChange dc = new DatabaseChange(uid, "Edited test for " + test.getDocument_nr() + " in the database", new Timestamp(System.currentTimeMillis()));
+        dc.insert();
+        System.out.println(this.soll + " " + this.sollPlus + " " + this.sollMinus);
+        try (PreparedStatement s = DbContext.getConnection().prepareStatement("UPDATE test_result " +
+                                                                                    "SET test_result = ?, test_soll = ?, test_soll_plus = ?, test_soll_minus = ? " +
+                                                                                    "WHERE test_id = ? AND id = ?",
+                                                                                    Statement.RETURN_GENERATED_KEYS)) {
+            s.setString(1, this.testResult);
+            s.setString(2, this.soll);
+            s.setString(3, this.sollPlus);
+            s.setString(4, this.sollMinus);
+            s.setInt(5, test.databaseId);
+            s.setInt(6, testResult.getDbid());
+            s.executeUpdate();
+        }
+
+
     }
 
     public void insert(String uid) throws SQLException {

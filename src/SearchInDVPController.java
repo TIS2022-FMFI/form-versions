@@ -9,6 +9,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.stage.FileChooser;
 
+import javax.xml.crypto.Data;
 import java.awt.event.ActionListener;
 import java.io.BufferedReader;
 import java.io.File;
@@ -105,9 +106,15 @@ public class SearchInDVPController implements Initializable {
             int index = tableViewDVPSearch.getSelectionModel().getSelectedIndex();
             TestWrapper tw = tableViewDVPSearch.getItems().get(index);
             tw.setTestResult(testWrapperStringCellEditEvent.getNewValue());
-
-
-            // Sem volanie funkcie na update v DB
+            DatabaseTransactions dbt = new DatabaseTransactions();
+            try {
+                dbt.editTestWrapper(tw, testsForCurrentSearch.get(dateDropdown.getSelectionModel().getSelectedItem().split("#")[0])
+                                .get(Integer.parseInt(dateDropdown.getSelectionModel().getSelectedItem().split("#")[1])),
+                        findTestResultInTestByName(testsForCurrentSearch.get(dateDropdown.getSelectionModel().getSelectedItem().split("#")[0])
+                                .get(Integer.parseInt(dateDropdown.getSelectionModel().getSelectedItem().split("#")[1])), tw.getTestType()), "dummy");
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
 
 
         });
@@ -119,10 +126,17 @@ public class SearchInDVPController implements Initializable {
         sollDVPSearch.setOnEditCommit(testWrapperStringCellEditEvent -> {
             int index = tableViewDVPSearch.getSelectionModel().getSelectedIndex();
             TestWrapper tw = tableViewDVPSearch.getItems().get(index);
-            tw.setTestResult(testWrapperStringCellEditEvent.getNewValue());
-
-
-            // Sem volanie funkcie na update v DB
+            tw.setSoll(testWrapperStringCellEditEvent.getNewValue());
+            System.out.println(tw.getSoll());
+            DatabaseTransactions dbt = new DatabaseTransactions();
+            try {
+                dbt.editTestWrapper(tw, testsForCurrentSearch.get(dateDropdown.getSelectionModel().getSelectedItem().split("#")[0])
+                                .get(Integer.parseInt(dateDropdown.getSelectionModel().getSelectedItem().split("#")[1])),
+                        findTestResultInTestByName(testsForCurrentSearch.get(dateDropdown.getSelectionModel().getSelectedItem().split("#")[0])
+                                .get(Integer.parseInt(dateDropdown.getSelectionModel().getSelectedItem().split("#")[1])), tw.getTestType()), "dummy");
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
 
         });
 
@@ -133,10 +147,16 @@ public class SearchInDVPController implements Initializable {
         plusDVPSearch.setOnEditCommit(testWrapperStringCellEditEvent -> {
             int index = tableViewDVPSearch.getSelectionModel().getSelectedIndex();
             TestWrapper tw = tableViewDVPSearch.getItems().get(index);
-            tw.setTestResult(testWrapperStringCellEditEvent.getNewValue());
-
-
-            // Sem volanie funkcie na update v DB
+            tw.setSollPlus(testWrapperStringCellEditEvent.getNewValue());
+            DatabaseTransactions dbt = new DatabaseTransactions();
+            try {
+                dbt.editTestWrapper(tw, testsForCurrentSearch.get(dateDropdown.getSelectionModel().getSelectedItem().split("#")[0])
+                                .get(Integer.parseInt(dateDropdown.getSelectionModel().getSelectedItem().split("#")[1])),
+                        findTestResultInTestByName(testsForCurrentSearch.get(dateDropdown.getSelectionModel().getSelectedItem().split("#")[0])
+                                .get(Integer.parseInt(dateDropdown.getSelectionModel().getSelectedItem().split("#")[1])), tw.getTestType()), "dummy");
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
 
         });
 
@@ -147,10 +167,16 @@ public class SearchInDVPController implements Initializable {
         minusDVPSearch.setOnEditCommit(testWrapperStringCellEditEvent -> {
             int index = tableViewDVPSearch.getSelectionModel().getSelectedIndex();
             TestWrapper tw = tableViewDVPSearch.getItems().get(index);
-            tw.setTestResult(testWrapperStringCellEditEvent.getNewValue());
-
-
-            // Sem volanie funkcie na update v DB
+            tw.setSollMinus(testWrapperStringCellEditEvent.getNewValue());
+            DatabaseTransactions dbt = new DatabaseTransactions();
+            try {
+                dbt.editTestWrapper(tw, testsForCurrentSearch.get(dateDropdown.getSelectionModel().getSelectedItem().split("#")[0])
+                                .get(Integer.parseInt(dateDropdown.getSelectionModel().getSelectedItem().split("#")[1])),
+                        findTestResultInTestByName(testsForCurrentSearch.get(dateDropdown.getSelectionModel().getSelectedItem().split("#")[0])
+                                .get(Integer.parseInt(dateDropdown.getSelectionModel().getSelectedItem().split("#")[1])), tw.getTestType()), "dummy");
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
 
         });
 
@@ -249,4 +275,12 @@ public class SearchInDVPController implements Initializable {
         } else System.out.println("zle");
     }
 
+    public TestResult findTestResultInTestByName(Test test, String name) {
+        for (int i = 0; i < test.getTest_results().size(); i++) {
+            if (Objects.equals(test.getTest_results().get(i).getTest_type(), name)) {
+                return test.getTest_results().get(i);
+            }
+        }
+        return new TestResult();
+    }
 }
