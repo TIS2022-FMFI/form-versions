@@ -4,7 +4,6 @@ drop table if exists db_log;
 drop table if exists template;
 drop table if exists test_result cascade;
 drop table if exists test cascade;
-drop table if exists dvp cascade;
 drop table if exists part cascade;
 drop table if exists test_types cascade;
 
@@ -92,25 +91,6 @@ create index table_id
 create index test_type
     on coordinates (test_type);
 
-create table dvp
-(
-    id              int auto_increment
-        primary key,
-    part_id         varchar(100) null,
-    date            varchar(100) not null,
-    aa              varchar(100) null,
-    consumer_id     varchar(100) null,
-    test_result     varchar(100) null,
-    test_soll       varchar(100) null,
-    test_soll_plus  varchar(50)  null,
-    test_soll_minus varchar(50)  null,
-    test_type_id    int          null,
-    constraint test_type_id
-        foreign key (test_type_id) references test_types (id)
-);
-
-create index part_id
-    on dvp (part_id);
 
 create table test_result
 (
@@ -129,10 +109,10 @@ create table test_result
 );
 
 
-
-
-
-
+insert into users (mail, password) VALUE ('boge@boge.sk', '2f243a7bacd3f91dbc3cfb349aca8776'); -- bogeman
+insert into users (mail, password) VALUE ('admin@boge.sk', '21232f297a57a5a743894a0e4a801fc3'); -- admin
+insert into users (mail, password) VALUE ('worker@boge.sk', 'b61822e8357dcaff77eaaccf348d9134'); -- worker
+insert into users (mail, password) VALUE ('catiasheet@boge.sk', 'c259e2688655535af4203956c045f32c'); -- catia_api
 
 insert into test_types (name) VALUE ('DVP / Teilelebenslauf - xxx.xxx cENGIS- xxxxxx : Customer Design Phase');
 insert into test_types (name) VALUE ('DVP / Teilelebenslauf - xxx.xxx cENGIS- xxxxxx : Development Stage : No.');

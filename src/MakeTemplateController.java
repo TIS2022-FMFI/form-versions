@@ -213,7 +213,7 @@ public class MakeTemplateController implements Initializable{
     public void remove_template() throws SQLException {
         String template_to_remove = template_menu_to_remove.getSelectionModel().getSelectedItem().toString();
         DatabaseTransactions dbt = new DatabaseTransactions();
-        dbt.deleteTemplate("dummy", TemplateFinder.getInstance().findByName(template_to_remove));
+        dbt.deleteTemplate(TemplateFinder.getInstance().findByName(template_to_remove));
         fill_choice_box(TemplateFinder.getInstance().findAll().stream().map(it -> it.template_name).collect(Collectors.toList()), template_menu_to_remove);
         System.out.println(template_to_remove);
     }
@@ -280,7 +280,7 @@ public class MakeTemplateController implements Initializable{
                         template.row_ids.size() == template.col_ids.size() && rows.size() == sheets.size()){
                     System.out.println("Template sa dá uložiť");
                     DatabaseTransactions dbt = new DatabaseTransactions();
-                    dbt.insertTemplate("bogeman", template);
+                    dbt.insertTemplate(template);
                     fill_choice_box(TemplateFinder.getInstance().findAll().stream().map(it -> it.template_name).collect(Collectors.toList()), template_menu_to_remove);
                 }
             }

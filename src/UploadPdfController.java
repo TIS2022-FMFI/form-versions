@@ -220,7 +220,7 @@ public class UploadPdfController implements Initializable {
         findParents(); // adds the parent-child connections
 
         DatabaseTransactions dbt = new DatabaseTransactions();
-        dbt.insertPart(mainPdf, "dummyName", subpartsCatiaSheetList);
+        dbt.insertPart(mainPdf, subpartsCatiaSheetList);
 
         clearAll();
     }
