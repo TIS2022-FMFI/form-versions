@@ -57,6 +57,7 @@ public class DatabaseTransactions {
         dc.insert();
         try (PreparedStatement s = DbContext.getConnection().prepareStatement("UPDATE part SET comment=? WHERE part_id = ?", Statement.RETURN_GENERATED_KEYS)) {
             s.setString(1, comm);
+            s.setString(2,partID);
             s.executeUpdate();
         } catch (SQLException e) {
             DbContext.getConnection().rollback();

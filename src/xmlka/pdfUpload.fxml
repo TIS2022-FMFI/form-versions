@@ -10,14 +10,13 @@
 <?import javafx.scene.effect.InnerShadow?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.text.Font?>
 
 <SplitPane dividerPositions="0.8477157360406091" orientation="VERTICAL" prefHeight="850.0" prefWidth="1210.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="UploadPdfController">
              <items>
                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="511.0" prefWidth="1238.0">
                  <children>
-                   <SplitPane dividerPositions="0.4638728323699422" layoutX="533.0" layoutY="194.0" orientation="VERTICAL" prefHeight="694.0" prefWidth="1238.0" AnchorPane.bottomAnchor="-30.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                   <SplitPane dividerPositions="0.4638728323699422" layoutX="533.0" layoutY="194.0" orientation="VERTICAL" prefHeight="715.0" prefWidth="1208.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <items>
                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="1236.0">
                          <children>
@@ -52,21 +51,20 @@
                        </AnchorPane>
                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="302.0" prefWidth="1236.0">
                          <children>
-                           <StackPane AnchorPane.bottomAnchor="-217.0" AnchorPane.leftAnchor="-1.0" AnchorPane.rightAnchor="-1.0" AnchorPane.topAnchor="243.0" />
-                           <TableView fx:id="tableView" layoutX="-1.0" layoutY="33.0" prefHeight="481.0" prefWidth="1300.0">
-                             <columns>
-                               <TableColumn fx:id="designation" prefWidth="130.0" resizable="false" text="Designation" />
-                               <TableColumn fx:id="documentNo" minWidth="0.0" prefWidth="135.0" resizable="false" text="Drawing No." />
-                               <TableColumn fx:id="version" prefWidth="60.0" resizable="false" text="Version" />
-                               <TableColumn fx:id="lastHeaderDate" prefWidth="88.0" resizable="false" text="Date" />
-                               <TableColumn fx:id="lastHeaderChange" prefWidth="693.0" resizable="false" text="Change in BOM" />
-                               <TableColumn fx:id="componentImage" minWidth="0.0" prefWidth="102.0" resizable="false" text="Image" />
-                             </columns>
-                           </TableView>
                            <Label layoutX="540.0" layoutY="4.0" text="Components part">
                              <effect>
                                <InnerShadow />
                              </effect></Label>
+                           <TableView fx:id="tableView" layoutX="-302.0" layoutY="27.0" prefHeight="351.0" prefWidth="1206.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="27.0">
+                             <columns>
+                               <TableColumn fx:id="designation" prefWidth="130.0" text="Designation" />
+                               <TableColumn fx:id="documentNo" minWidth="0.0" prefWidth="181.00003051757812" text="Drawing No." />
+                               <TableColumn fx:id="version" prefWidth="125.0" text="Version" />
+                               <TableColumn fx:id="lastHeaderDate" prefWidth="197.0" text="Date" />
+                               <TableColumn fx:id="lastHeaderChange" prefWidth="500.0" text="Change in BOM" />
+                               <TableColumn fx:id="componentImage" minWidth="0.0" prefWidth="150.0" text="Image" />
+                             </columns>
+                           </TableView>
                          </children></AnchorPane>
                      </items>
                    </SplitPane>

@@ -208,7 +208,7 @@ public class SearchInDVPController implements Initializable {
                     if (!dateDropdown.getItems().isEmpty()) dateDropdown.getItems().clear();
                     else {
                         if (!Objects.equals(showingDVPForPartTextField.getText(), ""))
-                        getAllTestsSorted(showingDVPForPartTextField.getText());
+                            getAllTestsSorted(showingDVPForPartTextField.getText());
                         if (listTemplatov == null)
                             listTemplatov = TemplateFinder.getInstance().findAll().stream().map(it -> it.template_name).collect(Collectors.toList());
                         dropdownTemplates.getItems().addAll(listTemplatov);

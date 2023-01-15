@@ -45,5 +45,14 @@
         <jarDirectory url="file://$MODULE_DIR$/lib/poi-bin-5.2.3-20220909/poi-bin-5.2.3/ooxml-lib" recursive="false" />
       </library>
     </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/lib/jmetro-8.6.14.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
   </component>
 </module>
