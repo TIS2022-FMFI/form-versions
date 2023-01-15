@@ -127,7 +127,7 @@ public class SearchInDVPController implements Initializable {
         return TestFinder.getInstance().findTestsForPart(partID);
     }
 
-    public ObservableList<TestWrapper> getDVPTableFromDB(String partID) throws SQLException { // toto ta krasne poprosinkám urobiť kubko cmuq
+    public ObservableList<TestWrapper> getDVPTableFromDB(String partID) throws SQLException {
         ExcelSheet e = new ExcelSheet();
         e.setListOfAllTests(getAllTestsForPart(partID));
         return FXCollections.observableArrayList(e.generateTestWrappersForAllTest());
