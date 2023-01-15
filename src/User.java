@@ -20,7 +20,7 @@ public class User {
 
     private static String name;
 
-    public static boolean res;
+    public static int res = -1;
 
     public static String getName() {
         return name;
@@ -30,15 +30,16 @@ public class User {
         User.name = name;
     }
 
-    public static boolean isRes() {
+    public static int getRes() {
         return res;
     }
 
-    public static void setRes(boolean res) {
+    public static void setRes(int res) {
         User.res = res;
     }
 
     public static void identifyYourself() {
+        setRes(-1);
         Dialog<Pair<String, String>> dialog = new Dialog<>();
         dialog.setTitle("Login Dialog");
         dialog.setHeaderText("Please fill in your login information");
@@ -89,7 +90,9 @@ public class User {
         result.ifPresent(u -> {
             setName(u.getKey());
             try {
-                res = findUserInDatabaseAndCheckPassword(u.getValue());
+                boolean tempRes = findUserInDatabaseAndCheckPassword(u.getValue());
+                if (tempRes) res = 1;
+                else res = 0;
             } catch (SQLException e) {
                 e.printStackTrace();
             }
