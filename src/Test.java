@@ -23,27 +23,21 @@ public class Test {
     private int AA_col_idx = 1;
     private int documentnr_col_idx = 2;
     private int customernr_col_idx = 3;
-
     private List<List<XSSFCell>> all_cell;
-
     public int databaseId;
 
     public String getDate() {
         return date;
     }
-
     public String getAA() {
         return AA;
     }
-
     public String getDocument_nr() {
         return Document_nr;
     }
-
     public String getCustomer_nr() {
         return Customer_nr;
     }
-
     public List<TestResult> getTest_results() {
         return test_results;
     }

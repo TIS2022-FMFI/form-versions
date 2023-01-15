@@ -1,3 +1,4 @@
+import javafx.scene.control.Alert;
 import org.bouncycastle.asn1.tsp.TSTInfo;
 
 import java.io.IOException;
@@ -31,9 +32,15 @@ public class DatabaseTransactions {
             });
         } catch (SQLException e) {
             DbContext.getConnection().rollback();
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setHeaderText("Upload not succesful!");
+            alert.showAndWait();
             throw new RuntimeException(e);
         } finally {
             DbContext.getConnection().setAutoCommit(true);
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setHeaderText("Upload succesful!");
+            alert.showAndWait();
         }
     }
 
@@ -43,9 +50,15 @@ public class DatabaseTransactions {
             template.insert(uid);
         } catch (SQLException e) {
             DbContext.getConnection().rollback();
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setHeaderText("Upload not succesful!");
+            alert.showAndWait();
             throw new RuntimeException(e);
         } finally {
             DbContext.getConnection().setAutoCommit(true);
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setHeaderText("Upload succesful!");
+            alert.showAndWait();
         }
     }
 
@@ -55,9 +68,15 @@ public class DatabaseTransactions {
             template.delete(uid);
         } catch (SQLException e) {
             DbContext.getConnection().rollback();
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setHeaderText("Delete succesful!");
+            alert.showAndWait();
             throw new RuntimeException(e);
         } finally {
             DbContext.getConnection().setAutoCommit(true);
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setHeaderText("Delete not succesful!");
+            alert.showAndWait();
         }
     }
 
@@ -97,11 +116,18 @@ public class DatabaseTransactions {
                 try {
                     test.insert(uid);
                 } catch (SQLException e) {
+                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                    alert.setHeaderText("Upload not succesful!");
+                    alert.showAndWait();
                     throw new RuntimeException(e);
+
                 }
             });
         } finally {
             DbContext.getConnection().setAutoCommit(true);
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setHeaderText("Upload succesful!");
+            alert.showAndWait();
         }
     }
 

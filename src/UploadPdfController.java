@@ -98,7 +98,6 @@ public class UploadPdfController implements Initializable {
         assemblyImgButton.setDisable(true);
         clearAllElements.setDisable(true);
 
-
     }
 
 
@@ -188,7 +187,6 @@ public class UploadPdfController implements Initializable {
         fc.setTitle("Choose the subpart PDF files");
         fc.setInitialDirectory(new File("src\\pdfka"));
 
-
         List<File> listPathov = fc.showOpenMultipleDialog(null);
 
         if (listPathov != null) {
@@ -201,22 +199,15 @@ public class UploadPdfController implements Initializable {
                 }
             });
             observableListItems = FXCollections.observableArrayList(subpartsCatiaSheetList);
-//            System.out.println(subpartsCatiaSheetList);
-
 
         } else System.out.println("Failed to load");
         createTable();
         createHeaderFooter();
         assemblyImgButton.setDisable(false);
-
-
     }
 
 
     public void showImage(ActionEvent actionEvent) {
-//        Image image = Clipboard.getSystemClipboard().getImage();
-//        imageShowcase.setImage(image);
-//        clearAllElements.setDisable(false);
         if (mainPdf != null) {
             mainPdf.setImageFromExplorer();
             assemblyImageShowcase.setImage(mainPdf.image);
@@ -228,7 +219,6 @@ public class UploadPdfController implements Initializable {
         updateMainPdfFromFrontend();
         findParents(); // adds the parent-child connections
 
-
         DatabaseTransactions dbt = new DatabaseTransactions();
         dbt.insertPart(mainPdf, "dummyName", subpartsCatiaSheetList);
 
@@ -236,15 +226,12 @@ public class UploadPdfController implements Initializable {
     }
 
     public void findParents() {
-
         subpartsCatiaSheetList.forEach(child -> {
             if (checkIfParentExistsInMainPdf(child.documentNo)) {
                 addParent(mainPdf, child);
             }
             for (CatiaSheet parent : findParentInSubparts(child)) {
                 addParent(parent, child);
-
-
             }
         });
     }

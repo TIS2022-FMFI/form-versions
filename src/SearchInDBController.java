@@ -127,7 +127,6 @@ public class SearchInDBController implements Initializable {
     }
 
 
-
     public void fillPartHistoryListview() throws SQLException {
         currClickedOn = partHistoryListView.getSelectionModel().getSelectedItem();
         BOMListView.getItems().clear();
