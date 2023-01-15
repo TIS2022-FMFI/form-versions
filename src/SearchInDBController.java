@@ -127,7 +127,6 @@ public class SearchInDBController implements Initializable {
     }
 
 
-
     public void fillPartHistoryListview() throws SQLException {
         currClickedOn = partHistoryListView.getSelectionModel().getSelectedItem();
         BOMListView.getItems().clear();
@@ -148,8 +147,4 @@ public class SearchInDBController implements Initializable {
             MainController.switchTab(1);
         }
     }
-
-
-
-
 }

@@ -161,11 +161,9 @@ public class Template {
 
 
         try {
-
             System.out.println(testWrapperList + " jouojo");
             FileOutputStream out = new FileOutputStream(path);
             emptyTable.write(out);
-
 
             File xlsxFile = new File(path);
             FileInputStream inputStream = new FileInputStream(xlsxFile);
