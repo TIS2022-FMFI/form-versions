@@ -61,7 +61,7 @@ public class SearchInDVPController implements Initializable {
     private TableColumn<TestWrapper, String> minusDVPSearch;
 
 
-    ObservableList<TestWrapper> observableListItems;
+    public ObservableList<TestWrapper> observableListItems;
 
     public Map<String, List<Test>> testsForCurrentSearch;
 
@@ -72,38 +72,87 @@ public class SearchInDVPController implements Initializable {
 
         docNumDVPSearch.setCellValueFactory(new PropertyValueFactory<>("documentNr"));
         docNumDVPSearch.setCellFactory(TextFieldTableCell.forTableColumn());
+        docNumDVPSearch.setEditable(false);
+
 
 
         dateDVPSearch.setCellValueFactory(new PropertyValueFactory<>("date"));
         dateDVPSearch.setCellFactory(TextFieldTableCell.forTableColumn());
+        dateDVPSearch.setEditable(false);
 
 
         aaDVPSearch.setCellValueFactory(new PropertyValueFactory<>("AA"));
         aaDVPSearch.setCellFactory(TextFieldTableCell.forTableColumn());
+        aaDVPSearch.setEditable(false);
 
 
         custNumDVPSearch.setCellValueFactory(new PropertyValueFactory<>("customerNr"));
         custNumDVPSearch.setCellFactory(TextFieldTableCell.forTableColumn());
+        custNumDVPSearch.setEditable(false);
 
 
         testTypeDVPSearch.setCellValueFactory(new PropertyValueFactory<>("testType"));
         testTypeDVPSearch.setCellFactory(TextFieldTableCell.forTableColumn());
+        testTypeDVPSearch.setEditable(false);
 
 
         testResDVPSearch.setCellValueFactory(new PropertyValueFactory<>("testResult"));
         testResDVPSearch.setCellFactory(TextFieldTableCell.forTableColumn());
 
 
+
+        testResDVPSearch.setOnEditCommit(testWrapperStringCellEditEvent -> {
+            int index = tableViewDVPSearch.getSelectionModel().getSelectedIndex();
+            TestWrapper tw = tableViewDVPSearch.getItems().get(index);
+            tw.setTestResult(testWrapperStringCellEditEvent.getNewValue());
+
+
+            // Sem volanie funkcie na update v DB
+
+
+        });
+
+
         sollDVPSearch.setCellValueFactory(new PropertyValueFactory<>("sollDVP"));
         sollDVPSearch.setCellFactory(TextFieldTableCell.forTableColumn());
+
+        sollDVPSearch.setOnEditCommit(testWrapperStringCellEditEvent -> {
+            int index = tableViewDVPSearch.getSelectionModel().getSelectedIndex();
+            TestWrapper tw = tableViewDVPSearch.getItems().get(index);
+            tw.setTestResult(testWrapperStringCellEditEvent.getNewValue());
+
+
+            // Sem volanie funkcie na update v DB
+
+        });
 
 
         plusDVPSearch.setCellValueFactory(new PropertyValueFactory<>("sollPlus"));
         plusDVPSearch.setCellFactory(TextFieldTableCell.forTableColumn());
 
+        plusDVPSearch.setOnEditCommit(testWrapperStringCellEditEvent -> {
+            int index = tableViewDVPSearch.getSelectionModel().getSelectedIndex();
+            TestWrapper tw = tableViewDVPSearch.getItems().get(index);
+            tw.setTestResult(testWrapperStringCellEditEvent.getNewValue());
+
+
+            // Sem volanie funkcie na update v DB
+
+        });
+
 
         minusDVPSearch.setCellValueFactory(new PropertyValueFactory<>("sollMinus"));
         minusDVPSearch.setCellFactory(TextFieldTableCell.forTableColumn());
+
+        minusDVPSearch.setOnEditCommit(testWrapperStringCellEditEvent -> {
+            int index = tableViewDVPSearch.getSelectionModel().getSelectedIndex();
+            TestWrapper tw = tableViewDVPSearch.getItems().get(index);
+            tw.setTestResult(testWrapperStringCellEditEvent.getNewValue());
+
+
+            // Sem volanie funkcie na update v DB
+
+        });
 
 
         tableViewDVPSearch.setItems(observableListItems);
@@ -112,6 +161,7 @@ public class SearchInDVPController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        tableViewDVPSearch.setEditable(true);
         if (showingDVPForPartTextField != null) {
             State.setTextField(showingDVPForPartTextField);
 
