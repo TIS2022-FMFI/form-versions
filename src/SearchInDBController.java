@@ -168,6 +168,6 @@ public class SearchInDBController implements Initializable {
     public void updateCommentOfPart(ActionEvent actionEvent) throws SQLException {
         DatabaseTransactions dT = new DatabaseTransactions();
         if (partIDInput != null & partComment != null)
-        dT.editPartComment(partIDInput.getText(),partComment.getText());
+        dT.editPartComment(currClickedOn,partComment.getText());
     }
 }

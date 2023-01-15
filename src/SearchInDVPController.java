@@ -258,6 +258,7 @@ public class SearchInDVPController implements Initializable {
 
 
     public void exportDVPOfPartToTemplate(ActionEvent actionEvent) {
+
         FileChooser fc = new FileChooser();
         fc.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Excel", ".xlsx"));
 

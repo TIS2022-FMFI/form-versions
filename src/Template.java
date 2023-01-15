@@ -160,7 +160,6 @@ public class Template {
             FileInputStream inputStream = new FileInputStream(xlsxFile);
             System.out.println(result_names.size());
             for (int i = 0; i < result_names.size(); i++) {
-                System.out.println(result_names.get(i));
                 Sheet sheet = emptyTable.getSheetAt(sheet_ids.get(i)-1);
                 Row r = sheet.getRow(row_ids.get(i)-1);
                 try {
@@ -229,7 +228,6 @@ public class Template {
                     s.setInt(2, row_ids.get(i));
                     s.setInt(3, col_ids.get(i));
                     s.setInt(4, sheet_ids.get(i));
-                    System.out.println(result_names.get(i));
                     if (TestTypeFinder.getInstance().returnIdInTable(result_names.get(i)) == -1) {
                         throw new SQLException("Wrong test name, nothing inserted");
                     }

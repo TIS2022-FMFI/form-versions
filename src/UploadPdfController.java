@@ -216,13 +216,40 @@ public class UploadPdfController implements Initializable {
 
     public void insert() throws SQLException, IOException {
 
-        updateMainPdfFromFrontend();
-        findParents(); // adds the parent-child connections
+        if (!checkForSingleCharacetrVersion()) {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setHeaderText("Verison has to only contain one character!");
+            alert.showAndWait();
+        } else {
 
-        DatabaseTransactions dbt = new DatabaseTransactions();
-        dbt.insertPart(mainPdf, subpartsCatiaSheetList);
+            if (checkForEmptyFields()) {
 
-        clearAll();
+                updateMainPdfFromFrontend();
+                findParents(); // adds the parent-child connections
+                mainPdf.version = mainPdf.version.toUpperCase();
+
+                DatabaseTransactions dbt = new DatabaseTransactions();
+                dbt.insertPart(mainPdf, subpartsCatiaSheetList);
+
+                clearAll();
+            } else {
+                Alert alert = new Alert(Alert.AlertType.WARNING);
+                alert.setHeaderText("One or more fields empty!");
+                alert.showAndWait();
+            }
+        }
+
+    }
+
+    public boolean checkForEmptyFields() {
+        return !verziaTextField.getText().equals("") &&
+                !releaseTextField.getText().equals("") &&
+                !docNoTextField.getText().equals("") &&
+                !devFromTextField.getText().equals("");
+    }
+
+    public boolean checkForSingleCharacetrVersion() {
+        return verziaTextField.getText().length() == 1;
     }
 
     public void findParents() {

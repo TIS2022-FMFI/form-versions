@@ -207,11 +207,12 @@ public class MakeTemplateController implements Initializable{
     }
 
     public void remove_template() throws SQLException {
-        String template_to_remove = template_menu_to_remove.getSelectionModel().getSelectedItem().toString();
-        DatabaseTransactions dbt = new DatabaseTransactions();
-        dbt.deleteTemplate(TemplateFinder.getInstance().findByName(template_to_remove));
-        fill_choice_box(TemplateFinder.getInstance().findAll().stream().map(it -> it.template_name).collect(Collectors.toList()), template_menu_to_remove);
-        System.out.println(template_to_remove);
+        if (!(template_menu_to_remove.getSelectionModel().getSelectedItem() == null)) {
+            String template_to_remove = template_menu_to_remove.getSelectionModel().getSelectedItem().toString();
+            DatabaseTransactions dbt = new DatabaseTransactions();
+            dbt.deleteTemplate(TemplateFinder.getInstance().findByName(template_to_remove));
+            fill_choice_box(TemplateFinder.getInstance().findAll().stream().map(it -> it.template_name).collect(Collectors.toList()), template_menu_to_remove);
+        }
     }
 
     public void reset_template(){
@@ -274,13 +275,16 @@ public class MakeTemplateController implements Initializable{
                 Template template = new Template(path_to_excel, template_menu, results, rows, cols, sheets);
                 if(template.result_names.size()>0 && template.row_ids.size()==template.result_names.size() &&
                         template.row_ids.size() == template.col_ids.size() && rows.size() == sheets.size()){
-                    System.out.println("Template sa dá uložiť");
                     DatabaseTransactions dbt = new DatabaseTransactions();
                     dbt.insertTemplate(template);
                     fill_choice_box(TemplateFinder.getInstance().findAll().stream().map(it -> it.template_name).collect(Collectors.toList()), template_menu_to_remove);
                 }
             }
             reset_template();
+        } else {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setHeaderText("Not enough information to upload!");
+            alert.showAndWait();
         }
     }
 
