@@ -6,6 +6,7 @@ import javafx.scene.image.ImageView;
 import javafx.stage.FileChooser;
 
 import javax.imageio.ImageIO;
+import javax.swing.*;
 import java.awt.image.BufferedImage;
 import java.io.*;
 import java.net.URL;
@@ -479,7 +480,7 @@ public class CatiaSheet {
     public void setImageFromExplorer(){
         FileChooser fc = new FileChooser();
         fc.setTitle("Choose the image for the Assembly");
-        fc.setInitialDirectory(new File("src\\imgs"));
+        fc.setInitialDirectory(new File((new JFileChooser()).getFileSystemView().getDefaultDirectory().toString()));
         File selectedFile = fc.showOpenDialog(null);
 
         if (selectedFile != null) {
