@@ -161,31 +161,32 @@ public class Template {
 
 
         try {
-
+            System.out.println(testWrapperList + " jouojo");
             FileOutputStream out = new FileOutputStream(path);
-            Workbook wb = new XSSFWorkbook();
-            wb.write(out);
+            emptyTable.write(out);
 
             File xlsxFile = new File(path);
             FileInputStream inputStream = new FileInputStream(xlsxFile);
-
+            System.out.println(result_names.size());
             for (int i = 0; i < result_names.size(); i++) {
-                Sheet sheet = emptyTable.getSheetAt(sheet_ids.get(i));
-                Row r = sheet.getRow(row_ids.get(i));
+                System.out.println(result_names.get(i));
+                Sheet sheet = emptyTable.getSheetAt(sheet_ids.get(i)-1);
+                Row r = sheet.getRow(row_ids.get(i)-1);
                 try {
-                    Cell c = r.getCell(col_ids.get(i));
+                    Cell c = r.getCell(col_ids.get(i)-1);
                     c.setCellValue(findResultFromWrapperList(testWrapperList,result_names.get(i)));
                 } catch (NullPointerException e) {
                     try {
-                        Cell c = r.createCell(col_ids.get(i));
+                        Cell c = r.createCell(col_ids.get(i)-1);
                         c.setCellValue(findResultFromWrapperList(testWrapperList,result_names.get(i)));
                     } catch (NullPointerException e2) {
-                        Row r2 = sheet.createRow(row_ids.get(i));
-                        Cell c = r2.createCell(col_ids.get(i));
+                        Row r2 = sheet.createRow(row_ids.get(i)-1);
+                        Cell c = r2.createCell(col_ids.get(i)-1);
                         c.setCellValue(findResultFromWrapperList(testWrapperList,result_names.get(i)));
                     }
                 }
             }
+
 
             inputStream.close();
             FileOutputStream os = new FileOutputStream(xlsxFile);
@@ -207,7 +208,7 @@ public class Template {
             DatabaseChange dc = new DatabaseChange(uid, "Uploaded a template named " + template_name + " to the database", new Timestamp(System.currentTimeMillis()));
             dc.insert();
 
-            Integer databaseId;
+            int databaseId;
 
             try (PreparedStatement s = DbContext.getConnection().prepareStatement("INSERT INTO template (name, excel) VALUES (?,?)", Statement.RETURN_GENERATED_KEYS)) {
                 s.setString(1, this.template_name);
