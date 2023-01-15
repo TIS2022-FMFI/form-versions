@@ -27,7 +27,7 @@ public class DbLogController implements Initializable {
         fillListView();
     }
 
-    public void fillListView(){
+    public void fillListView() {
         try {
             List<DatabaseChange> temp = new ArrayList<>();
             StringBuilder tempString = new StringBuilder();

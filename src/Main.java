@@ -18,8 +18,6 @@ public class Main  extends Application{
     public static void main(String[] args) throws IOException, SQLException {
 
         try {
-//            Connection connection = DriverManager.getConnection("jdbc:mariadb://localhost:3306/moja", "root", "root");
-
             java.util.Properties prop = new Properties();
             prop.loadFromXML(Files.newInputStream(Paths.get("./conf.xml")));
             Connection connection = DriverManager.getConnection(
@@ -27,9 +25,9 @@ public class Main  extends Application{
                     prop.getProperty("user"),
                     prop.getProperty("password"));
 
-            System.out.println("Success");
 
             if (connection != null) {
+                System.out.println("Success");
                 DbContext.setConnection(connection);
             } else {
                 System.out.println("Failed to make connection!");

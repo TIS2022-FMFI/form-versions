@@ -102,9 +102,9 @@ public class Test {
         return null;
     }
 
-    public void insert(String uid) throws SQLException {
+    public void insert() throws SQLException {
 
-            DatabaseChange dc = new DatabaseChange(uid, "Uploaded a test for " + this.date + " to the database", new Timestamp(System.currentTimeMillis()));
+            DatabaseChange dc = new DatabaseChange(User.getName(), "Uploaded a test for " + this.date + " to the database", new Timestamp(System.currentTimeMillis()));
             dc.insert();
 
             int databaseId;
