@@ -4,7 +4,6 @@ drop table if exists db_log;
 drop table if exists template;
 drop table if exists test_result cascade;
 drop table if exists test cascade;
-drop table if exists dvp cascade;
 drop table if exists part cascade;
 drop table if exists test_types cascade;
 
@@ -92,25 +91,6 @@ create index table_id
 create index test_type
     on coordinates (test_type);
 
-create table dvp
-(
-    id              int auto_increment
-        primary key,
-    part_id         varchar(100) null,
-    date            varchar(100) not null,
-    aa              varchar(100) null,
-    consumer_id     varchar(100) null,
-    test_result     varchar(100) null,
-    test_soll       varchar(100) null,
-    test_soll_plus  varchar(50)  null,
-    test_soll_minus varchar(50)  null,
-    test_type_id    int          null,
-    constraint test_type_id
-        foreign key (test_type_id) references test_types (id)
-);
-
-create index part_id
-    on dvp (part_id);
 
 create table test_result
 (

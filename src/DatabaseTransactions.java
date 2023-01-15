@@ -186,8 +186,13 @@ public class DatabaseTransactions {
         DbContext.getConnection().setAutoCommit(false);
         DatabaseChange dc = new DatabaseChange(uid, "Deleted CatiaSheed with id " + partID + " in the database", new Timestamp(System.currentTimeMillis()));
         dc.insert();
-        try (PreparedStatement s = DbContext.getConnection().prepareStatement("DELETE FROM part WHERE part_id = ?", Statement.RETURN_GENERATED_KEYS)) {
+        try {
+            PreparedStatement s = DbContext.getConnection().prepareStatement("DELETE FROM part WHERE part_id = ?", Statement.RETURN_GENERATED_KEYS);
             s.setString(1, partID);
+            s.executeUpdate();
+            s = DbContext.getConnection().prepareStatement("DELETE FROM bom WHERE parent = ? OR child = ?", Statement.RETURN_GENERATED_KEYS);
+            s.setString(1, partID);
+            s.setString(2, partID);
             s.executeUpdate();
         } catch (SQLException e) {
             DbContext.getConnection().rollback();
