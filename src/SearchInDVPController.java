@@ -105,9 +105,7 @@ public class SearchInDVPController implements Initializable {
             int index = tableViewDVPSearch.getSelectionModel().getSelectedIndex();
             TestWrapper tw = tableViewDVPSearch.getItems().get(index);
             tw.setTestResult(testWrapperStringCellEditEvent.getNewValue());
-
-
-            // Sem volanie funkcie na update v DB
+            updateTestWrapper(tw);
 
 
         });
@@ -119,10 +117,9 @@ public class SearchInDVPController implements Initializable {
         sollDVPSearch.setOnEditCommit(testWrapperStringCellEditEvent -> {
             int index = tableViewDVPSearch.getSelectionModel().getSelectedIndex();
             TestWrapper tw = tableViewDVPSearch.getItems().get(index);
-            tw.setTestResult(testWrapperStringCellEditEvent.getNewValue());
-
-
-            // Sem volanie funkcie na update v DB
+            tw.setSoll(testWrapperStringCellEditEvent.getNewValue());
+            System.out.println(tw.getSoll());
+            updateTestWrapper(tw);
 
         });
 
@@ -133,10 +130,8 @@ public class SearchInDVPController implements Initializable {
         plusDVPSearch.setOnEditCommit(testWrapperStringCellEditEvent -> {
             int index = tableViewDVPSearch.getSelectionModel().getSelectedIndex();
             TestWrapper tw = tableViewDVPSearch.getItems().get(index);
-            tw.setTestResult(testWrapperStringCellEditEvent.getNewValue());
-
-
-            // Sem volanie funkcie na update v DB
+            tw.setSollPlus(testWrapperStringCellEditEvent.getNewValue());
+            updateTestWrapper(tw);
 
         });
 
@@ -147,10 +142,8 @@ public class SearchInDVPController implements Initializable {
         minusDVPSearch.setOnEditCommit(testWrapperStringCellEditEvent -> {
             int index = tableViewDVPSearch.getSelectionModel().getSelectedIndex();
             TestWrapper tw = tableViewDVPSearch.getItems().get(index);
-            tw.setTestResult(testWrapperStringCellEditEvent.getNewValue());
-
-
-            // Sem volanie funkcie na update v DB
+            tw.setSollMinus(testWrapperStringCellEditEvent.getNewValue());
+            updateTestWrapper(tw);
 
         });
 
@@ -247,6 +240,27 @@ public class SearchInDVPController implements Initializable {
                 e.printStackTrace();
             }
         } else System.out.println("zle");
+    }
+
+    public TestResult findTestResultInTestByName(Test test, String name) {
+        for (int i = 0; i < test.getTest_results().size(); i++) {
+            if (Objects.equals(test.getTest_results().get(i).getTest_type(), name)) {
+                return test.getTest_results().get(i);
+            }
+        }
+        return new TestResult();
+    }
+
+    public void updateTestWrapper(TestWrapper tw) {
+        try {
+            tw.editInDatabase("dummy",
+                    testsForCurrentSearch.get(dateDropdown.getSelectionModel().getSelectedItem().split("#")[0])
+                            .get(Integer.parseInt(dateDropdown.getSelectionModel().getSelectedItem().split("#")[1])),
+                    findTestResultInTestByName(testsForCurrentSearch.get(dateDropdown.getSelectionModel().getSelectedItem().split("#")[0])
+                            .get(Integer.parseInt(dateDropdown.getSelectionModel().getSelectedItem().split("#")[1])), tw.getTestType()));
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
 }

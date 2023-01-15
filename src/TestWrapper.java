@@ -56,14 +56,15 @@ public class TestWrapper {
     public void editInDatabase(String uid, Test test, TestResult testResult) throws SQLException {
         DatabaseChange dc = new DatabaseChange(uid, "Edited test for " + test.getDocument_nr() + " in the database", new Timestamp(System.currentTimeMillis()));
         dc.insert();
+        System.out.println(this.soll + " " + this.sollPlus + " " + this.sollMinus);
         try (PreparedStatement s = DbContext.getConnection().prepareStatement("UPDATE test_result " +
                                                                                     "SET test_result = ?, test_soll = ?, test_soll_plus = ?, test_soll_minus = ? " +
                                                                                     "WHERE test_id = ? AND id = ?",
                                                                                     Statement.RETURN_GENERATED_KEYS)) {
-            s.setString(1, testResult.getTest_result());
-            s.setString(2, testResult.getSoll());
-            s.setString(3, testResult.getSoll_plus());
-            s.setString(4, testResult.getSoll_minus());
+            s.setString(1, this.testResult);
+            s.setString(2, this.soll);
+            s.setString(3, this.sollPlus);
+            s.setString(4, this.sollMinus);
             s.setInt(5, test.databaseId);
             s.setInt(6, testResult.getDbid());
             s.executeUpdate();

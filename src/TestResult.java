@@ -36,9 +36,9 @@ public class TestResult {
             soll_plus = "";
             soll_minus = "";
         }
-
-
     }
+
+    public TestResult() {}
 
     public String getTest_type() {
         return test_type;
