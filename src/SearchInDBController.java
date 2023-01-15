@@ -147,4 +147,27 @@ public class SearchInDBController implements Initializable {
             MainController.switchTab(1);
         }
     }
+
+    public void removeSelectedPartFromDB(ActionEvent actionEvent) throws SQLException {
+        if (!Objects.equals(currClickedOn, "") && currClickedOn != null) {
+            DatabaseTransactions dT = new DatabaseTransactions();
+            dT.deleteCatiaSheet(currClickedOn, "dummy");
+            clearPage();
+            partHistoryListView.getItems().addAll(getDBInfoPartListView(partIDInput.getText()));
+        }
+    }
+
+
+    private void clearPage(){
+        partHistoryListView.getItems().clear();
+        BOMListView.getItems().clear();
+        if (currImageForPart != null) currImageForPart.setImage(null);
+        partComment.setText("");
+    }
+
+    public void updateCommentOfPart(ActionEvent actionEvent) throws SQLException {
+        DatabaseTransactions dT = new DatabaseTransactions();
+        if (partIDInput != null & partComment != null)
+        dT.editPartComment(partIDInput.getText(),partComment.getText());
+    }
 }

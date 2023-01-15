@@ -2,8 +2,12 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
+import jfxtras.styles.jmetro.JMetro;
+import jfxtras.styles.jmetro.Style;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -48,15 +52,35 @@ public class Main  extends Application{
 
     @Override
     public void start(Stage stage) throws Exception {
-        mainStage = stage;
 
-        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("xmlka/main.fxml")));
 
-        stage.getIcons().add(new Image(Objects.requireNonNull(Main.class.getResourceAsStream("imgs/logo.png"))));
+        User.identifyYourself();
+        if (User.isRes()){
+            mainStage = stage;
 
-        stage.setTitle("BogeParser (Logged in as dummyString)");
-        stage.setScene(new Scene(root));
-        stage.show();
+            Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("xmlka/main.fxml")));
+
+            stage.getIcons().add(new Image(Objects.requireNonNull(Main.class.getResourceAsStream("imgs/logo.png"))));
+            Scene s = new Scene(root);
+            JMetro jMetro = new JMetro(Style.LIGHT);
+            jMetro.setScene(s);
+
+
+
+
+            stage.setTitle("BogeParser (Logged in as "+User.getName()+")");
+            stage.setScene(s);
+            stage.show();
+
+
+        }
+        else {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setHeaderText("Wrong login information! Please try again.");
+            alert.showAndWait();
+            start(stage);
+
+        }
     }
 
 

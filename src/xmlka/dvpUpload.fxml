@@ -5,36 +5,31 @@
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.HBox?>
 
-<SplitPane dividerPositions="0.8223350253807107" orientation="VERTICAL" prefHeight="850.0" prefWidth="1210.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="UploadDVPController">
+<SplitPane dividerPositions="0.8477" orientation="VERTICAL" prefHeight="850.0" prefWidth="1210.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="UploadDVPController">
     <items>
         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
             <children>
                 <TableView fx:id="tableViewDVP" layoutX="491.0" layoutY="75.0" prefHeight="644.0" prefWidth="1238.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                     <columns>
                         <TableColumn fx:id="docNumDVP" prefWidth="192.99996948242188" text="doc_num" />
-                        <TableColumn fx:id="dateDVP" prefWidth="89.99996948242188" text="date" />
-                        <TableColumn fx:id="aaDVP" prefWidth="151.0" text="aa" />
-                        <TableColumn fx:id="custNumDVP" prefWidth="219.0" text="customer_num" />
-                        <TableColumn fx:id="testTypeDVP" prefWidth="319.0" text="test_type" />
-                        <TableColumn fx:id="testResDVP" prefWidth="183.0" text="test_result" />
-                        <TableColumn fx:id="sollDVP" prefWidth="139.0" text="soll" />
-                        <TableColumn fx:id="plusDVP" minWidth="0.0" prefWidth="116.0" text="+" />
-                        <TableColumn fx:id="minusDVP" prefWidth="89.0" text="-" />
+                        <TableColumn fx:id="dateDVP" prefWidth="128.0" text="date" />
+                        <TableColumn fx:id="aaDVP" prefWidth="140.0" text="aa" />
+                        <TableColumn fx:id="custNumDVP" prefWidth="240.0" text="customer_num" />
+                        <TableColumn fx:id="testTypeDVP" prefWidth="450.0" text="test_type" />
+                        <TableColumn fx:id="testResDVP" prefWidth="150.0" text="test_result" />
+                        <TableColumn fx:id="sollDVP" prefWidth="150.0" text="soll" />
+                        <TableColumn fx:id="plusDVP" minWidth="0.0" prefWidth="100.0" text="+" />
+                        <TableColumn fx:id="minusDVP" prefWidth="100.0" text="-" />
                     </columns>
                 </TableView>
             </children>
         </AnchorPane>
-        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
+        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="1208.0">
             <children>
-                <HBox layoutX="104.0" layoutY="29.0" spacing="200.0">
-                    <children>
-                        <Button fx:id="cleaDVP" mnemonicParsing="false" onAction="#clearDVPPage" prefHeight="90.0" prefWidth="200.0" text="Clear All" />
-                        <Button fx:id="uploadDVP" mnemonicParsing="false" onAction="#loadDVP" prefHeight="90.0" prefWidth="200.0" text="Upload dvp" />
-                        <Button fx:id="insetToDBDVP" mnemonicParsing="false" onAction="#insertToDB" prefHeight="90.0" prefWidth="200.0" text="insert to DB" />
-                    </children>
-                </HBox>
+                  <Button fx:id="cleaDVP" layoutX="65.0" layoutY="24.0" mnemonicParsing="false" onAction="#clearDVPPage" prefHeight="60.0" prefWidth="200.0" text="Clear All" />
+                  <Button fx:id="uploadDVP" layoutX="736.0" layoutY="24.0" mnemonicParsing="false" onAction="#loadDVP" prefHeight="60.0" prefWidth="200.0" text="Upload dvp" />
+                  <Button fx:id="insetToDBDVP" layoutX="972.0" layoutY="24.0" mnemonicParsing="false" onAction="#insertToDB" prefHeight="60.0" prefWidth="200.0" text="insert to DB" />
             </children>
         </AnchorPane>
     </items>

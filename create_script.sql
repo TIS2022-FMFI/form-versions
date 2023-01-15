@@ -6,6 +6,7 @@ drop table if exists test_result cascade;
 drop table if exists test cascade;
 drop table if exists part cascade;
 drop table if exists test_types cascade;
+drop table if exists users;
 
 create table bom
 (
@@ -108,11 +109,18 @@ create table test_result
         foreign key (test_type) references test_types (id)
 );
 
+create table users
+(
+    id     int PRIMARY KEY auto_increment,
+    mail   varchar(50),
+    psswrd varchar(50)
+);
 
-insert into users (mail, password) VALUE ('boge@boge.sk', '2f243a7bacd3f91dbc3cfb349aca8776'); -- bogeman
-insert into users (mail, password) VALUE ('admin@boge.sk', '21232f297a57a5a743894a0e4a801fc3'); -- admin
-insert into users (mail, password) VALUE ('worker@boge.sk', 'b61822e8357dcaff77eaaccf348d9134'); -- worker
-insert into users (mail, password) VALUE ('catiasheet@boge.sk', 'c259e2688655535af4203956c045f32c'); -- catia_api
+
+insert into users (mail, psswrd) VALUE ('boge@boge.sk', '2f243a7bacd3f91dbc3cfb349aca8776'); -- bogeman
+insert into users (mail, psswrd) VALUE ('admin@boge.sk', '21232f297a57a5a743894a0e4a801fc3'); -- admin
+insert into users (mail, psswrd) VALUE ('worker@boge.sk', 'b61822e8357dcaff77eaaccf348d9134'); -- worker
+insert into users (mail, psswrd) VALUE ('catiasheet@boge.sk', 'c259e2688655535af4203956c045f32c'); -- catia_api
 
 insert into test_types (name) VALUE ('DVP / Teilelebenslauf - xxx.xxx cENGIS- xxxxxx : Customer Design Phase');
 insert into test_types (name) VALUE ('DVP / Teilelebenslauf - xxx.xxx cENGIS- xxxxxx : Development Stage : No.');

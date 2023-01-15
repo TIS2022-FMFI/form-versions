@@ -111,7 +111,6 @@ public class MakeTemplateController implements Initializable{
         label_result.setId("label"+idx);
         label_result.setLayoutX(label_results.get(label_results.size()-1).getLayoutX());
         label_result.setLayoutY(label_results.get(label_results.size()-1).getLayoutY()+49);
-        label_result.setFont(new Font(18));
         add_more.getChildren().add(label_result);
         label_results.add(label_result);
 
@@ -129,7 +128,6 @@ public class MakeTemplateController implements Initializable{
         row_label.setId("row_label"+idx);
         row_label.setLayoutX(row_labels.get(row_labels.size()-1).getLayoutX());
         row_label.setLayoutY(row_labels.get(row_labels.size()-1).getLayoutY()+49);
-        row_label.setFont(new Font(18));
         add_more.getChildren().add(row_label);
         row_labels.add(row_label);
 
@@ -145,7 +143,6 @@ public class MakeTemplateController implements Initializable{
         col_label.setId("col_label"+idx);
         col_label.setLayoutX(col_labels.get(col_labels.size()-1).getLayoutX());
         col_label.setLayoutY(col_labels.get(col_labels.size()-1).getLayoutY()+49);
-        col_label.setFont(new Font(18));
         add_more.getChildren().add(col_label);
         col_labels.add(col_label);
 
@@ -161,7 +158,6 @@ public class MakeTemplateController implements Initializable{
         sheet_label.setId("sheet_label"+idx);
         sheet_label.setLayoutX(sheet_labels.get(sheet_labels.size()-1).getLayoutX());
         sheet_label.setLayoutY(sheet_labels.get(sheet_labels.size()-1).getLayoutY()+49);
-        sheet_label.setFont(new Font(18));
         add_more.getChildren().add(sheet_label);
         sheet_labels.add(sheet_label);
 
