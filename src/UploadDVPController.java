@@ -4,6 +4,7 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -134,17 +135,23 @@ public class UploadDVPController implements Initializable {
 
     @FXML
     void clearDVPPage(ActionEvent event) {
-        tableViewDVP.getItems().clear();
-        excelSheet = new ExcelSheet();
-        System.out.println(observableListItems.size());
-        System.out.println(observableListItems);
+        if (observableListItems == null || !observableListItems.isEmpty()) {
+            tableViewDVP.getItems().clear();
+            excelSheet = new ExcelSheet();
+        }
     }
 
     @FXML
     void insertToDB(ActionEvent event) throws SQLException {
-        DatabaseTransactions dbt = new DatabaseTransactions();
-        dbt.insertTestList(excelSheet.listOfAllTests);
-        clearDVPPage(event);
+        if (excelSheet.listOfAllTests == null || excelSheet.listOfAllTests.size() == 0) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setHeaderText("Empty table to upload!");
+            alert.showAndWait();
+        } else{
+            DatabaseTransactions dbt = new DatabaseTransactions();
+            dbt.insertTestList(excelSheet.listOfAllTests);
+            clearDVPPage(event);
+        }
     }
 
     @FXML

@@ -39,13 +39,13 @@ public class DatabaseTransactions {
             });
         } catch (SQLException e) {
             DbContext.getConnection().rollback();
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setHeaderText("Upload not succesful!");
             alert.showAndWait();
             throw new RuntimeException(e);
         } finally {
             DbContext.getConnection().setAutoCommit(true);
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
             alert.setHeaderText("Upload succesful!");
             alert.showAndWait();
         }
@@ -53,21 +53,21 @@ public class DatabaseTransactions {
 
     public void editPartComment(String partID, String comm) throws SQLException {
         DbContext.getConnection().setAutoCommit(false);
-        DatabaseChange dc = new DatabaseChange(User.getName(), "Edited " + partID + " in the database", new Timestamp(System.currentTimeMillis()));
-        dc.insert();
         try (PreparedStatement s = DbContext.getConnection().prepareStatement("UPDATE part SET comment=? WHERE part_id = ?", Statement.RETURN_GENERATED_KEYS)) {
+            DatabaseChange dc = new DatabaseChange(User.getName(), "Edited " + partID + " in the database", new Timestamp(System.currentTimeMillis()));
+            dc.insert();
             s.setString(1, comm);
-            s.setString(2,partID);
+            s.setString(2, partID);
             s.executeUpdate();
         } catch (SQLException e) {
             DbContext.getConnection().rollback();
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setHeaderText("Failed editing comment");
             alert.showAndWait();
             throw new RuntimeException(e);
         } finally {
             DbContext.getConnection().setAutoCommit(true);
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
             alert.setHeaderText("Comment edited succesfuly!");
             alert.showAndWait();
         }
@@ -75,21 +75,19 @@ public class DatabaseTransactions {
 
     public void editTestWrapper(TestWrapper tw, Test test, TestResult testResult) throws SQLException {
         DbContext.getConnection().setAutoCommit(false);
-        DatabaseChange dc = new DatabaseChange(User.getName(), "Edited a test for " + test.getDocument_nr() + " in the database", new Timestamp(System.currentTimeMillis()));
-        dc.insert();
         try {
+            DatabaseChange dc = new DatabaseChange(User.getName(), "Edited a test for " + test.getDocument_nr() + " in the database", new Timestamp(System.currentTimeMillis()));
+            dc.insert();
             tw.editInDatabase(test, testResult);
-
-
         } catch (SQLException e) {
             DbContext.getConnection().rollback();
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setHeaderText("Failed editing test result");
             alert.showAndWait();
             throw new RuntimeException(e);
         } finally {
             DbContext.getConnection().setAutoCommit(true);
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
             alert.setHeaderText("Test result edited succesfuly!");
             alert.showAndWait();
         }
@@ -102,13 +100,13 @@ public class DatabaseTransactions {
             template.insert();
         } catch (SQLException e) {
             DbContext.getConnection().rollback();
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setHeaderText("Template upload not succesful!");
             alert.showAndWait();
             throw new RuntimeException(e);
         } finally {
             DbContext.getConnection().setAutoCommit(true);
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
             alert.setHeaderText("Template uploaded succesfuly!");
             alert.showAndWait();
         }
@@ -120,13 +118,13 @@ public class DatabaseTransactions {
             template.delete();
         } catch (SQLException e) {
             DbContext.getConnection().rollback();
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setHeaderText("Delete not succesful!");
             alert.showAndWait();
             throw new RuntimeException(e);
         } finally {
             DbContext.getConnection().setAutoCommit(true);
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
             alert.setHeaderText("Template deleted succesfuly!");
             alert.showAndWait();
         }
@@ -140,7 +138,7 @@ public class DatabaseTransactions {
                 try {
                     test.insert();
                 } catch (SQLException e) {
-                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
                     alert.setHeaderText("Upload not succesful!");
                     alert.showAndWait();
                     throw new RuntimeException(e);
@@ -149,7 +147,7 @@ public class DatabaseTransactions {
             });
         } finally {
             DbContext.getConnection().setAutoCommit(true);
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
             alert.setHeaderText("Upload succesful!");
             alert.showAndWait();
         }
@@ -169,13 +167,13 @@ public class DatabaseTransactions {
             s.executeUpdate();
         } catch (SQLException e) {
             DbContext.getConnection().rollback();
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setHeaderText("Failed to delete CatiaSheet");
             alert.showAndWait();
             throw new RuntimeException(e);
         } finally {
             DbContext.getConnection().setAutoCommit(true);
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
             alert.setHeaderText("CatiaSheet deleted succesfuly!");
             alert.showAndWait();
         }

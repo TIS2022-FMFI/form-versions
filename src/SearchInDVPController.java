@@ -255,21 +255,39 @@ public class SearchInDVPController implements Initializable {
 
 
     public void exportDVPOfPartToTemplate(ActionEvent actionEvent) {
-        FileChooser fc = new FileChooser();
-        fc.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Excel", ".xlsx"));
 
-        File selectedFile = fc.showSaveDialog(null);
+        if (observableListItems.isEmpty()) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setHeaderText("Nothing to export!");
+            alert.showAndWait();
+        }
 
-        if (selectedFile != null) {
-            try {
-                TemplateFinder.getInstance().findByName(dropdownTemplates.getValue()).
-                        export(selectedFile.getAbsolutePath(), observableListItems);
-                showingDVPForPartTextField.setText("");
+        if (dropdownTemplates.getValue() == null) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setHeaderText("No template selected!");
+            alert.showAndWait();
+        } else {
 
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        } else System.out.println("zle");
+            FileChooser fc = new FileChooser();
+            fc.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Excel", ".xlsx"));
+
+            File selectedFile = fc.showSaveDialog(null);
+
+            if (selectedFile != null) {
+                try {
+                    TemplateFinder.getInstance().findByName(dropdownTemplates.getValue()).
+                            export(selectedFile.getAbsolutePath(), observableListItems);
+                    showingDVPForPartTextField.setText("");
+                    Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                    alert.setHeaderText("File exported succesfully!");
+                    alert.showAndWait();
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            } else System.out.println("zle");
+        }
+
     }
 
     public TestResult findTestResultInTestByName(Test test, String name) {

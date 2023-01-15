@@ -52,6 +52,7 @@ public class Main  extends Application{
 
         stage.setResizable(false);
         User.identifyYourself();
+
         if (User.getRes() == 1){
             mainStage = stage;
             Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("xmlka/main.fxml")));

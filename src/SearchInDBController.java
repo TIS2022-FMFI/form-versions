@@ -167,7 +167,9 @@ public class SearchInDBController implements Initializable {
 
     public void updateCommentOfPart(ActionEvent actionEvent) throws SQLException {
         DatabaseTransactions dT = new DatabaseTransactions();
+
         if (currClickedOn != null & partComment != null)
         dT.editPartComment(currClickedOn, partComment.getText());
+
     }
 }

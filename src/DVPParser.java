@@ -1,3 +1,4 @@
+import javafx.scene.control.Alert;
 import org.apache.poi.ss.usermodel.DateUtil;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.xssf.usermodel.XSSFCell;
@@ -76,6 +77,9 @@ public class DVPParser {
                 sheet = wb.getSheet("DVP");
             }
             else{
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setHeaderText("Invalid excel file!");
+                alert.showAndWait();
                 System.out.println("Nenašiel sa sheet s názvom DVP alebo DVP Internal");
             }
             if (sheet != null) {
