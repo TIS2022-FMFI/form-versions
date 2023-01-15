@@ -58,6 +58,7 @@ public class UploadDVPController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         tableViewDVP.setEditable(true);
+        observableListItems = FXCollections.observableArrayList();
     }
 
     public void createTable() {

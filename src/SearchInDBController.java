@@ -40,7 +40,7 @@ public class SearchInDBController implements Initializable {
     @FXML
     public ImageView currImageForPart;
 
-    public String currClickedOn;
+    public String currClickedOn = "";
 
 
 
@@ -149,9 +149,9 @@ public class SearchInDBController implements Initializable {
     }
 
     public void removeSelectedPartFromDB(ActionEvent actionEvent) throws SQLException {
-        if (!Objects.equals(currClickedOn, "") && currClickedOn != null) {
+        if (!Objects.equals(currClickedOn, "")) {
             DatabaseTransactions dT = new DatabaseTransactions();
-            dT.deleteCatiaSheet(currClickedOn, "dummy");
+            dT.deleteCatiaSheet(currClickedOn, User.getName());
             clearPage();
             partHistoryListView.getItems().addAll(getDBInfoPartListView(partIDInput.getText()));
         }
@@ -163,13 +163,15 @@ public class SearchInDBController implements Initializable {
         BOMListView.getItems().clear();
         if (currImageForPart != null) currImageForPart.setImage(null);
         partComment.setText("");
+        currClickedOn = "";
     }
 
     public void updateCommentOfPart(ActionEvent actionEvent) throws SQLException {
         DatabaseTransactions dT = new DatabaseTransactions();
 
-        if (currClickedOn != null & partComment != null)
-        dT.editPartComment(currClickedOn, partComment.getText());
+        if (!Objects.equals(currClickedOn, "") && partComment != null) {
+            dT.editPartComment(currClickedOn, partComment.getText());
+        }
 
     }
 }
