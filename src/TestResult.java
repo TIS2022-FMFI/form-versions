@@ -163,4 +163,20 @@ public class TestResult {
     public void setDbid(int dbid) {
         this.dbid = dbid;
     }
+
+    public void setTest_result(String test_result) {
+        this.test_result = test_result;
+    }
+
+    public void setSoll(String soll) {
+        this.soll = soll;
+    }
+
+    public void setSoll_plus(String soll_plus) {
+        this.soll_plus = soll_plus;
+    }
+
+    public void setSoll_minus(String soll_minus) {
+        this.soll_minus = soll_minus;
+    }
 }

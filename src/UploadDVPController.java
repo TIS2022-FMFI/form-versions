@@ -101,6 +101,7 @@ public class UploadDVPController implements Initializable {
         testResDVP.setOnEditCommit(testWrapperStringCellEditEvent -> {
             TestWrapper tw = testWrapperStringCellEditEvent.getRowValue();
             tw.setTestResult(testWrapperStringCellEditEvent.getNewValue());
+            editTestResult(tw);
         });
 
         sollDVP.setCellValueFactory(new PropertyValueFactory<>("sollDVP"));
@@ -108,6 +109,7 @@ public class UploadDVPController implements Initializable {
         sollDVP.setOnEditCommit(testWrapperStringCellEditEvent -> {
             TestWrapper tw = testWrapperStringCellEditEvent.getRowValue();
             tw.setSoll(testWrapperStringCellEditEvent.getNewValue());
+            editTestResult(tw);
         });
 
         plusDVP.setCellValueFactory(new PropertyValueFactory<>("sollPlus"));
@@ -115,6 +117,7 @@ public class UploadDVPController implements Initializable {
         plusDVP.setOnEditCommit(testWrapperStringCellEditEvent -> {
             TestWrapper tw = testWrapperStringCellEditEvent.getRowValue();
             tw.setSollPlus(testWrapperStringCellEditEvent.getNewValue());
+            editTestResult(tw);
         });
 
         minusDVP.setCellValueFactory(new PropertyValueFactory<>("sollMinus"));
@@ -122,6 +125,7 @@ public class UploadDVPController implements Initializable {
         minusDVP.setOnEditCommit(testWrapperStringCellEditEvent -> {
             TestWrapper tw = testWrapperStringCellEditEvent.getRowValue();
             tw.setSollMinus(testWrapperStringCellEditEvent.getNewValue());
+            editTestResult(tw);
         });
 
         tableViewDVP.setItems(observableListItems);
@@ -161,5 +165,21 @@ public class UploadDVPController implements Initializable {
                 e.printStackTrace();
             }
         } else System.out.println("zle");
+    }
+
+    void editTestResult(TestWrapper tw) {
+        excelSheet.listOfAllTests.forEach(test -> {
+            test.getTest_results().forEach(testResult -> {
+                if (test.getDocument_nr().equals(tw.getDocumentNr()) &&
+                    test.getDate().equals(tw.getDate()) &&
+                    testResult.getTest_type().replace('\n', ' ').equals(tw.getTestType().replace('\n', ' '))) {
+                    System.out.println(testResult.getTest_type().replace('\n', ' ') + " " + tw.getTestType().replace('\n', ' '));
+                    testResult.setTest_result(tw.getTestResult());
+                        testResult.setSoll(tw.getSoll());
+                        testResult.setSoll_minus(tw.getSollMinus());
+                        testResult.setSoll_plus(tw.getSollPlus());
+                }
+            });
+        });
     }
 }
