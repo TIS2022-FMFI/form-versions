@@ -61,7 +61,7 @@ public class SearchInDVPController implements Initializable {
     private TableColumn<TestWrapper, String> minusDVPSearch;
 
 
-    ObservableList<TestWrapper> observableListItems;
+    public ObservableList<TestWrapper> observableListItems;
 
     public Map<String, List<Test>> testsForCurrentSearch;
 
@@ -104,9 +104,6 @@ public class SearchInDVPController implements Initializable {
         testResDVPSearch.setOnEditCommit(testWrapperStringCellEditEvent -> {
             int index = tableViewDVPSearch.getSelectionModel().getSelectedIndex();
             TestWrapper tw = tableViewDVPSearch.getItems().get(index);
-
-
-
             tw.setTestResult(testWrapperStringCellEditEvent.getNewValue());
 
 
