@@ -40,6 +40,8 @@ public class SearchInDBController implements Initializable {
     @FXML
     public ImageView currImageForPart;
 
+    public String currClickedOn;
+
 
 
 
@@ -50,7 +52,7 @@ public class SearchInDBController implements Initializable {
     //odtialto dolu je druha Scene
 
 
-    public Map<String, List<Test>> testsForCurrentSearch;
+
 
 
 
@@ -125,23 +127,26 @@ public class SearchInDBController implements Initializable {
     }
 
 
+
     public void fillPartHistoryListview() throws SQLException {
-        String selected = partHistoryListView.getSelectionModel().getSelectedItem();
+        currClickedOn = partHistoryListView.getSelectionModel().getSelectedItem();
         BOMListView.getItems().clear();
-        BOMListView.getItems().addAll(getDBInfoBOMListView(selected));
-        partComment.setText(getDBInfoPartComment(selected));
-        currImageForPart.setImage(getSelectedPartImage(selected));
+        BOMListView.getItems().addAll(getDBInfoBOMListView(currClickedOn));
+        partComment.setText(getDBInfoPartComment(currClickedOn));
+        currImageForPart.setImage(getSelectedPartImage(currClickedOn));
     }
 
     public void fillPartBOMListview() throws SQLException {
-        String selected = BOMListView.getSelectionModel().getSelectedItem();
-        partComment.setText(getDBInfoPartComment(selected));
-        currImageForPart.setImage(getSelectedPartImage(selected));
+        currClickedOn = BOMListView.getSelectionModel().getSelectedItem();
+        partComment.setText(getDBInfoPartComment(currClickedOn));
+        currImageForPart.setImage(getSelectedPartImage(currClickedOn));
     }
 
     public void showDVP(ActionEvent actionEvent) {
-        State.getTextField().setText(partIDInput.getText());
-        MainController.switchTab(1);
+        if (currClickedOn != null) {
+            State.getTextField().setText(currClickedOn);
+            MainController.switchTab(1);
+        }
     }
 
 

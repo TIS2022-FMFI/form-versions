@@ -2,21 +2,20 @@
 
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
-<?import javafx.scene.layout.AnchorPane?>
 
 <TabPane fx:id="tabPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="850.0" prefWidth="1210.0" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="MainController">
   <tabs>
-      <Tab text="Search in database">
+      <Tab text="Search Parts">
         <content>
             <fx:include fx:id="searchDB" source="searchInDB.fxml" />
         </content>
       </Tab>
-      <Tab text="Search in DVP">
+      <Tab text="Search DVP">
         <content>
             <fx:include fx:id="searchDVP" source="showDVPForPartXML.fxml" />
         </content>
       </Tab>
-    <Tab text="Upload pdf file">
+    <Tab text="Upload Pdf File">
          <content>
                  <fx:include fx:id="pdf" source="pdfUpload.fxml" />
 <!--           <SplitPane dividerPositions="0.8477157360406091" orientation="VERTICAL" prefHeight="861.0" prefWidth="1209.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">-->
@@ -106,7 +105,7 @@
     </Tab>
 
 
-    <Tab text="Upload dvp table">
+    <Tab text="Upload DVP table">
       <content>
 <!--        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />-->
           <fx:include fx:id="dvp" source="dvpUpload.fxml" />
@@ -118,7 +117,7 @@
 
 
 
-      <Tab text="Make a template">
+      <Tab text="Make a Template">
         <content>
           <!--<AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />-->
           <fx:include fx:id="template" source="templateMaker.fxml" />
@@ -127,7 +126,7 @@
 
 
 
-      <Tab text="View database log">
+      <Tab text="View Database Log">
         <content>
 <!--          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">-->
 <!--            <children>-->

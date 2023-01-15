@@ -239,7 +239,7 @@ public class MakeTemplateController implements Initializable{
         return result.reverse().toString();
     }
 
-    public void fill_choice_box(List<String> result_names, ChoiceBox choice_box){
+    public void fill_choice_box(List<String> result_names, ChoiceBox<String> choice_box){
         choice_box.setItems(FXCollections.observableArrayList(result_names));
     }
 
