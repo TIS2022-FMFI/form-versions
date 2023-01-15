@@ -2,6 +2,7 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -52,6 +53,9 @@ public class Main  extends Application{
         mainStage = stage;
 
         Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("xmlka/main.fxml")));
+
+        stage.getIcons().add(new Image(Objects.requireNonNull(Main.class.getResourceAsStream("imgs/logo.png"))));
+
         stage.setTitle("BogeParser (Logged in as dummyString)");
         stage.setScene(new Scene(root));
         stage.show();

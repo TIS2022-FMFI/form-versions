@@ -12,12 +12,15 @@
     <children>
         <Label layoutX="39.0" layoutY="102.0" text="Part ID" />
         <TextField fx:id="partIDInput" layoutX="123.0" layoutY="97.0" prefHeight="31.0" prefWidth="500.0" />
-        <Label layoutX="39.0" layoutY="276.0" text="Part History" />
-        <Label layoutX="660.0" layoutY="276.0" text="Part BOM" />
-        <ListView fx:id="partHistoryListView" layoutX="39.0" layoutY="315.0" prefHeight="333.0" prefWidth="500.0" />
-        <ListView fx:id="BOMListView" layoutX="660.0" layoutY="315.0" prefHeight="333.0" prefWidth="500.0" AnchorPane.rightAnchor="50.0" />
-        <TextArea fx:id="partComment" layoutX="39.0" layoutY="686.0" prefHeight="100.0" prefWidth="800.0" />
-        <Button fx:id="showDVPForPartButton" layoutX="970.0" layoutY="686.0" mnemonicParsing="false" onAction="#showDVP" prefHeight="100.0" prefWidth="190.0" text="Show DVP table for selected part" textAlignment="CENTER" wrapText="true" />
-      <ImageView fx:id="currImageForPart" fitHeight="212.0" fitWidth="329.0" layoutX="831.0" layoutY="64.0" pickOnBounds="true" preserveRatio="true" />
-      <Label layoutX="921.0" layoutY="34.0" text="Image of selected part" />
+        <Label layoutX="45.0" layoutY="211.0" text="Part History" />
+        <Label layoutX="658.0" layoutY="211.0" text="Part BOM" />
+        <ListView fx:id="partHistoryListView" layoutX="39.0" layoutY="241.0" prefHeight="333.0" prefWidth="500.0" />
+        <ListView fx:id="BOMListView" layoutX="658.0" layoutY="241.0" prefHeight="333.0" prefWidth="500.0" AnchorPane.rightAnchor="52.0" />
+        <TextArea fx:id="partComment" layoutX="39.0" layoutY="605.0" prefHeight="81.0" prefWidth="956.0" />
+        <Button fx:id="showDVPForPartButton" layoutX="1006.0" layoutY="707.0" mnemonicParsing="false" onAction="#showDVP" prefHeight="70.0" prefWidth="170.0" text="Show DVP table for selected part" textAlignment="CENTER" wrapText="true" />
+      <ImageView fx:id="currImageForPart" fitHeight="186.0" fitWidth="310.0" layoutX="851.0" layoutY="35.0" pickOnBounds="true" preserveRatio="true" />
+      <Label layoutX="932.0" layoutY="14.0" text="Image of selected part" />
+      <Label layoutX="39.0" layoutY="584.0" text="Comment" />
+      <Button layoutX="38.0" layoutY="707.0" mnemonicParsing="false" prefHeight="70.0" prefWidth="170.0" text="Remove selected part from database" textAlignment="CENTER" wrapText="true" />
+      <Button layoutX="520.0" layoutY="707.0" mnemonicParsing="false" prefHeight="70.0" prefWidth="170.0" text="Update comment for selected part" textAlignment="CENTER" wrapText="true" />
     </children></AnchorPane>

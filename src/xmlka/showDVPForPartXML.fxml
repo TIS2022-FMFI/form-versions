@@ -14,7 +14,7 @@
       <TextField fx:id="showingDVPForPartTextField" layoutX="273.0" layoutY="28.0" prefHeight="31.0" prefWidth="227.0" />
       <ComboBox fx:id="dateDropdown" layoutX="932.0" layoutY="23.0" prefHeight="41.0" prefWidth="236.0" promptText="Choose a wanted Date" />
 
-      <TableView fx:id="tableViewDVPSearch" layoutX="491.0" layoutY="86.0" prefHeight="602.0" prefWidth="1210.0" AnchorPane.bottomAnchor="162.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="86.0">
+      <TableView fx:id="tableViewDVPSearch" layoutY="70.0" prefHeight="602.0" prefWidth="1210.0" AnchorPane.bottomAnchor="178.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="70.0">
          <columns>
             <TableColumn fx:id="docNumDVPSearch" prefWidth="192.99996948242188" text="doc_num" />
             <TableColumn fx:id="dateDVPSearch" prefWidth="89.99996948242188" text="date" />
@@ -27,8 +27,8 @@
             <TableColumn fx:id="minusDVPSearch" prefWidth="89.0" text="-" />
          </columns>
       </TableView>
-      <ComboBox fx:id="dropdownTemplates" layoutX="752.0" layoutY="727.0" prefHeight="90.0" prefWidth="180.0" promptText="Choose a template" />
-      <Button layoutX="960.0" layoutY="727.0" mnemonicParsing="false" onAction="#exportDVPOfPartToTemplate" prefHeight="90.0" prefWidth="180.0" text="Export this DVP table to chosen Template" textAlignment="CENTER" wrapText="true" />
-      <Button layoutX="65.0" layoutY="727.0" mnemonicParsing="false" prefHeight="90.0" prefWidth="193.0" text="Update in DB" />
+      <ComboBox fx:id="dropdownTemplates" layoutX="752.0" layoutY="682.0" prefHeight="90.0" prefWidth="180.0" promptText="Choose a template" />
+      <Button layoutX="960.0" layoutY="682.0" mnemonicParsing="false" onAction="#exportDVPOfPartToTemplate" prefHeight="90.0" prefWidth="180.0" text="Export this DVP table to chosen Template" textAlignment="CENTER" wrapText="true" />
+      <Button layoutX="59.0" layoutY="682.0" mnemonicParsing="false" prefHeight="90.0" prefWidth="193.0" text="Update in DB" />
    </children>
 </AnchorPane>
