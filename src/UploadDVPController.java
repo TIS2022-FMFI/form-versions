@@ -135,15 +135,15 @@ public class UploadDVPController implements Initializable {
 
     @FXML
     void clearDVPPage(ActionEvent event) {
-        tableViewDVP.getItems().clear();
-        excelSheet = new ExcelSheet();
-        System.out.println(observableListItems.size());
-        System.out.println(observableListItems);
+        if (observableListItems == null || !observableListItems.isEmpty()) {
+            tableViewDVP.getItems().clear();
+            excelSheet = new ExcelSheet();
+        }
     }
 
     @FXML
     void insertToDB(ActionEvent event) throws SQLException {
-        if (excelSheet.listOfAllTests.size() == 0) {
+        if (excelSheet.listOfAllTests == null || excelSheet.listOfAllTests.size() == 0) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setHeaderText("Empty table to upload!");
             alert.showAndWait();
