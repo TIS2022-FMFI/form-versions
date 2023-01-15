@@ -1,8 +1,15 @@
+import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.control.Alert;
 import org.bouncycastle.asn1.tsp.TSTInfo;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.sql.Statement;
+import java.sql.Timestamp;
 import java.util.List;
 
 public class DatabaseTransactions {
@@ -43,6 +50,28 @@ public class DatabaseTransactions {
             alert.showAndWait();
         }
     }
+
+    public void editPartComment(String partID, String comm, String uid) throws SQLException {
+        DbContext.getConnection().setAutoCommit(false);
+        DatabaseChange dc = new DatabaseChange(uid, "Edited " + partID + " in the database", new Timestamp(System.currentTimeMillis()));
+        dc.insert();
+        try (PreparedStatement s = DbContext.getConnection().prepareStatement("UPDATE part SET comment=? WHERE part_id = ?", Statement.RETURN_GENERATED_KEYS)) {
+            s.setString(1, comm);
+            s.executeUpdate();
+        } catch (SQLException e) {
+            DbContext.getConnection().rollback();
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setHeaderText("Failed editing comment");
+            alert.showAndWait();
+            throw new RuntimeException(e);
+        } finally {
+            DbContext.getConnection().setAutoCommit(true);
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setHeaderText("Comment edited succesfuly!");
+            alert.showAndWait();
+        }
+    }
+
 
     public void insertTemplate(String uid, Template template) throws SQLException {
         DbContext.getConnection().setAutoCommit(false);

@@ -66,7 +66,9 @@ public class TestFinder {
                             r.getString(2),
                             r.getString(3),
                             r.getString(4),
-                            r.getString(5)
+                            r.getString(5),
+                            r.getInt(6),
+                            r.getInt(7)
                     ));
                 }
             }

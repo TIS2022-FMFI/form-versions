@@ -14,6 +14,8 @@ public class TestResult {
     private String soll = "";
     private String soll_plus = "";
     private String soll_minus = "";
+    private int dbid;
+    private int parentTestId;
     private List<List<XSSFCell>> all_cell;
     private int soll_row_idx = 4;
     private int test_name_row_idx = 1;
@@ -144,11 +146,21 @@ public class TestResult {
         return string_value;
     }
 
-    public TestResult(String test_type, String test_result, String soll, String soll_plus, String soll_minus) {
+    public TestResult(String test_type, String test_result, String soll, String soll_plus, String soll_minus, int dbd, int prntid) {
         this.test_type = test_type;
         this.test_result = test_result;
         this.soll = soll;
         this.soll_plus = soll_plus;
         this.soll_minus = soll_minus;
+        this.dbid = dbd;
+        this.parentTestId = prntid;
+    }
+
+    public int getDbid() {
+        return dbid;
+    }
+
+    public void setDbid(int dbid) {
+        this.dbid = dbid;
     }
 }
