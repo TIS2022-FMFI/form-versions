@@ -10,6 +10,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -36,6 +37,9 @@ public class SearchInDBController implements Initializable {
     @FXML
     public Button showDVPForPartButton;
 
+    @FXML
+    public ImageView currImageForPart;
+
 
 
 
@@ -44,47 +48,7 @@ public class SearchInDBController implements Initializable {
 
 
     //odtialto dolu je druha Scene
-    @FXML
-    public Button returnToSearchButton;
 
-    @FXML
-    public ComboBox<String> dropdownTemplates;
-
-    @FXML
-    private TextField showingDVPForPartTextField;
-
-    @FXML
-    private ComboBox<String> dateDropdown;
-
-    @FXML
-    private TableView<TestWrapper> tableViewDVPSearch;
-
-    @FXML
-    private TableColumn<TestWrapper, String> docNumDVPSearch;
-
-    @FXML
-    private TableColumn<TestWrapper, String> dateDVPSearch;
-
-    @FXML
-    private TableColumn<TestWrapper, String> aaDVPSearch;
-
-    @FXML
-    private TableColumn<TestWrapper, String> custNumDVPSearch;
-
-    @FXML
-    private TableColumn<TestWrapper, String> testTypeDVPSearch;
-
-    @FXML
-    private TableColumn<TestWrapper, String> testResDVPSearch;
-
-    @FXML
-    private TableColumn<TestWrapper, String> sollDVPSearch;
-
-    @FXML
-    private TableColumn<TestWrapper, String> plusDVPSearch;
-
-    @FXML
-    private TableColumn<TestWrapper, String> minusDVPSearch;
 
     public Map<String, List<Test>> testsForCurrentSearch;
 
@@ -96,14 +60,43 @@ public class SearchInDBController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         if (partIDInput != null) {
+
             partIDInput.textProperty().addListener(v -> {
+                //sem treba nakodit select z databazy na konkretny search
                 System.out.println(partIDInput.getText());   // <- v partIDInput je pri zmene nacitany konkretny string s ktorym mozes pracovat kubko aby si hladal v DB
                 try {
-                    getAllTestsSorted(partIDInput.getText());
-                } catch (SQLException e) {
-                    throw new RuntimeException(e);
+
+
+
+
+                    partHistoryListView.getItems().clear();
+                    BOMListView.getItems().clear();
+                    currImageForPart.setImage(null);
+                    partComment.setText("");
+                    partHistoryListView.getItems().addAll(getDBInfoPartListView(partIDInput.getText()));
                 }
-                getDatesForAllTests();
+                catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            });
+
+
+
+            partHistoryListView.setOnMouseClicked(mouseEvent ->
+            {
+                try {
+                    fillPartHistoryListview();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            });
+
+            BOMListView.setOnMouseClicked(mouseEvent -> {
+                try {
+                    fillPartBOMListview();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
 
             });
         }
@@ -131,96 +124,22 @@ public class SearchInDBController implements Initializable {
         return null;
     }
 
-    public void showDVPScene(ActionEvent actionEvent) throws IOException {
-        Parent root =  FXMLLoader.load(Objects.requireNonNull(getClass().getResource("xmlka/showDVPForPartXML.fxml")));
-        Scene scene = new Scene(root);
-        Stage thisStage = (Stage) showDVPForPartButton.getScene().getWindow();
-        thisStage.setScene(scene);
+
+    public void fillPartHistoryListview() throws SQLException {
+        String selected = partHistoryListView.getSelectionModel().getSelectedItem();
+        BOMListView.getItems().clear();
+        BOMListView.getItems().addAll(getDBInfoBOMListView(selected));
+        partComment.setText(getDBInfoPartComment(selected));
+        currImageForPart.setImage(getSelectedPartImage(selected));
+    }
+
+    public void fillPartBOMListview() throws SQLException {
+        String selected = BOMListView.getSelectionModel().getSelectedItem();
+        partComment.setText(getDBInfoPartComment(selected));
+        currImageForPart.setImage(getSelectedPartImage(selected));
     }
 
 
 
-
-
-
-
-    
-    //odtialto dolu funkcionalita druhej sceny kde sa riesia dvpcka
-    public void createTable() {
-
-        docNumDVPSearch.setCellValueFactory(new PropertyValueFactory<>("documentNr"));
-        docNumDVPSearch.setCellFactory(TextFieldTableCell.forTableColumn());
-
-
-        dateDVPSearch.setCellValueFactory(new PropertyValueFactory<>("date"));
-        dateDVPSearch.setCellFactory(TextFieldTableCell.forTableColumn());
-
-
-        aaDVPSearch.setCellValueFactory(new PropertyValueFactory<>("AA"));
-        aaDVPSearch.setCellFactory(TextFieldTableCell.forTableColumn());
-
-
-        custNumDVPSearch.setCellValueFactory(new PropertyValueFactory<>("customerNr"));
-        custNumDVPSearch.setCellFactory(TextFieldTableCell.forTableColumn());
-
-
-        testTypeDVPSearch.setCellValueFactory(new PropertyValueFactory<>("testType"));
-        testTypeDVPSearch.setCellFactory(TextFieldTableCell.forTableColumn());
-
-
-        testResDVPSearch.setCellValueFactory(new PropertyValueFactory<>("testResult"));
-        testResDVPSearch.setCellFactory(TextFieldTableCell.forTableColumn());
-
-
-        sollDVPSearch.setCellValueFactory(new PropertyValueFactory<>("sollDVP"));
-        sollDVPSearch.setCellFactory(TextFieldTableCell.forTableColumn());
-
-
-        plusDVPSearch.setCellValueFactory(new PropertyValueFactory<>("sollPlus"));
-        plusDVPSearch.setCellFactory(TextFieldTableCell.forTableColumn());
-
-
-        minusDVPSearch.setCellValueFactory(new PropertyValueFactory<>("sollMinus"));
-        minusDVPSearch.setCellFactory(TextFieldTableCell.forTableColumn());
-
-    }
-
-
-    public void returnToSearchPage(ActionEvent actionEvent) throws IOException {
-        Parent root =  FXMLLoader.load(Objects.requireNonNull(getClass().getResource("xmlka/main.fxml")));
-        Scene scene = new Scene(root);
-        Stage thisStage = (Stage) returnToSearchButton.getScene().getWindow();
-        thisStage.setScene(scene);
-    }
-
-    public List<Test> getAllTestsForPart(String partID) throws SQLException {
-        return TestFinder.getInstance().findTestsForPart(partID);
-    }
-
-    public void getAllTestsSorted(String partID) throws SQLException {
-        testsForCurrentSearch = getAllTestsForPart(partID).stream().collect(Collectors.groupingBy(Test::getDate));
-    }
-
-    public ObservableList<String> getDatesForAllTests() {
-        List<String> dates = new ArrayList<>();
-        testsForCurrentSearch.forEach((date, test) -> {
-            for (int i = 0; i < test.size(); i++) {
-                dates.add(test.get(i).getDate() + "#" + i);
-            }
-        });
-        System.out.println(dates);
-        return FXCollections.observableArrayList(dates);
-    }
-
-    public ObservableList<TestWrapper> getTestFromSelected(String selectedTest) {
-        ExcelSheet e = new ExcelSheet();
-        List<Test> tst = new ArrayList<>();
-        tst.add(testsForCurrentSearch.get(selectedTest.split("#")[0]).get(Integer.parseInt(selectedTest.split("#")[1])));
-        e.setListOfAllTests(tst);
-        return FXCollections.observableArrayList(e.generateTestWrappersForAllTest());
-    }
-
-    public void exportDVPOfPartToTemplate(ActionEvent actionEvent) {
-    }
 
 }
