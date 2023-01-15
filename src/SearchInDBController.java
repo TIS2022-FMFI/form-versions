@@ -144,10 +144,7 @@ public class SearchInDBController implements Initializable {
 
 
 
-
-
-
-
+    
     //odtialto dolu funkcionalita druhej sceny kde sa riesia dvpcka
     public void createTable() {
 
@@ -186,8 +183,6 @@ public class SearchInDBController implements Initializable {
         minusDVPSearch.setCellValueFactory(new PropertyValueFactory<>("sollMinus"));
         minusDVPSearch.setCellFactory(TextFieldTableCell.forTableColumn());
 
-
-//        tableViewDVPSearch.setItems(observableListItems);
     }
 
 
@@ -196,7 +191,6 @@ public class SearchInDBController implements Initializable {
         Scene scene = new Scene(root);
         Stage thisStage = (Stage) returnToSearchButton.getScene().getWindow();
         thisStage.setScene(scene);
-
     }
 
     public List<Test> getAllTestsForPart(String partID) throws SQLException {
@@ -229,16 +223,4 @@ public class SearchInDBController implements Initializable {
     public void exportDVPOfPartToTemplate(ActionEvent actionEvent) {
     }
 
-
-//    public void setPartHistoryListView(){
-//
-//    }
-//
-//    public void setBOMListView(){
-//
-//    }
-//
-//    public void setPartComment(){
-//
-//    }
 }

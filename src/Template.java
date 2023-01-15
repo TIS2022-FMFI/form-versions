@@ -1,3 +1,4 @@
+import javafx.scene.control.Alert;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextField;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -160,6 +161,11 @@ public class Template {
 
 
         try {
+
+            FileOutputStream out = new FileOutputStream(path);
+            Workbook wb = new XSSFWorkbook();
+            wb.write(out);
+
             File xlsxFile = new File(path);
             FileInputStream inputStream = new FileInputStream(xlsxFile);
 

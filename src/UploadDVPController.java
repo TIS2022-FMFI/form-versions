@@ -132,10 +132,6 @@ public class UploadDVPController implements Initializable {
             tw.setSollMinus(testWrapperStringCellEditEvent.getNewValue());
         });
 
-
-
-
-
         tableViewDVP.setItems(observableListItems);
     }
 
