@@ -7,6 +7,7 @@ import javafx.fxml.FXML;
 import javafx.scene.text.Font;
 import javafx.stage.FileChooser;
 
+import javax.swing.*;
 import java.io.File;
 import java.sql.SQLException;
 import java.util.*;
@@ -242,7 +243,7 @@ public class MakeTemplateController implements Initializable{
 
     public void load_template(ActionEvent event){
 
-        fc.setInitialDirectory(new File("src\\excely"));
+        fc.setInitialDirectory(new File((new JFileChooser()).getFileSystemView().getDefaultDirectory().toString()));
 
         fc.setTitle("Choose excel file");
 

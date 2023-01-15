@@ -12,6 +12,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.stage.FileChooser;
 
+import javax.swing.*;
 import java.io.File;
 import java.net.URL;
 import java.sql.SQLException;
@@ -159,7 +160,7 @@ public class UploadDVPController implements Initializable {
     void loadDVP(ActionEvent event) {
         FileChooser fc = new FileChooser();
         fc.setTitle("Choose the excel file");
-        fc.setInitialDirectory(new File("src\\excely"));
+        fc.setInitialDirectory(new File((new JFileChooser()).getFileSystemView().getDefaultDirectory().toString()));
         File selectedFile = fc.showOpenDialog(null);
 
         if (selectedFile != null) {

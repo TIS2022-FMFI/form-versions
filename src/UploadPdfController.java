@@ -20,6 +20,8 @@ import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.image.ImageView;
 import javafx.stage.FileChooser;
 
+import javax.swing.*;
+
 
 public class UploadPdfController implements Initializable {
     @FXML
@@ -162,7 +164,7 @@ public class UploadPdfController implements Initializable {
     @FXML
     void loadMainPdf(ActionEvent event) {
         fc.setTitle("Choose the main PDF file");
-        fc.setInitialDirectory(new File("src\\pdfka"));
+        fc.setInitialDirectory(new File((new JFileChooser()).getFileSystemView().getDefaultDirectory().toString()));
         File selectedFile = fc.showOpenDialog(null);
 
         if (selectedFile != null) {
@@ -185,7 +187,7 @@ public class UploadPdfController implements Initializable {
     void loadSubpartPdf(ActionEvent event) {
 
         fc.setTitle("Choose the subpart PDF files");
-        fc.setInitialDirectory(new File("src\\pdfka"));
+        fc.setInitialDirectory(new File((new JFileChooser()).getFileSystemView().getDefaultDirectory().toString()));
 
         List<File> listPathov = fc.showOpenMultipleDialog(null);
 
