@@ -51,9 +51,9 @@ public class Main  extends Application{
     public void start(Stage stage) throws Exception {
 
         stage.setResizable(false);
-        User.identifyYourself();
+//        User.identifyYourself();
 
-        if (User.getRes() == 1){
+//        if (User.getRes() == 1){
             mainStage = stage;
             Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("xmlka/main.fxml")));
             stage.getIcons().add(new Image(Objects.requireNonNull(Main.class.getResourceAsStream("imgs/logo.png"))));
@@ -65,27 +65,27 @@ public class Main  extends Application{
             stage.show();
 
 
-        }
-        else if (User.getRes() == 0) {
-            ButtonType log = new ButtonType("login again", ButtonBar.ButtonData.OK_DONE);
-            Alert alert = new Alert(Alert.AlertType.NONE,"Wrong user login information, please try again !" ,log);
-            Optional<ButtonType> result = alert.showAndWait();
-
-            if (result.isPresent() && result.get() == log) {
-                start(stage);
-            }
-        }
-
-        else{
-            ButtonType log = new ButtonType("login again", ButtonBar.ButtonData.OK_DONE);
-            ButtonType exit = new ButtonType("exit", ButtonBar.ButtonData.OK_DONE);
-            Alert alert = new Alert(Alert.AlertType.NONE,"Are you sure you want to exit ?" ,log, exit);
-            Optional<ButtonType> result = alert.showAndWait();
-
-            if (result.orElse(exit) == log) {
-                start(stage);
-            }
-        }
+//        }
+//        else if (User.getRes() == 0) {
+//            ButtonType log = new ButtonType("login again", ButtonBar.ButtonData.OK_DONE);
+//            Alert alert = new Alert(Alert.AlertType.NONE,"Wrong user login information, please try again !" ,log);
+//            Optional<ButtonType> result = alert.showAndWait();
+//
+//            if (result.isPresent() && result.get() == log) {
+//                start(stage);
+//            }
+//        }
+//
+//        else{
+//            ButtonType log = new ButtonType("login again", ButtonBar.ButtonData.OK_DONE);
+//            ButtonType exit = new ButtonType("exit", ButtonBar.ButtonData.OK_DONE);
+//            Alert alert = new Alert(Alert.AlertType.NONE,"Are you sure you want to exit ?" ,log, exit);
+//            Optional<ButtonType> result = alert.showAndWait();
+//
+//            if (result.orElse(exit) == log) {
+//                start(stage);
+//            }
+//        }
     }
 
 
