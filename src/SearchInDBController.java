@@ -138,8 +138,8 @@ public class SearchInDBController implements Initializable {
     }
 
     public void showDVP(ActionEvent actionEvent) {
-        if (currClickedOn != null) {
-            State.getTextField().setText(currClickedOn);
+        if (partIDInput != null) {
+            State.getTextField().setText(partIDInput.getText());
             MainController.switchTab(1);
         }
     }
