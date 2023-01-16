@@ -361,7 +361,7 @@ public class SearchInDVPController implements Initializable {
     }
 
     // to be called when pressing search a chces dostat testwrappery pre zobrazenie testov
-    public ObservableList<TestWrapper> getTestWrappersForCurrentSelection(List<String> parts, List<String> dates, List<String> tests) {
+    public ObservableList<TestWrapper> getTestWrappersForCurrentSelection() {
 
         List<Test> wantedTests = new ArrayList<>();
 
@@ -370,11 +370,34 @@ public class SearchInDVPController implements Initializable {
         System.out.println(selectedTestTypesList);
         System.out.println("________________________________");
 
-        if (dates.isEmpty() || parts.isEmpty()) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setHeaderText("No part/No date selected!");
-            alert.showAndWait();
-            return FXCollections.observableArrayList(new ArrayList<>());
+        if (!selectedDateForPartList.isEmpty() && !selectedVersionTempList.isEmpty()) {
+            for (Test test : new ArrayList<>(
+                    testsForCurrentSearch.entrySet().stream()
+                            .filter(a -> selectedVersionTempList.contains(a.getKey()))
+                            .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue))
+                            .values()).stream()
+                    .flatMap(Collection::stream)
+                    .collect(Collectors.toList())) {
+
+                if (selectedVersionTempList.contains(test.getDocument_nr()) &&
+                        selectedDateForPartList.stream()
+                                .map(it -> it.split(" ")[1]
+                                        .split("#")[0])
+                                .collect(Collectors.toList())
+                                .contains(test.getDate())) {
+
+                    if (selectedTestTypesList.isEmpty()) {
+                        wantedTests.add(test);
+                    } else {
+                        Test t = test;
+                        t.setTest_results(test.getTest_results().stream()
+                                .filter(it -> selectedTestTypesList
+                                        .contains(it.getTest_type()))
+                                .collect(Collectors.toList()));
+                        wantedTests.add(t);
+                    }
+                }
+            }
         }
 
 
