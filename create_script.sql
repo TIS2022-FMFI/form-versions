@@ -117,10 +117,10 @@ create table users
 );
 
 
-insert into users (mail, psswrd) VALUE ('boge@boge.sk', '2f243a7bacd3f91dbc3cfb349aca8776'); -- bogeman
 insert into users (mail, psswrd) VALUE ('admin@boge.sk', '21232f297a57a5a743894a0e4a801fc3'); -- admin
 insert into users (mail, psswrd) VALUE ('worker@boge.sk', 'b61822e8357dcaff77eaaccf348d9134'); -- worker
 insert into users (mail, psswrd) VALUE ('catiasheet@boge.sk', 'c259e2688655535af4203956c045f32c'); -- catia_api
+insert into users (mail, psswrd) VALUE ('a', '0cc175b9c0f1b6a831c399e269772661'); -- catia_api
 
 insert into test_types (name) VALUE ('DVP / Teilelebenslauf - xxx.xxx cENGIS- xxxxxx : Customer Design Phase');
 insert into test_types (name) VALUE ('DVP / Teilelebenslauf - xxx.xxx cENGIS- xxxxxx : Development Stage : No.');

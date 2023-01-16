@@ -6,6 +6,7 @@ import org.apache.poi.xssf.usermodel.XSSFCell;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 public class TestResult {
 
@@ -26,7 +27,7 @@ public class TestResult {
     public TestResult(List<List<XSSFCell>> all_cell0, XSSFCell cell0) {
         all_cell = all_cell0;
         col = cell0.getColumnIndex();
-        test_type = create_test_type_name();
+        test_type = create_test_type_name().replace('\n', ' ');
         test_result = get_string_value_from_cell(cell0);
         soll = get_string_value_from_cell(get_cell(soll_row_idx, col));
         soll_plus = get_string_value_from_cell(get_cell(soll_row_idx+1, col));
@@ -178,5 +179,22 @@ public class TestResult {
 
     public void setSoll_minus(String soll_minus) {
         this.soll_minus = soll_minus;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        TestResult that = (TestResult) o;
+        return test_type.equals(that.test_type) &&
+                test_result.equals(that.test_result) &&
+                soll.equals(that.soll) &&
+                soll_plus.equals(that.soll_plus) &&
+                soll_minus.equals(that.soll_minus);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(test_type, test_result, soll, soll_plus, soll_minus);
     }
 }
