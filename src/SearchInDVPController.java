@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
 public class SearchInDVPController implements Initializable {
 
     @FXML
-    public ComboBox<String> dropdownTemplates;
+    public ComboBox<String> dropdownTemplates = new ComboBox<>();
 
     @FXML
     public TextField showingDVPForPartTextField;
@@ -32,7 +32,7 @@ public class SearchInDVPController implements Initializable {
     public Button exportToTemplateButton;
 
     @FXML
-    private ComboBox<String> dateDropdown;
+    private ComboBox<String> dateDropdown = new ComboBox<>();
 
     @FXML
     private TableView<TestWrapper> tableViewDVPSearch;
@@ -65,7 +65,7 @@ public class SearchInDVPController implements Initializable {
     private TableColumn<TestWrapper, String> minusDVPSearch;
 
 
-    public ObservableList<TestWrapper> observableListItems;
+    public ObservableList<TestWrapper> observableListItems = FXCollections.observableArrayList(new ArrayList<>());
 
     public Map<String, List<Test>> testsForCurrentSearch;
 
@@ -200,19 +200,15 @@ public class SearchInDVPController implements Initializable {
 
             showingDVPForPartTextField.textProperty().addListener(v -> {
                 try {
-
-                    if(!dropdownTemplates.getItems().isEmpty())dropdownTemplates.getItems().clear();
-                    if (!dateDropdown.getItems().isEmpty()) dateDropdown.getItems().clear();
-                    else {
+                        dropdownTemplates.getItems().clear();
+                        dateDropdown.getItems().clear();
+                        observableListItems.clear();
                         if (!Objects.equals(showingDVPForPartTextField.getText(), ""))
                             getAllTestsSorted(showingDVPForPartTextField.getText());
                         if (listTemplatov == null)
                             listTemplatov = TemplateFinder.getInstance().findAll().stream().map(it -> it.template_name).collect(Collectors.toList());
                         dropdownTemplates.getItems().addAll(listTemplatov);
                         dateDropdown.getItems().addAll(getDatesForAllTests());
-                    }
-
-
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }

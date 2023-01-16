@@ -168,7 +168,6 @@ public class UploadDVPController implements Initializable {
                 excelSheet = new ExcelSheet();
                 excelSheet.parseExcelFile(selectedFile.getAbsolutePath());
                 observableListItems = FXCollections.observableArrayList(excelSheet.generateTestWrappersForAllTest());
-                System.out.println(observableListItems.size());
                 createTable();
             } catch (Exception e) {
                 e.printStackTrace();

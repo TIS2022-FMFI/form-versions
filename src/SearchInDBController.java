@@ -67,10 +67,6 @@ public class SearchInDBController implements Initializable {
                 //sem treba nakodit select z databazy na konkretny search
                 System.out.println(partIDInput.getText());   // <- v partIDInput je pri zmene nacitany konkretny string s ktorym mozes pracovat kubko aby si hladal v DB
                 try {
-
-
-
-
                     partHistoryListView.getItems().clear();
                     BOMListView.getItems().clear();
                     currImageForPart.setImage(null);

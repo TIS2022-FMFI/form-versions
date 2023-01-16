@@ -12,6 +12,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 public class Test {
     private String date = "";
@@ -75,7 +76,7 @@ public class Test {
         if (cell != null) {
             switch (cell.getCellType()) {
                 case BOOLEAN:
-                    string_value = String.valueOf(cell.getBooleanCellValue());
+                    string_value = String.valueOf(cell.getBooleanCellValue()).replace('\n', ' ');
                     break;
                 case NUMERIC:
                     if (DateUtil.isCellDateFormatted(cell)) {
@@ -104,6 +105,7 @@ public class Test {
 
     public void insert() throws SQLException {
 
+        if (!isTestInDatabase(this)) {
             DatabaseChange dc = new DatabaseChange(User.getName(), "Uploaded a test for " + this.getDocument_nr() + " for date " + this.date + " to the database", new Timestamp(System.currentTimeMillis()));
             dc.insert();
 
@@ -128,26 +130,66 @@ public class Test {
             }
 
 
-        for (TestResult testResult : test_results) {
-            try (PreparedStatement s = DbContext.getConnection().prepareStatement("INSERT INTO test_result (test_type, test_result, test_soll, test_soll_plus, test_soll_minus, test_id) VALUES (?,?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS)) {
-                s.setString(2, testResult.getTest_result());
-                s.setString(3, testResult.getSoll());
-                s.setString(4, testResult.getSoll_plus());
-                s.setString(5, testResult.getSoll_minus());
-                if (TestTypeFinder.getInstance().returnIdInTable(testResult.getTest_type().replace('\n', ' ')) == -1) {
-                    throw new SQLException("Wrong test name (" + testResult.getTest_type().replace('\n', ' ') + "), nothing inserted");
+            for (TestResult testResult : test_results) {
+                try (PreparedStatement s = DbContext.getConnection().prepareStatement("INSERT INTO test_result (test_type, test_result, test_soll, test_soll_plus, test_soll_minus, test_id) VALUES (?,?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS)) {
+                    s.setString(2, testResult.getTest_result());
+                    s.setString(3, testResult.getSoll());
+                    s.setString(4, testResult.getSoll_plus());
+                    s.setString(5, testResult.getSoll_minus());
+                    if (TestTypeFinder.getInstance().returnIdInTable(testResult.getTest_type().replace('\n', ' ')) == -1) {
+                        throw new SQLException("Wrong test name (" + testResult.getTest_type().replace('\n', ' ') + "), nothing inserted");
+                    }
+                    s.setInt(1, TestTypeFinder.getInstance().returnIdInTable(testResult.getTest_type().replace('\n', ' ')));
+                    s.setInt(6, databaseId);
+                    s.executeUpdate();
                 }
-                s.setInt(1, TestTypeFinder.getInstance().returnIdInTable(testResult.getTest_type().replace('\n', ' ')));
-                s.setInt(6, databaseId);
-                System.out.println(testResult.getSoll());
-                s.executeUpdate();
             }
         }
+
+
 
     }
 
     public void addTestToListOfTests(TestResult test) {
         test_results.add(test);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Test test = (Test) o;
+        return date.equals(test.date) &&
+                AA.equals(test.AA) &&
+                Document_nr.equals(test.Document_nr) &&
+                Customer_nr.equals(test.Customer_nr) &&
+                areTestResultsSame(test.getTest_results());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(date, AA, Document_nr, Customer_nr, test_results);
+    }
+
+    public boolean areTestResultsSame(List<TestResult> other) {
+        for (TestResult tr : test_results) {
+            if (!other.contains(tr)) {
+                System.out.println(tr.to_string());
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public boolean isTestInDatabase(Test test) throws SQLException {
+        System.out.println(test.getTest_results().size());
+        for (Test t : TestFinder.getInstance().getAll()) {
+            System.out.println(test.equals(t) + " " + t.getTest_results().size());
+            if (test.equals(t)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public String to_string() {

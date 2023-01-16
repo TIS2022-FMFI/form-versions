@@ -21,6 +21,29 @@ public class TestFinder {
     private TestFinder() {
     }
 
+    public List<Test> getAll() throws SQLException {
+        List<Test> lst = new ArrayList<>();
+        try (PreparedStatement s = DbContext.getConnection().prepareStatement("SELECT * FROM test")) {
+            try (ResultSet r = s.executeQuery()) {
+                while (r.next()) {
+                    Test h = new Test(
+                            r.getString(2),
+                            r.getString(4),
+                            r.getString(5),
+                            r.getString(3),
+                            new ArrayList<>(),
+                            r.getInt(1)
+                    );
+                    addResultsToTest(h);
+                    lst.add(h);
+                }
+                return lst;
+            }
+        }
+    }
+
+
+
     /**
      * Find all tests in the database for a certain part.
      *
@@ -73,6 +96,37 @@ public class TestFinder {
                 }
             }
         }
+    }
+
+    /**
+     * Find all tests in the database for a certain part.
+     *
+     * @param partId the ID of the part we want tests for
+     * @return the list of all tests
+     * @throws SQLException the sql exception
+     */
+    public List<Test> findTestsForZostava(String partId) throws SQLException {
+        List<Test> lst = new ArrayList<>();
+        if (partId.matches("[0-9]{3}[.][0-9]{3}[.][0-9]{3}[.][0-9]{3}")) {
+            try (PreparedStatement s = DbContext.getConnection().prepareStatement("SELECT * FROM test WHERE part_id = ?")) {
+                s.setString(1, partId);
+                try (ResultSet r = s.executeQuery()) {
+                    while (r.next()) {
+                        Test h = new Test(
+                                r.getString(2),
+                                r.getString(4),
+                                r.getString(5),
+                                r.getString(3),
+                                new ArrayList<>(),
+                                r.getInt(1)
+                        );
+                        addResultsToTest(h);
+                        lst.add(h);
+                    }
+                }
+            }
+        }
+        return lst;
     }
 
 }
