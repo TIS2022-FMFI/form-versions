@@ -203,5 +203,9 @@ public class Test {
         }
         return return_str;
     }
+
+    public void setTest_results(List<TestResult> test_results) {
+        this.test_results = test_results;
+    }
 }
 

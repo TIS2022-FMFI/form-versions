@@ -218,7 +218,9 @@ public class SearchInDVPController implements Initializable {
 
 
     public List<Test> getAllTestsForPart(String partID) throws SQLException {
-        return TestFinder.getInstance().findTestsForPart(partID);
+//        return TestFinder.getInstance().findTestsForPart(partID);
+        return TestFinder.getInstance().findTestsForZostava(partID);
+
     }
 
     public ObservableList<TestWrapper> getDVPTableFromDB(String partID) throws SQLException {
@@ -227,15 +229,87 @@ public class SearchInDVPController implements Initializable {
         return FXCollections.observableArrayList(e.generateTestWrappersForAllTest());
     }
 
+    // to be called when search textbox is updated
     public void getAllTestsSorted(String partID) throws SQLException {
-        testsForCurrentSearch = getAllTestsForPart(partID).stream().collect(Collectors.groupingBy(Test::getDate));
+//        testsForCurrentSearch = getAllTestsForPart(partID).stream().collect(Collectors.groupingBy(Test::getDate));
+        testsForCurrentSearch = getAllTestsForPart(partID).stream().collect(Collectors.groupingBy(Test::getDocument_nr)); // nastavi zoznam testov
     }
+
+    // to be called when wanting to update the part with pismenko listview, asi hnedp otom jak zavolas getAllTestsSorted
+    public ObservableList<String> getAllAvailablePartsInSearch() {
+        return FXCollections.observableArrayList(testsForCurrentSearch.keySet()); // zoznam stringov verzii suciastok
+    }
+
+    // to be called when pressing button to update the dates listview
+    public List<String> getDatesForSelectedParts(List<String> selection) {
+        List<String> dates = new ArrayList<>();
+        for (String part : selection) {
+            dates.addAll(getDatesForPart(testsForCurrentSearch.get(part).stream().collect(Collectors.groupingBy(Test::getDate))));
+        }
+        return dates;
+    }
+
+    // to be called when pressing search a chces dostat testwrappery pre zobrazenie testov
+    public ObservableList<TestWrapper> getTestWrappersForCurrentSelection(List<String> parts, List<String> dates, List<String> tests) {
+
+        List<Test> wantedTests = new ArrayList<>();
+
+        if (dates.isEmpty() || parts.isEmpty()) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setHeaderText("No part/No date selected!");
+            alert.showAndWait();
+            return FXCollections.observableArrayList(new ArrayList<>());
+        }
+
+        for (Test test : new ArrayList<>(
+                testsForCurrentSearch.entrySet().stream()
+                    .filter(a -> parts.contains(a.getKey()))
+                    .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue))
+                    .values()).stream()
+                        .flatMap(Collection::stream)
+                .collect(Collectors.toList())) {
+
+            if (parts.contains(test.getDocument_nr()) &&
+                dates.stream()
+                        .map(it -> it.split(" ")[1]
+                                .split("#")[0])
+                        .collect(Collectors.toList())
+                        .contains(test.getDate())) {
+
+                if (tests.isEmpty()) {
+                    wantedTests.add(test);
+                } else {
+                    Test t = test;
+                    t.setTest_results(test.getTest_results().stream()
+                            .filter(it -> tests
+                                    .contains(it.getTest_type()))
+                            .collect(Collectors.toList()));
+                    wantedTests.add(t);
+                }
+            }
+        }
+
+        ExcelSheet e = new ExcelSheet();
+        e.setListOfAllTests(wantedTests);
+        return FXCollections.observableArrayList(e.generateTestWrappersForAllTest());
+    }
+
 
     public ObservableList<String> getDatesForAllTests() {
         List<String> dates = new ArrayList<>();
         testsForCurrentSearch.forEach((date, test) -> {
             for (int i = 0; i < test.size(); i++) {
                 dates.add(test.get(i).getDate() + "#" + i);
+            }
+        });
+        return FXCollections.observableArrayList(dates);
+    }
+
+    public ObservableList<String> getDatesForPart(Map<String, List<Test>> lst) {
+        List<String> dates = new ArrayList<>();
+        lst.forEach((date, test) -> {
+            for (int i = 0; i < test.size(); i++) {
+                dates.add(test.get(i).getDocument_nr() + " " + test.get(i).getDate() + "#" + i);
             }
         });
         return FXCollections.observableArrayList(dates);
@@ -294,4 +368,5 @@ public class SearchInDVPController implements Initializable {
         }
         return new TestResult();
     }
+
 }
