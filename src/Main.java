@@ -60,7 +60,7 @@ public class Main  extends Application{
             Scene s = new Scene(root);
             JMetro jMetro = new JMetro(Style.LIGHT);
             jMetro.setScene(s);
-            stage.setTitle("BogeParser (Logged in as " + User.getName() + ")");
+            stage.setTitle("FormVersions (Logged in as " + User.getName() + ")");
             stage.setScene(s);
             stage.show();
 
