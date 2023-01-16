@@ -99,7 +99,7 @@ public class TestFinder {
     }
 
     /**
-     * Find all tests in the database for a certain part.
+     * Find all tests in the database for a certain part group.
      *
      * @param partId the ID of the part we want tests for
      * @return the list of all tests
@@ -108,7 +108,7 @@ public class TestFinder {
     public List<Test> findTestsForZostava(String partId) throws SQLException {
         List<Test> lst = new ArrayList<>();
         if (partId.matches("[0-9]{3}[.][0-9]{3}[.][0-9]{3}[.][0-9]{3}")) {
-            try (PreparedStatement s = DbContext.getConnection().prepareStatement("SELECT * FROM test WHERE part_id = ?")) {
+            try (PreparedStatement s = DbContext.getConnection().prepareStatement("SELECT * FROM test WHERE part_id REGEXP ?")) {
                 s.setString(1, partId);
                 try (ResultSet r = s.executeQuery()) {
                     while (r.next()) {
