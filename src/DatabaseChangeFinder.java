@@ -42,6 +42,24 @@ public class DatabaseChangeFinder {
             }
         }
     }
+
+    public List<DatabaseChange> findWhereName(String name) throws SQLException {
+        try (PreparedStatement s = DbContext.getConnection().prepareStatement("SELECT * FROM db_log WHERE user_id = ? ORDER BY time DESC")) {
+            s.setString(1, name);
+            try (ResultSet r = s.executeQuery()) {
+                List<DatabaseChange> elements = new ArrayList<>();
+                while (r.next()) {
+                    DatabaseChange h = new DatabaseChange(
+                            r.getString(2),
+                            r.getString(4),
+                            r.getTimestamp(3)
+                    );
+                    elements.add(h);
+                }
+                return elements;
+            }
+        }
+    }
 }
 
 
