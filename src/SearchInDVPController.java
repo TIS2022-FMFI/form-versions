@@ -235,7 +235,7 @@ public class SearchInDVPController implements Initializable {
         List<String> testTypeNames = TestTypeFinder.getInstance().findAll();
         ObservableList<String> r = FXCollections.observableArrayList(testTypeNames);
         testTypesListView.setCellFactory(CheckBoxListCell.forListView(item -> {
-            BooleanProperty observable = new SimpleBooleanProperty();
+            BooleanProperty observable = new SimpleBooleanProperty(selectedTestTypesList.contains(item));
             observable.addListener((obs, wasSelected, isNowSelected) -> {
                 if (isNowSelected) {
                     selectedTestTypesList.add(item);
@@ -252,7 +252,7 @@ public class SearchInDVPController implements Initializable {
         List<String> partVersions = getAllAvailablePartsInSearch();
         ObservableList<String> r = FXCollections.observableArrayList(partVersions);
         versionsListView.setCellFactory(CheckBoxListCell.forListView(item -> {
-            BooleanProperty observable = new SimpleBooleanProperty();
+            BooleanProperty observable = new SimpleBooleanProperty(selectedVersionTempList.contains(item));
             observable.addListener((obs, wasSelected, isNowSelected) -> {
                 if (isNowSelected) {
                     selectedVersionTempList.add(item);
@@ -273,16 +273,20 @@ public class SearchInDVPController implements Initializable {
 
     private void setCheckBoxesForDates(){
         datesForVersionListView.setCellFactory(CheckBoxListCell.forListView(item -> {
-            BooleanProperty observable = new SimpleBooleanProperty();
+            BooleanProperty observable = new SimpleBooleanProperty(selectedDateForPartList.contains(item));
             observable.addListener((obs, wasSelected, isNowSelected) -> {
                 if (isNowSelected) {
                     selectedDateForPartList.add(item);
+
                 } else selectedDateForPartList.remove(item);
+
+
                 observableListItems = getTestWrappersForCurrentSelection();
                 createTable();
             });
             return observable;
         }));
+
     }
 
 
