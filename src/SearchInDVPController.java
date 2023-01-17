@@ -79,7 +79,7 @@ public class SearchInDVPController implements Initializable {
 
     public ObservableList<TestWrapper> observableListItems = FXCollections.observableArrayList(new ArrayList<>());
 
-    public Map<String, List<Test>> testsForCurrentSearch;
+    public Map<String, Map<String, List<Test>>> testsForCurrentSearch = new HashMap<>();
 
     public List<String> listTemplatov = null;
 
@@ -212,27 +212,18 @@ public class SearchInDVPController implements Initializable {
 
         if (showingDVPForPartTextField != null) {
             State.setTextField(showingDVPForPartTextField);
-
-
             showingDVPForPartTextField.textProperty().addListener(v -> {
                 try {
-
                     dropdownTemplates.getItems().clear();
                     observableListItems.clear();
-
-
-
-
-
-                    if (!Objects.equals(showingDVPForPartTextField.getText(), ""))
+                    if (!Objects.equals(showingDVPForPartTextField.getText(), "")) {
                         getAllTestsSorted(showingDVPForPartTextField.getText());
-                        fillVersionsOfPartListView();
-
-
-                    if (listTemplatov == null)
+                    }
+                    fillVersionsOfPartListView();
+                    if (listTemplatov == null) {
                         listTemplatov = TemplateFinder.getInstance().findAll().stream().map(it -> it.template_name).collect(Collectors.toList());
+                    }
                     dropdownTemplates.getItems().addAll(listTemplatov);
-//                        dateDropdown.getItems().addAll(getDatesForAllTests());
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }
@@ -246,116 +237,90 @@ public class SearchInDVPController implements Initializable {
         testTypesListView.setCellFactory(CheckBoxListCell.forListView(item -> {
             BooleanProperty observable = new SimpleBooleanProperty();
             observable.addListener((obs, wasSelected, isNowSelected) -> {
-                if (selectedTestTypesList.contains(item)){
-                    selectedTestTypesList.remove(item);
-                }
-                else selectedTestTypesList.add(item);
-
+                if (isNowSelected) {
+                    selectedTestTypesList.add(item);
+                } else selectedTestTypesList.remove(item);
                 observableListItems = getTestWrappersForCurrentSelection();
                 createTable();
-                    }
-
-            );
+            });
             return observable;
         }));
-
         testTypesListView.setItems(r);
-
     }
 
     private void fillVersionsOfPartListView(){
         List<String> partVersions = getAllAvailablePartsInSearch();
         ObservableList<String> r = FXCollections.observableArrayList(partVersions);
-
-
         versionsListView.setCellFactory(CheckBoxListCell.forListView(item -> {
             BooleanProperty observable = new SimpleBooleanProperty();
             observable.addListener((obs, wasSelected, isNowSelected) -> {
-                if (selectedVersionTempList.contains(item)){
-                    selectedVersionTempList.remove(item);
-                }
-                else selectedVersionTempList.add(item);
-
-                if (!datesForVersionListView.getItems().isEmpty()){
-                    datesForVersionListView.getItems().clear();
-                }
-                List<String> temp = getDatesForSelectedParts(selectedVersionTempList);
+                if (isNowSelected) {
+                    selectedVersionTempList.add(item);
+                } else selectedVersionTempList.remove(item);
+                List<String> temp = getDatesForSelectedParts();
                 ObservableList<String> tempp = FXCollections.observableArrayList(temp);
                 datesForVersionListView.setItems(tempp);
-
-
+                selectedDateForPartList = new ArrayList<>();
                 observableListItems = getTestWrappersForCurrentSelection();
                 createTable();
-
-
-
-
-
-                    }
-
-
-
-            );
+            });
             return observable;
         }));
-
 
         versionsListView.setItems(r);
         System.out.println(versionsListView);
     }
-
-
-
+    
     private void setCheckBoxesForDates(){
         datesForVersionListView.setCellFactory(CheckBoxListCell.forListView(item -> {
             BooleanProperty observable = new SimpleBooleanProperty();
             observable.addListener((obs, wasSelected, isNowSelected) -> {
-                        if (selectedDateForPartList.contains(item)){
-                            selectedDateForPartList.remove(item);
-                        }
-                        else selectedDateForPartList.add(item);
-
+                if (isNowSelected) {
+                    selectedDateForPartList.add(item);
+                } else selectedDateForPartList.remove(item);
                 observableListItems = getTestWrappersForCurrentSelection();
                 createTable();
-                    }
-
-            );
+            });
             return observable;
         }));
     }
 
 
-
-
-
     public List<Test> getAllTestsForPart(String partID) throws SQLException {
-//        return TestFinder.getInstance().findTestsForPart(partID);
         return TestFinder.getInstance().findTestsForZostava(partID);
-
     }
 
-    public ObservableList<TestWrapper> getDVPTableFromDB(String partID) throws SQLException {
-        ExcelSheet e = new ExcelSheet();
-        e.setListOfAllTests(getAllTestsForPart(partID));
-        return FXCollections.observableArrayList(e.generateTestWrappersForAllTest());
-    }
-
-    // to be called when search textbox is updated
     public void getAllTestsSorted(String partID) throws SQLException {
-//        testsForCurrentSearch = getAllTestsForPart(partID).stream().collect(Collectors.groupingBy(Test::getDate));
-        testsForCurrentSearch = getAllTestsForPart(partID).stream().collect(Collectors.groupingBy(Test::getDocument_nr)); // nastavi zoznam testov
+        for (Test t : getAllTestsForPart(partID)) {
+            if (!testsForCurrentSearch.containsKey(t.getDocument_nr())) {
+                testsForCurrentSearch.put(t.getDocument_nr(), new HashMap<String, List<Test>>());
+                testsForCurrentSearch.get(t.getDocument_nr()).put(t.getDate(), new ArrayList<>());
+                testsForCurrentSearch.get(t.getDocument_nr()).get(t.getDate()).add(t);
+            } else {
+                if (!testsForCurrentSearch.get(t.getDocument_nr()).containsKey(t.getDate())) {
+                    testsForCurrentSearch.get(t.getDocument_nr()).put(t.getDate(), new ArrayList<>());
+                    testsForCurrentSearch.get(t.getDocument_nr()).get(t.getDate()).add(t);
+                } else {
+                    testsForCurrentSearch.get(t.getDocument_nr()).get(t.getDate()).add(t);
+                }
+            }
+        }
+
+
     }
 
-    // to be called when wanting to update the part with pismenko listview, asi hnedp otom jak zavolas getAllTestsSorted
     public ObservableList<String> getAllAvailablePartsInSearch() {
         return FXCollections.observableArrayList(testsForCurrentSearch.keySet()); // zoznam stringov verzii suciastok
     }
 
-    // to be called when pressing button to update the dates listview
-    public List<String> getDatesForSelectedParts(List<String> selection) {
+    public List<String> getDatesForSelectedParts() {
         List<String> dates = new ArrayList<>();
-        for (String part : selection) {
-            dates.addAll(getDatesForPart(testsForCurrentSearch.get(part).stream().collect(Collectors.groupingBy(Test::getDate))));
+        for (String part : selectedVersionTempList) {
+            for (String date : testsForCurrentSearch.get(part).keySet()) {
+                for (int i = 0; i < testsForCurrentSearch.get(part).get(date).size(); i++) {
+                    dates.add(testsForCurrentSearch.get(part).get(date).get(i).getDocument_nr() + " " + date + "#" + i);
+                }
+            }
         }
         return dates;
     }
@@ -365,87 +330,41 @@ public class SearchInDVPController implements Initializable {
 
         List<Test> wantedTests = new ArrayList<>();
 
-        System.out.println(selectedVersionTempList);
-        System.out.println(selectedDateForPartList);
-        System.out.println(selectedTestTypesList);
-        System.out.println("________________________________");
-
         if (!selectedDateForPartList.isEmpty() && !selectedVersionTempList.isEmpty()) {
-            for (Test test : new ArrayList<>(
-                    testsForCurrentSearch.entrySet().stream()
-                            .filter(a -> selectedVersionTempList.contains(a.getKey()))
-                            .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue))
-                            .values()).stream()
-                    .flatMap(Collection::stream)
-                    .collect(Collectors.toList())) {
 
-                if (selectedVersionTempList.contains(test.getDocument_nr()) &&
-                        selectedDateForPartList.stream()
-                                .map(it -> it.split(" ")[1]
-                                        .split("#")[0])
-                                .collect(Collectors.toList())
-                                .contains(test.getDate())) {
+            for (String part : testsForCurrentSearch.keySet()) {
+                for (String date : testsForCurrentSearch.get(part).keySet()) {
+                    for (int i = 0; i < testsForCurrentSearch.get(part).get(date).size(); i++) {
 
-                    if (selectedTestTypesList.isEmpty()) {
-                        wantedTests.add(test);
-                    } else {
-                        Test t = test;
-                        t.setTest_results(test.getTest_results().stream()
-                                .filter(it -> selectedTestTypesList
-                                        .contains(it.getTest_type()))
-                                .collect(Collectors.toList()));
-                        wantedTests.add(t);
+                        if (selectedVersionTempList.contains(part) && selectedDateForPartList.contains(part + " " + date + "#" + i)) {
+
+                            if (selectedTestTypesList.isEmpty()) {
+
+                                wantedTests.add(testsForCurrentSearch.get(part).get(date).get(i));
+
+                            } else {
+
+                                Test ref = testsForCurrentSearch.get(part).get(date).get(i);
+                                Test t = new Test(ref.getDate(), ref.getAA(), ref.getDocument_nr(), ref.getCustomer_nr(), new ArrayList<>(), 1);
+                                List<TestResult> trl = new ArrayList<>();
+                                for (TestResult tr : ref.getTest_results()) {
+                                    if (selectedTestTypesList.contains(tr.getTest_type())) {
+                                        trl.add(tr);
+                                    }
+                                }
+                                t.setTest_results(trl);
+                                wantedTests.add(t);
+                            }
+                        }
                     }
                 }
             }
         }
 
-
-
         ExcelSheet e = new ExcelSheet();
         e.setListOfAllTests(wantedTests);
         return FXCollections.observableArrayList(e.generateTestWrappersForAllTest());
     }
-
-
-    public ObservableList<String> getDatesForAllTests() {
-        List<String> dates = new ArrayList<>();
-        testsForCurrentSearch.forEach((date, test) -> {
-            for (int i = 0; i < test.size(); i++) {
-                dates.add(test.get(i).getDate() + "#" + i);
-            }
-        });
-        return FXCollections.observableArrayList(dates);
-    }
-
-    public ObservableList<String> getDatesForPart(Map<String, List<Test>> lst) {
-        List<String> dates = new ArrayList<>();
-        lst.forEach((date, test) -> {
-            for (int i = 0; i < test.size(); i++) {
-                dates.add(test.get(i).getDocument_nr() + " " + test.get(i).getDate() + "#" + i);
-            }
-        });
-        return FXCollections.observableArrayList(dates);
-    }
-
-    public ObservableList<TestWrapper> getTestFromSelected(String selectedTest) {
-        ExcelSheet e = new ExcelSheet();
-        List<Test> tst = new ArrayList<>();
-        tst.add(testsForCurrentSearch.get(selectedTest.split("#")[0]).get(Integer.parseInt(selectedTest.split("#")[1])));
-        e.setListOfAllTests(tst);
-        return FXCollections.observableArrayList(e.generateTestWrappersForAllTest());
-    }
-
-    public void showDatesForSelectedVersion(ActionEvent actionEvent) throws SQLException {
-
-
-
-
-    }
-
-    public void showSearchResultTable(ActionEvent actionEvent) {
-    }
-
 
     public void exportDVPOfPartToTemplate(ActionEvent actionEvent) {
 
