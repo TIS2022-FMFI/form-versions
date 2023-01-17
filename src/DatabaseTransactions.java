@@ -153,9 +153,9 @@ public class DatabaseTransactions {
         }
     }
 
-    public void deleteCatiaSheet(String partID, String uid) throws SQLException {
+    public void deleteCatiaSheet(String partID) throws SQLException {
         DbContext.getConnection().setAutoCommit(false);
-        DatabaseChange dc = new DatabaseChange(uid, "Deleted CatiaSheed with id " + partID + " in the database", new Timestamp(System.currentTimeMillis()));
+        DatabaseChange dc = new DatabaseChange(User.getName(), "Deleted CatiaSheed with id " + partID + " in the database", new Timestamp(System.currentTimeMillis()));
         dc.insert();
         try {
             PreparedStatement s = DbContext.getConnection().prepareStatement("DELETE FROM part WHERE part_id = ?", Statement.RETURN_GENERATED_KEYS);
@@ -175,6 +175,28 @@ public class DatabaseTransactions {
             DbContext.getConnection().setAutoCommit(true);
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
             alert.setHeaderText("CatiaSheet deleted succesfuly!");
+            alert.showAndWait();
+        }
+    }
+
+    public void deleteTestsForPartId(String partID) throws SQLException {
+        DbContext.getConnection().setAutoCommit(false);
+        DatabaseChange dc = new DatabaseChange(User.getName(), "Deleted tests for " + partID + " in the database", new Timestamp(System.currentTimeMillis()));
+        dc.insert();
+        try {
+            PreparedStatement s = DbContext.getConnection().prepareStatement("DELETE FROM test WHERE part_id = ?", Statement.RETURN_GENERATED_KEYS);
+            s.setString(1, partID);
+            s.executeUpdate();
+        } catch (SQLException e) {
+            DbContext.getConnection().rollback();
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setHeaderText("Failed to delete tests");
+            alert.showAndWait();
+            throw new RuntimeException(e);
+        } finally {
+            DbContext.getConnection().setAutoCommit(true);
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setHeaderText("Tests deleted succesfuly!");
             alert.showAndWait();
         }
     }

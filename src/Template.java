@@ -10,6 +10,8 @@ import java.nio.file.Paths;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+
 import org.apache.poi.EncryptedDocumentException;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
@@ -150,7 +152,22 @@ public class Template {
         return "";
     }
 
-    public void export(String path, List<TestWrapper> testWrapperList) throws Exception {
+    public boolean checkIfListHasAllTests(List<TestWrapper> testWrapperList) {
+        if (result_names.size() > testWrapperList.size()) return false;
+
+        for (String rn : result_names) {
+            if (testWrapperList.stream()
+                    .map(TestWrapper::getTestType)
+                    .filter(testType -> testType
+                            .equals(rn))
+                    .count() != 1) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public void export(String path, List<TestWrapper> testWrapperList) {
 
         try {
             FileOutputStream out = new FileOutputStream(path);

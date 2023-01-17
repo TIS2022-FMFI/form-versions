@@ -147,7 +147,7 @@ public class SearchInDBController implements Initializable {
     public void removeSelectedPartFromDB(ActionEvent actionEvent) throws SQLException {
         if (!Objects.equals(currClickedOn, "")) {
             DatabaseTransactions dT = new DatabaseTransactions();
-            dT.deleteCatiaSheet(currClickedOn, User.getName());
+            dT.deleteCatiaSheet(currClickedOn);
             clearPage();
             partHistoryListView.getItems().addAll(getDBInfoPartListView(partIDInput.getText()));
         }

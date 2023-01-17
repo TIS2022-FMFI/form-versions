@@ -214,8 +214,7 @@ public class SearchInDVPController implements Initializable {
             State.setTextField(showingDVPForPartTextField);
             showingDVPForPartTextField.textProperty().addListener(v -> {
                 try {
-                    dropdownTemplates.getItems().clear();
-                    observableListItems.clear();
+                    resetView();
                     if (!Objects.equals(showingDVPForPartTextField.getText(), "")) {
                         getAllTestsSorted(showingDVPForPartTextField.getText());
                     }
@@ -229,6 +228,20 @@ public class SearchInDVPController implements Initializable {
                 }
             });
         }
+    }
+
+    public void resetView() throws SQLException {
+        dropdownTemplates.getItems().clear();
+        observableListItems.clear();
+        selectedVersionTempList.clear();
+        selectedTestTypesList.clear();
+        selectedDateForPartList.clear();
+        testsForCurrentSearch.clear();
+        setCheckBoxesForDates();
+        fillTestTypeListView();
+        fillVersionsOfPartListView();
+        datesForVersionListView.setItems(FXCollections.observableArrayList(new ArrayList<>()));
+        createTable();
     }
 
     private void fillTestTypeListView() throws SQLException {
@@ -268,7 +281,6 @@ public class SearchInDVPController implements Initializable {
         }));
 
         versionsListView.setItems(r);
-        System.out.println(versionsListView);
     }
 
     private void setCheckBoxesForDates(){
@@ -279,7 +291,6 @@ public class SearchInDVPController implements Initializable {
                     selectedDateForPartList.add(item);
 
                 } else selectedDateForPartList.remove(item);
-
 
                 observableListItems = getTestWrappersForCurrentSelection();
                 createTable();
@@ -309,8 +320,6 @@ public class SearchInDVPController implements Initializable {
                 }
             }
         }
-
-
     }
 
     public ObservableList<String> getAllAvailablePartsInSearch() {
@@ -329,7 +338,6 @@ public class SearchInDVPController implements Initializable {
         return dates;
     }
 
-    // to be called when pressing search a chces dostat testwrappery pre zobrazenie testov
     public ObservableList<TestWrapper> getTestWrappersForCurrentSelection() {
 
         List<Test> wantedTests = new ArrayList<>();
@@ -370,7 +378,7 @@ public class SearchInDVPController implements Initializable {
         return FXCollections.observableArrayList(e.generateTestWrappersForAllTest());
     }
 
-    public void exportDVPOfPartToTemplate(ActionEvent actionEvent) {
+    public void exportDVPOfPartToTemplate(ActionEvent actionEvent) throws SQLException {
 
         if (observableListItems.isEmpty()) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -382,28 +390,45 @@ public class SearchInDVPController implements Initializable {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setHeaderText("No template selected!");
             alert.showAndWait();
+
         } else {
 
-            FileChooser fc = new FileChooser();
-            fc.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Excel", ".xlsx"));
+            Template template = TemplateFinder.getInstance().findByName(dropdownTemplates.getValue());
+            if (!template.checkIfListHasAllTests(observableListItems)) {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setHeaderText("Not all information available to export");
+                alert.showAndWait();
+            } else {
+                FileChooser fc = new FileChooser();
+                fc.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Excel", ".xlsx"));
 
-            File selectedFile = fc.showSaveDialog(null);
+                File selectedFile = fc.showSaveDialog(null);
 
-            if (selectedFile != null) {
-                try {
-                    TemplateFinder.getInstance().findByName(dropdownTemplates.getValue()).
-                            export(selectedFile.getAbsolutePath(), observableListItems);
-                    showingDVPForPartTextField.setText("");
-                    Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-                    alert.setHeaderText("File exported succesfully!");
-                    alert.showAndWait();
+                if (selectedFile != null) {
+                    try {
+                        template.export(selectedFile.getAbsolutePath(), observableListItems);
+                        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                        alert.setHeaderText("File exported succesfully!");
+                        alert.showAndWait();
+                        showingDVPForPartTextField.setText("");
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                } else System.out.println("zle");
+            }
 
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            } else System.out.println("zle");
         }
+    }
 
+    public void deleteSelectedTests() {
+        DatabaseTransactions dbt = new DatabaseTransactions();
+        selectedVersionTempList.forEach(id -> {
+            try {
+                dbt.deleteTestsForPartId(id);
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        });
     }
 
     public TestResult findTestResultInTestByName(Test test, String name) {
