@@ -270,7 +270,7 @@ public class SearchInDVPController implements Initializable {
         versionsListView.setItems(r);
         System.out.println(versionsListView);
     }
-    
+
     private void setCheckBoxesForDates(){
         datesForVersionListView.setCellFactory(CheckBoxListCell.forListView(item -> {
             BooleanProperty observable = new SimpleBooleanProperty();

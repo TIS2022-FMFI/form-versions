@@ -180,8 +180,8 @@ public class UploadDVPController implements Initializable {
             test.getTest_results().forEach(testResult -> {
                 if (test.getDocument_nr().equals(tw.getDocumentNr()) &&
                     test.getDate().equals(tw.getDate()) &&
-                    testResult.getTest_type().replace('\n', '\0').equals(tw.getTestType().replace('\n', '\0'))) {
-                    System.out.println(testResult.getTest_type().replace('\n', ' ') + " " + tw.getTestType().replace('\n', '\0'));
+                    testResult.getTest_type().replace('\n', ' ').equals(tw.getTestType().replace('\n', ' '))) {
+                    System.out.println(testResult.getTest_type().replace('\n', ' ') + " " + tw.getTestType().replace('\n', ' '));
                     testResult.setTest_result(tw.getTestResult());
                         testResult.setSoll(tw.getSoll());
                         testResult.setSoll_minus(tw.getSollMinus());

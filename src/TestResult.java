@@ -27,7 +27,7 @@ public class TestResult {
     public TestResult(List<List<XSSFCell>> all_cell0, XSSFCell cell0) {
         all_cell = all_cell0;
         col = cell0.getColumnIndex();
-        test_type = create_test_type_name().replace('\n', '\0');
+        test_type = create_test_type_name().replace('\n',  ' ');
         test_result = get_string_value_from_cell(cell0);
         soll = get_string_value_from_cell(get_cell(soll_row_idx, col));
         soll_plus = get_string_value_from_cell(get_cell(soll_row_idx+1, col));
