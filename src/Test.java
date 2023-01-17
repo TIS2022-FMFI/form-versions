@@ -43,6 +43,7 @@ public class Test {
         return test_results;
     }
 
+
     public Test(String date, String AA, String document_nr, String customer_nr, List<TestResult> test_results, int dbid) {
         this.date = date;
         this.AA = AA;
