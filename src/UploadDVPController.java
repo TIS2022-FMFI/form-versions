@@ -23,37 +23,26 @@ public class UploadDVPController implements Initializable {
 
     @FXML
     private TableView<TestWrapper> tableViewDVP;
-
     @FXML
     private TableColumn<TestWrapper, String> docNumDVP;
-
     @FXML
     private TableColumn<TestWrapper, String> dateDVP;
-
     @FXML
     private TableColumn<TestWrapper, String> aaDVP;
-
     @FXML
     private TableColumn<TestWrapper, String> custNumDVP;
-
     @FXML
     private TableColumn<TestWrapper, String> testTypeDVP;
-
     @FXML
     private TableColumn<TestWrapper, String> testResDVP;
-
     @FXML
     private TableColumn<TestWrapper, String> sollDVP;
-
     @FXML
     private TableColumn<TestWrapper, String> plusDVP;
-
     @FXML
     private TableColumn<TestWrapper, String> minusDVP;
 
-
     ObservableList<TestWrapper> observableListItems;
-
     ExcelSheet excelSheet;
 
     @Override
@@ -149,7 +138,7 @@ public class UploadDVPController implements Initializable {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setHeaderText("Empty table to upload!");
             alert.showAndWait();
-        } else{
+        } else {
             DatabaseTransactions dbt = new DatabaseTransactions();
             dbt.insertTestList(excelSheet.listOfAllTests);
             clearDVPPage(event);
@@ -180,8 +169,7 @@ public class UploadDVPController implements Initializable {
             test.getTest_results().forEach(testResult -> {
                 if (test.getDocument_nr().equals(tw.getDocumentNr()) &&
                     test.getDate().equals(tw.getDate()) &&
-                    testResult.getTest_type().replace('\n', '\0').equals(tw.getTestType().replace('\n', '\0'))) {
-                    System.out.println(testResult.getTest_type().replace('\n', ' ') + " " + tw.getTestType().replace('\n', '\0'));
+                    testResult.getTest_type().replace('\n', ' ').equals(tw.getTestType().replace('\n', ' '))) {
                     testResult.setTest_result(tw.getTestResult());
                         testResult.setSoll(tw.getSoll());
                         testResult.setSoll_minus(tw.getSollMinus());

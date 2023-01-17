@@ -80,10 +80,9 @@ create table coordinates
     sheet     int not null,
     test_type int null,
     constraint coordinates_ibfk_1
-        foreign key (table_id) references template (id)
-            on delete cascade,
+        foreign key (table_id) references template (id) on delete cascade,
     constraint coordinates_ibfk_2
-        foreign key (test_type) references test_types (id)
+        foreign key (test_type) references test_types (id) on delete cascade
 );
 
 create index table_id
@@ -104,9 +103,9 @@ create table test_result
         primary key,
     test_id         int         null,
     constraint test_id_fk
-        foreign key (test_id) references test (id),
+        foreign key (test_id) references test (id) on delete cascade,
     constraint test_type
-        foreign key (test_type) references test_types (id)
+        foreign key (test_type) references test_types (id) on delete cascade
 );
 
 create table users

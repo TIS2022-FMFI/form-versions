@@ -24,82 +24,58 @@ import javax.swing.*;
 
 
 public class UploadPdfController implements Initializable {
+
     @FXML
     public TextField verziaTextField;
-
     @FXML
     public TextArea komentTextArea;
-
     @FXML
     public TextField releaseTextField;
-
     @FXML
     public TextField docNoTextField;
-
     @FXML
     public TextField devFromTextField;
-
     @FXML
     public ImageView assemblyImageShowcase = new ImageView();
-
     @FXML
     public Button mainPdfButton;
-
     @FXML
     public Button subpartPdf = new Button();
-
     @FXML
     public Button inserToDB = new Button();
-
     @FXML
     public Button clearAllElements = new Button();
-
     @FXML
     public TextField designationMainPdfTextField;
-
-
     @FXML
     private TableView<CatiaSheet> tableView = new TableView<>();
-
     @FXML
     private TableColumn<CatiaSheet, String> designation;
-
     @FXML
     private TableColumn<CatiaSheet, String> documentNo;
-
     @FXML
     public TableColumn<CatiaSheet, String> version;
-
     @FXML
     public TableColumn<CatiaSheet, String> lastHeaderDate;
-
     @FXML
     public TableColumn<CatiaSheet, String> lastHeaderChange;
-
     @FXML
     public TableColumn<CatiaSheet, Button> componentImage;
 
     @FXML
     Button assemblyImgButton = new Button();
-
     CatiaSheet mainPdf = null;
-
     List<CatiaSheet> subpartsCatiaSheetList = new ArrayList<>();
-
     FileChooser fc = new FileChooser();
-
     ObservableList<CatiaSheet> observableListItems;
-
 
     @Override
     public void initialize(URL arg0, ResourceBundle arg1) {
-
         tableView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
         tableView.setEditable(true);
         subpartPdf.setDisable(true);
         assemblyImgButton.setDisable(true);
         clearAllElements.setDisable(true);
-
     }
 
 
@@ -151,7 +127,6 @@ public class UploadPdfController implements Initializable {
     public void createHeaderFooter() {
         if (mainPdf != null) {
             CatiaComment h = mainPdf.getLastVersionHeader();
-
             designationMainPdfTextField.setText(mainPdf.designation);
             verziaTextField.setText(h.version);
             komentTextArea.setText(h.changes);
@@ -176,7 +151,6 @@ public class UploadPdfController implements Initializable {
                 subpartPdf.setDisable(false);
                 clearAllElements.setDisable(false);
 
-
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -195,7 +169,6 @@ public class UploadPdfController implements Initializable {
             listPathov.forEach(item -> {
                 try {
                     subpartsCatiaSheetList.add(PDFParser.parseFile(item.toString()));
-
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -227,7 +200,7 @@ public class UploadPdfController implements Initializable {
             if (checkForEmptyFields()) {
 
                 updateMainPdfFromFrontend();
-                findParents(); // adds the parent-child connections
+                findParents();
                 mainPdf.version = mainPdf.version.toUpperCase();
 
                 DatabaseTransactions dbt = new DatabaseTransactions();
@@ -240,7 +213,6 @@ public class UploadPdfController implements Initializable {
                 alert.showAndWait();
             }
         }
-
     }
 
     public boolean checkForEmptyFields() {
@@ -311,11 +283,7 @@ public class UploadPdfController implements Initializable {
     }
 
     public void updateMainPdfFromFrontend() {
-
-        //adds image from frontend
         mainPdf.setImage(assemblyImageShowcase.getImage());
-
-        // changes the values in mainpdf instance from the frontend text boxes
         mainPdf.version = verziaTextField.getText();
         mainPdf.documentNo = docNoTextField.getText();
         mainPdf.setLastHeaderDate(releaseTextField.getText());

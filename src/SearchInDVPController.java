@@ -28,63 +28,43 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class SearchInDVPController implements Initializable {
+
     @FXML
     public ComboBox<String> dropdownTemplates = new ComboBox<>();
-
     @FXML
     public TextField showingDVPForPartTextField;
-
     @FXML
     public Button exportToTemplateButton;
-
     @FXML
     public ListView<String> versionsListView;
-
     @FXML
     public ListView<String> datesForVersionListView;
-
     @FXML
     public ListView<String> testTypesListView;
-
     @FXML
     private TableView<TestWrapper> tableViewDVPSearch;
-
     @FXML
     private TableColumn<TestWrapper, String> docNumDVPSearch;
-
     @FXML
     private TableColumn<TestWrapper, String> dateDVPSearch;
-
     @FXML
     private TableColumn<TestWrapper, String> aaDVPSearch;
-
     @FXML
     private TableColumn<TestWrapper, String> custNumDVPSearch;
-
     @FXML
     private TableColumn<TestWrapper, String> testTypeDVPSearch;
-
     @FXML
     private TableColumn<TestWrapper, String> testResDVPSearch;
-
     @FXML
     private TableColumn<TestWrapper, String> sollDVPSearch;
-
     @FXML
     private TableColumn<TestWrapper, String> plusDVPSearch;
-
     @FXML
     private TableColumn<TestWrapper, String> minusDVPSearch;
 
-
     public ObservableList<TestWrapper> observableListItems = FXCollections.observableArrayList(new ArrayList<>());
-
     public Map<String, Map<String, List<Test>>> testsForCurrentSearch = new HashMap<>();
-
     public List<String> listTemplatov = null;
-
-
-
     private List<String> selectedVersionTempList = new ArrayList<>();
     private List<String> selectedDateForPartList = new ArrayList<>();
     private List<String> selectedTestTypesList = new ArrayList<>();
@@ -96,104 +76,55 @@ public class SearchInDVPController implements Initializable {
         docNumDVPSearch.setCellFactory(TextFieldTableCell.forTableColumn());
         docNumDVPSearch.setEditable(false);
 
-
         dateDVPSearch.setCellValueFactory(new PropertyValueFactory<>("date"));
         dateDVPSearch.setCellFactory(TextFieldTableCell.forTableColumn());
         dateDVPSearch.setEditable(false);
-
 
         aaDVPSearch.setCellValueFactory(new PropertyValueFactory<>("AA"));
         aaDVPSearch.setCellFactory(TextFieldTableCell.forTableColumn());
         aaDVPSearch.setEditable(false);
 
-
         custNumDVPSearch.setCellValueFactory(new PropertyValueFactory<>("customerNr"));
         custNumDVPSearch.setCellFactory(TextFieldTableCell.forTableColumn());
         custNumDVPSearch.setEditable(false);
-
 
         testTypeDVPSearch.setCellValueFactory(new PropertyValueFactory<>("testType"));
         testTypeDVPSearch.setCellFactory(TextFieldTableCell.forTableColumn());
         testTypeDVPSearch.setEditable(false);
 
+        // if editing cells and updating in db is needed, funciton editTestWrapper in DatabaseTransaction is to
+        // be called on desired setOnEditCommit
 
         testResDVPSearch.setCellValueFactory(new PropertyValueFactory<>("testResult"));
         testResDVPSearch.setCellFactory(TextFieldTableCell.forTableColumn());
-
-
         testResDVPSearch.setOnEditCommit(testWrapperStringCellEditEvent -> {
             int index = tableViewDVPSearch.getSelectionModel().getSelectedIndex();
             TestWrapper tw = tableViewDVPSearch.getItems().get(index);
             tw.setTestResult(testWrapperStringCellEditEvent.getNewValue());
-//            DatabaseTransactions dbt = new DatabaseTransactions();
-//            try {
-//                dbt.editTestWrapper(tw, testsForCurrentSearch.get(dateDropdown.getSelectionModel().getSelectedItem().split("#")[0])
-//                                .get(Integer.parseInt(dateDropdown.getSelectionModel().getSelectedItem().split("#")[1])),
-//                        findTestResultInTestByName(testsForCurrentSearch.get(dateDropdown.getSelectionModel().getSelectedItem().split("#")[0])
-//                                .get(Integer.parseInt(dateDropdown.getSelectionModel().getSelectedItem().split("#")[1])), tw.getTestType()));
-//            } catch (SQLException e) {
-//                throw new RuntimeException(e);
-//            }
-
-
         });
-
 
         sollDVPSearch.setCellValueFactory(new PropertyValueFactory<>("sollDVP"));
         sollDVPSearch.setCellFactory(TextFieldTableCell.forTableColumn());
-
         sollDVPSearch.setOnEditCommit(testWrapperStringCellEditEvent -> {
             int index = tableViewDVPSearch.getSelectionModel().getSelectedIndex();
             TestWrapper tw = tableViewDVPSearch.getItems().get(index);
             tw.setSoll(testWrapperStringCellEditEvent.getNewValue());
-            System.out.println(tw.getSoll());
-//            DatabaseTransactions dbt = new DatabaseTransactions();
-//            try {
-//                dbt.editTestWrapper(tw, testsForCurrentSearch.get(dateDropdown.getSelectionModel().getSelectedItem().split("#")[0])
-//                                .get(Integer.parseInt(dateDropdown.getSelectionModel().getSelectedItem().split("#")[1])),
-//                        findTestResultInTestByName(testsForCurrentSearch.get(dateDropdown.getSelectionModel().getSelectedItem().split("#")[0])
-//                                .get(Integer.parseInt(dateDropdown.getSelectionModel().getSelectedItem().split("#")[1])), tw.getTestType()));
-//            } catch (SQLException e) {
-//                throw new RuntimeException(e);
-//            }
-
         });
-
 
         plusDVPSearch.setCellValueFactory(new PropertyValueFactory<>("sollPlus"));
         plusDVPSearch.setCellFactory(TextFieldTableCell.forTableColumn());
-
         plusDVPSearch.setOnEditCommit(testWrapperStringCellEditEvent -> {
             int index = tableViewDVPSearch.getSelectionModel().getSelectedIndex();
             TestWrapper tw = tableViewDVPSearch.getItems().get(index);
             tw.setSollPlus(testWrapperStringCellEditEvent.getNewValue());
-//            DatabaseTransactions dbt = new DatabaseTransactions();
-//            try {
-//                dbt.editTestWrapper(tw, testsForCurrentSearch.get(dateDropdown.getSelectionModel().getSelectedItem().split("#")[0])
-//                                .get(Integer.parseInt(dateDropdown.getSelectionModel().getSelectedItem().split("#")[1])),
-//                        findTestResultInTestByName(testsForCurrentSearch.get(dateDropdown.getSelectionModel().getSelectedItem().split("#")[0])
-//                                .get(Integer.parseInt(dateDropdown.getSelectionModel().getSelectedItem().split("#")[1])), tw.getTestType()));
-//            } catch (SQLException e) {
-//                throw new RuntimeException(e);
-//            }
-
         });
+
         minusDVPSearch.setCellValueFactory(new PropertyValueFactory<>("sollMinus"));
         minusDVPSearch.setCellFactory(TextFieldTableCell.forTableColumn());
         minusDVPSearch.setOnEditCommit(testWrapperStringCellEditEvent -> {
             int index = tableViewDVPSearch.getSelectionModel().getSelectedIndex();
             TestWrapper tw = tableViewDVPSearch.getItems().get(index);
             tw.setSollMinus(testWrapperStringCellEditEvent.getNewValue());
-//            DatabaseTransactions dbt = new DatabaseTransactions();
-//            try {
-//                dbt.editTestWrapper(tw, testsForCurrentSearch.get(dateDropdown.getSelectionModel().getSelectedItem().split("#")[0])
-//                                .get(Integer.parseInt(dateDropdown.getSelectionModel().getSelectedItem().split("#")[1])),
-//                        findTestResultInTestByName(testsForCurrentSearch.get(dateDropdown.getSelectionModel().getSelectedItem().split("#")[0])
-//                                .get(Integer.parseInt(dateDropdown.getSelectionModel().getSelectedItem().split("#")[1])), tw.getTestType()));
-//            } catch (SQLException e) {
-//                throw new RuntimeException(e);
-//            }
-
         });
         tableViewDVPSearch.setItems(observableListItems);
     }
@@ -214,8 +145,7 @@ public class SearchInDVPController implements Initializable {
             State.setTextField(showingDVPForPartTextField);
             showingDVPForPartTextField.textProperty().addListener(v -> {
                 try {
-                    dropdownTemplates.getItems().clear();
-                    observableListItems.clear();
+                    resetView();
                     if (!Objects.equals(showingDVPForPartTextField.getText(), "")) {
                         getAllTestsSorted(showingDVPForPartTextField.getText());
                     }
@@ -229,6 +159,20 @@ public class SearchInDVPController implements Initializable {
                 }
             });
         }
+    }
+
+    public void resetView() throws SQLException {
+        dropdownTemplates.getItems().clear();
+        observableListItems.clear();
+        selectedVersionTempList.clear();
+        selectedTestTypesList.clear();
+        selectedDateForPartList.clear();
+        testsForCurrentSearch.clear();
+        setCheckBoxesForDates();
+        fillTestTypeListView();
+        fillVersionsOfPartListView();
+        datesForVersionListView.setItems(FXCollections.observableArrayList(new ArrayList<>()));
+        createTable();
     }
 
     private void fillTestTypeListView() throws SQLException {
@@ -268,19 +212,15 @@ public class SearchInDVPController implements Initializable {
         }));
 
         versionsListView.setItems(r);
-        System.out.println(versionsListView);
     }
-    
+
     private void setCheckBoxesForDates(){
         datesForVersionListView.setCellFactory(CheckBoxListCell.forListView(item -> {
             BooleanProperty observable = new SimpleBooleanProperty(selectedDateForPartList.contains(item));
             observable.addListener((obs, wasSelected, isNowSelected) -> {
                 if (isNowSelected) {
                     selectedDateForPartList.add(item);
-
                 } else selectedDateForPartList.remove(item);
-
-
                 observableListItems = getTestWrappersForCurrentSelection();
                 createTable();
             });
@@ -309,8 +249,6 @@ public class SearchInDVPController implements Initializable {
                 }
             }
         }
-
-
     }
 
     public ObservableList<String> getAllAvailablePartsInSearch() {
@@ -329,7 +267,6 @@ public class SearchInDVPController implements Initializable {
         return dates;
     }
 
-    // to be called when pressing search a chces dostat testwrappery pre zobrazenie testov
     public ObservableList<TestWrapper> getTestWrappersForCurrentSelection() {
 
         List<Test> wantedTests = new ArrayList<>();
@@ -370,7 +307,7 @@ public class SearchInDVPController implements Initializable {
         return FXCollections.observableArrayList(e.generateTestWrappersForAllTest());
     }
 
-    public void exportDVPOfPartToTemplate(ActionEvent actionEvent) {
+    public void exportDVPOfPartToTemplate(ActionEvent actionEvent) throws SQLException {
 
         if (observableListItems.isEmpty()) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -382,28 +319,45 @@ public class SearchInDVPController implements Initializable {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setHeaderText("No template selected!");
             alert.showAndWait();
+
         } else {
 
-            FileChooser fc = new FileChooser();
-            fc.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Excel", ".xlsx"));
+            Template template = TemplateFinder.getInstance().findByName(dropdownTemplates.getValue());
+            if (!template.checkIfListHasAllTests(observableListItems)) {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setHeaderText("Not all information available to export");
+                alert.showAndWait();
+            } else {
+                FileChooser fc = new FileChooser();
+                fc.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Excel", ".xlsx"));
 
-            File selectedFile = fc.showSaveDialog(null);
+                File selectedFile = fc.showSaveDialog(null);
 
-            if (selectedFile != null) {
-                try {
-                    TemplateFinder.getInstance().findByName(dropdownTemplates.getValue()).
-                            export(selectedFile.getAbsolutePath(), observableListItems);
-                    showingDVPForPartTextField.setText("");
-                    Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-                    alert.setHeaderText("File exported succesfully!");
-                    alert.showAndWait();
+                if (selectedFile != null) {
+                    try {
+                        template.export(selectedFile.getAbsolutePath(), observableListItems);
+                        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                        alert.setHeaderText("File exported succesfully!");
+                        alert.showAndWait();
+                        showingDVPForPartTextField.setText("");
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                } else System.out.println("zle");
+            }
 
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            } else System.out.println("zle");
         }
+    }
 
+    public void deleteSelectedTests() {
+        DatabaseTransactions dbt = new DatabaseTransactions();
+        selectedVersionTempList.forEach(id -> {
+            try {
+                dbt.deleteTestsForPartId(id);
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        });
     }
 
     public TestResult findTestResultInTestByName(Test test, String name) {

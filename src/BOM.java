@@ -5,11 +5,7 @@ public class BOM {
     public String designation = "";
     public String drawingNo = "";
     public String material = "";
-    //public List<String> material = new ArrayList<>();
     public String weight = "";
-
-
-
 
     public BOM(String i, String des, String draw, String mat, String w){
         item = i;
@@ -35,7 +31,6 @@ public class BOM {
                 material += " ";
             }
             material += input.get(index);
-            //material.add(input.get(index));
             index++;
         }
         weight = input.get(index++);
@@ -47,53 +42,31 @@ public class BOM {
     public String getItem() {
         return item;
     }
-
     public void setItem(String item) {
         this.item = item;
     }
-
     public String getDesignation() {
         return designation;
     }
-
     public void setDesignation(String designation) {
         this.designation = designation;
     }
-
     public String getDrawingNo() {
         return drawingNo;
     }
-
     public void setDrawingNo(String drawingNo) {
         this.drawingNo = drawingNo;
     }
-
     public String getMaterial() {
         return material;
     }
-
     public void setMaterial(String material) {
         this.material = material;
     }
-
     public String getWeight() {
         return weight;
     }
-
     public void setWeight(String weight) {
         this.weight = weight;
-    }
-
-    public void print() {
-        System.out.print(item);
-        System.out.print(" ");
-        System.out.print(designation);
-        System.out.print(" ");
-        System.out.print(drawingNo);
-        System.out.print(" ");
-        System.out.print(material);
-        System.out.print(" ");
-        System.out.print(weight);
-        System.out.println(" ");
     }
 }

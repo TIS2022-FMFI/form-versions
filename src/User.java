@@ -2,8 +2,6 @@ import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.control.*;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.util.Pair;
 
@@ -15,28 +13,22 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
-import java.util.concurrent.atomic.AtomicReference;
 
 public class User {
 
-    private static String name;
-
     public static int res = -1;
+    private static String name;
 
     public static String getName() {
         return name;
     }
-
     public static void setName(String name) {
         User.name = name;
     }
-
     public static int getRes() {
         return res;
     }
-
     public static void setRes(int res) {
         User.res = res;
     }
@@ -47,14 +39,10 @@ public class User {
         dialog.setTitle("Login Dialog");
         dialog.setHeaderText("Please fill in your login information");
 
-
         ButtonType loginButtonType = new ButtonType("Login", ButtonBar.ButtonData.OK_DONE);
         ButtonType cancel = new ButtonType("Cancel", ButtonBar.ButtonData.CANCEL_CLOSE);
         dialog.getDialogPane().getButtonTypes().addAll(loginButtonType, cancel);
 
-
-
-// Create the username and password labels and fields.
         GridPane grid = new GridPane();
         grid.setHgap(10);
         grid.setVgap(10);
@@ -102,11 +90,12 @@ public class User {
         });
 
     }
-        public static boolean findUserInDatabaseAndCheckPassword(String password) throws SQLException {
+
+    public static boolean findUserInDatabaseAndCheckPassword(String password) throws SQLException {
         try (PreparedStatement s = DbContext.getConnection().prepareStatement("SELECT * FROM users WHERE mail = ?")) {
             s.setString(1, getName());
             try (ResultSet r = s.executeQuery()) {
-                while(r.next()) {
+                while (r.next()) {
                     return comparePasswords(password, r.getString(3));
                 }
             }
@@ -156,7 +145,7 @@ public class User {
         }
     }
 
-    public static List<String> getAll() throws SQLException{
+    public static List<String> getAll() throws SQLException {
         try (PreparedStatement s = DbContext.getConnection().prepareStatement("SELECT * FROM users")) {
             try (ResultSet r = s.executeQuery()) {
                 List<String> elements = new ArrayList<>();

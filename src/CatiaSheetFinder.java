@@ -23,32 +23,6 @@ public class CatiaSheetFinder {
     private CatiaSheetFinder() {
     }
 
-    public List<CatiaSheet> findAll() throws SQLException {
-        List<CatiaComment> lsc = new ArrayList<>();
-        try (PreparedStatement s = DbContext.getConnection().prepareStatement("SELECT * FROM part")) {
-            try (ResultSet r = s.executeQuery()) {
-                List<CatiaSheet> elements = new ArrayList<>();
-                while (r.next()) {
-                    CatiaSheet h = new CatiaSheet(
-                            r.getString(2).substring(0, r.getString(2).length() - 1),
-                            r.getString(2).substring(r.getString(2).length() - 1),
-                            r.getDate(4).toString(),
-                            r.getString(5),
-                            r.getString(4),
-                            SwingFXUtils.toFXImage(ImageIO.read(r.getBlob(6).getBinaryStream()), null),
-                            r.getString(8),
-                            r.getString(7)
-                    );
-                    elements.add(h);
-                }
-                return elements;
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        return new ArrayList<CatiaSheet>();
-    }
-
     public List<CatiaSheet> findWithId(String id) throws SQLException {
         List<CatiaComment> lsc = new ArrayList<>();
         Image img = null;

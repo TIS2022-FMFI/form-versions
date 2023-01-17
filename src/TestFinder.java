@@ -43,7 +43,6 @@ public class TestFinder {
     }
 
 
-
     /**
      * Find all tests in the database for a certain part.
      *

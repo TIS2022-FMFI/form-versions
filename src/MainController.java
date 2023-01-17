@@ -11,9 +11,6 @@ public class MainController implements Initializable {
     @FXML
     public  TabPane tabPane;
 
-
-
-
     public static void switchTab(int index){
         State.getTabPane().getSelectionModel().select(index);
     }
