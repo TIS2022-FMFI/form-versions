@@ -1,6 +1,7 @@
 import java.util.List;
 
 public class CatiaComment {
+
     public String version = "";
     public String no = "";
     public String changes = "";
