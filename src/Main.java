@@ -63,28 +63,17 @@ public class Main  extends Application{
             stage.setTitle("FormVersions (Logged in as " + User.getName() + ")");
             stage.setScene(s);
             stage.show();
-
-
-        }
-        else if (User.getRes() == 0) {
+        } else if (User.getRes() == 0) {
             ButtonType log = new ButtonType("login again", ButtonBar.ButtonData.OK_DONE);
             Alert alert = new Alert(Alert.AlertType.NONE,"Wrong user login information, please try again !" ,log);
             Optional<ButtonType> result = alert.showAndWait();
-
-            if (result.isPresent() && result.get() == log) {
-                start(stage);
-            }
-        }
-
-        else{
+            if (result.isPresent() && result.get() == log) { start(stage); }
+        } else {
             ButtonType log = new ButtonType("login again", ButtonBar.ButtonData.OK_DONE);
             ButtonType exit = new ButtonType("exit", ButtonBar.ButtonData.OK_DONE);
             Alert alert = new Alert(Alert.AlertType.NONE,"Are you sure you want to exit ?" ,log, exit);
             Optional<ButtonType> result = alert.showAndWait();
-
-            if (result.orElse(exit) == log) {
-                start(stage);
-            }
+            if (result.orElse(exit) == log) { start(stage); }
         }
     }
 

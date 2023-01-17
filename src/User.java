@@ -46,15 +46,11 @@ public class User {
         Dialog<Pair<String, String>> dialog = new Dialog<>();
         dialog.setTitle("Login Dialog");
         dialog.setHeaderText("Please fill in your login information");
-
-
+        
         ButtonType loginButtonType = new ButtonType("Login", ButtonBar.ButtonData.OK_DONE);
         ButtonType cancel = new ButtonType("Cancel", ButtonBar.ButtonData.CANCEL_CLOSE);
         dialog.getDialogPane().getButtonTypes().addAll(loginButtonType, cancel);
 
-
-
-// Create the username and password labels and fields.
         GridPane grid = new GridPane();
         grid.setHgap(10);
         grid.setVgap(10);

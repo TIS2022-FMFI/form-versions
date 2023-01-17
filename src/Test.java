@@ -1,12 +1,7 @@
 import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.DateUtil;
 import org.apache.poi.xssf.usermodel.XSSFCell;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.sql.*;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -15,6 +10,7 @@ import java.util.List;
 import java.util.Objects;
 
 public class Test {
+    public int databaseId;
     private String date = "";
     private String AA = "";
     private String Document_nr = "";
@@ -25,24 +21,6 @@ public class Test {
     private int documentnr_col_idx = 2;
     private int customernr_col_idx = 3;
     private List<List<XSSFCell>> all_cell;
-    public int databaseId;
-
-    public String getDate() {
-        return date;
-    }
-    public String getAA() {
-        return AA;
-    }
-    public String getDocument_nr() {
-        return Document_nr;
-    }
-    public String getCustomer_nr() {
-        return Customer_nr;
-    }
-    public List<TestResult> getTest_results() {
-        return test_results;
-    }
-
 
     public Test(String date, String AA, String document_nr, String customer_nr, List<TestResult> test_results, int dbid) {
         this.date = date;
@@ -56,23 +34,47 @@ public class Test {
     public Test(List<List<XSSFCell>> all_cell0, int row) {
         all_cell = all_cell0;
 
-        date = get_string_value_from_cell(get_cell(row, date_col_idx));
-        AA = get_string_value_from_cell(get_cell(row, AA_col_idx));
-        Document_nr = get_string_value_from_cell(get_cell(row, documentnr_col_idx));
-        Customer_nr = get_string_value_from_cell(get_cell(row, customernr_col_idx));
+        date = getStringValueFromCell(getCell(row, date_col_idx));
+        AA = getStringValueFromCell(getCell(row, AA_col_idx));
+        Document_nr = getStringValueFromCell(getCell(row, documentnr_col_idx));
+        Customer_nr = getStringValueFromCell(getCell(row, customernr_col_idx));
 
 
-        for(XSSFCell cell: all_cell.get(row)){
-            if(cell.getCellType() != CellType.BLANK && cell.getColumnIndex()>3){
+        for (XSSFCell cell : all_cell.get(row)) {
+            if (cell.getCellType() != CellType.BLANK && cell.getColumnIndex() > 3) {
                 TestResult testResult = new TestResult(all_cell, cell);
-                if(!testResult.getTest_result().equals("")) {
+                if (!testResult.getTest_result().equals("")) {
                     test_results.add(testResult);
                 }
             }
         }
     }
 
-    private String get_string_value_from_cell(XSSFCell cell) {
+    public String getDate() {
+        return date;
+    }
+
+    public String getAA() {
+        return AA;
+    }
+
+    public String getDocument_nr() {
+        return Document_nr;
+    }
+
+    public String getCustomer_nr() {
+        return Customer_nr;
+    }
+
+    public List<TestResult> getTest_results() {
+        return test_results;
+    }
+
+    public void setTest_results(List<TestResult> test_results) {
+        this.test_results = test_results;
+    }
+
+    private String getStringValueFromCell(XSSFCell cell) {
         String string_value = "";
         if (cell != null) {
             switch (cell.getCellType()) {
@@ -93,10 +95,10 @@ public class Test {
         return string_value;
     }
 
-    XSSFCell get_cell(int row_idx, int col_idx){
-        for (List <XSSFCell> cells_row: all_cell){
-            for (XSSFCell cell: cells_row){
-                if(cell.getRowIndex() == row_idx && cell.getColumnIndex() == col_idx){
+    XSSFCell getCell(int row_idx, int col_idx) {
+        for (List<XSSFCell> cells_row : all_cell) {
+            for (XSSFCell cell : cells_row) {
+                if (cell.getRowIndex() == row_idx && cell.getColumnIndex() == col_idx) {
                     return cell;
                 }
             }
@@ -122,14 +124,11 @@ public class Test {
                 try (ResultSet generatedKeys = s.getGeneratedKeys()) {
                     if (generatedKeys.next()) {
                         databaseId = Math.toIntExact(generatedKeys.getLong(1));
-                    }
-                    else {
+                    } else {
                         throw new SQLException("Creating user failed, no ID obtained.");
                     }
                 }
-
             }
-
 
             for (TestResult testResult : test_results) {
                 try (PreparedStatement s = DbContext.getConnection().prepareStatement("INSERT INTO test_result (test_type, test_result, test_soll, test_soll_plus, test_soll_minus, test_id) VALUES (?,?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS)) {
@@ -146,7 +145,6 @@ public class Test {
                 }
             }
         }
-
 
 
     }
@@ -193,20 +191,5 @@ public class Test {
         return false;
     }
 
-    public String to_string() {
-        String return_str =  "\n\n  Test\n\n" +
-                "date = " + date + "\n" +
-                "AA = " + AA + "\n" +
-                "Document_nr = " + Document_nr + "\n" +
-                "Customer_nr = " + Customer_nr + "\n\n";
-        for (TestResult res : test_results){
-            return_str+=res.to_string();
-        }
-        return return_str;
-    }
-
-    public void setTest_results(List<TestResult> test_results) {
-        this.test_results = test_results;
-    }
 }
 
