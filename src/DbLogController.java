@@ -10,36 +10,46 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
+/**
+ * Controller for the Database Log window
+ *
+ * @author Peter Vercimak
+ * @version 1.0
+ */
 public class DbLogController implements Initializable {
+
     public ListView<String> dbLogListView;
-
     private ObservableList<String> items = FXCollections.observableArrayList();
-
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        fillListView();
+        try {
+            fillListView();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
-
-    public void refresh(ActionEvent actionEvent) {
+    /**
+     * Refreshes the list with most up-to-date information from the database
+     */
+    public void refresh(ActionEvent actionEvent) throws SQLException {
         dbLogListView.getItems().clear();
         fillListView();
     }
 
-    public void fillListView() {
-        try {
-            List<DatabaseChange> temp = new ArrayList<>();
-            StringBuilder tempString = new StringBuilder();
-            temp = DatabaseChangeFinder.getInstance().findAll();
-            temp.forEach(i ->{
-                tempString.append("User ").append(i.getWorkerId()).append(" ").append(i.getChange()).append(" at this timestamp : ").append(i.getTimestamp());
-                items.add(tempString.toString());
-                tempString.setLength(0);
-            });
-            dbLogListView.setItems(items);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+    /**
+     * Fills the list with information from the database
+     */
+    public void fillListView() throws SQLException {
+        List<DatabaseChange> temp = new ArrayList<>();
+        StringBuilder tempString = new StringBuilder();
+        temp = DatabaseChangeFinder.getInstance().findAll();
+        temp.forEach(i ->{
+            tempString.append("User ").append(i.getWorkerId()).append(" ").append(i.getChange()).append(" at this timestamp : ").append(i.getTimestamp());
+            items.add(tempString.toString());
+            tempString.setLength(0);
+        });
+        dbLogListView.setItems(items);
     }
 }

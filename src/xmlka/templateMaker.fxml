@@ -31,7 +31,7 @@
                                 <Label fx:id="sheet_label1" layoutX="839.0" layoutY="50.0" text="Sheet" />
                                 <TextField fx:id="sheet1" layoutX="889.0" layoutY="45.0" prefHeight="26.0" prefWidth="60.0" />
 
-                                <Button fx:id="add_more_button" layoutX="30.0" layoutY="110.0" mnemonicParsing="false" onAction="#add_more_contoller" prefHeight="49.0" prefWidth="119.0" text="Add more +">
+                                <Button fx:id="add_more_button" layoutX="30.0" layoutY="110.0" mnemonicParsing="false" onAction="#addMoreContoller" prefHeight="49.0" prefWidth="119.0" text="Add more +">
                                     <font>
                                         <Font size="14.0" />
                                     </font>

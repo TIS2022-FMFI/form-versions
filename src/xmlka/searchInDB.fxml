@@ -19,12 +19,12 @@
         <ListView fx:id="BOMListView" layoutX="658.0" layoutY="241.0" prefHeight="333.0" prefWidth="500.0" AnchorPane.rightAnchor="52.0" />
         <TextArea fx:id="partComment" layoutX="39.0" layoutY="605.0" prefHeight="81.0" prefWidth="956.0" />
         <Button fx:id="showDVPForPartButton" layoutX="1006.0" layoutY="707.0" mnemonicParsing="false" onAction="#showDVP" prefHeight="70.0" prefWidth="170.0" text="Show DVP table for selected part" textAlignment="CENTER" wrapText="true" />
-      <ImageView fx:id="currImageForPart" fitHeight="205.0" fitWidth="310.0" layoutX="851.0" layoutY="16.0" pickOnBounds="true" preserveRatio="true" />
-      <Label layoutX="39.0" layoutY="584.0" text="Comment" />
-      <Button fx:id="removerButton" layoutX="38.0" layoutY="707.0" mnemonicParsing="false" onAction="#removeSelectedPartFromDB" prefHeight="70.0" prefWidth="170.0" text="Remove selected part from database" textAlignment="CENTER" wrapText="true" />
-      <Button fx:id="updaterButton" layoutX="520.0" layoutY="707.0" mnemonicParsing="false" onAction="#updateCommentOfPart" prefHeight="70.0" prefWidth="170.0" text="Update comment for selected part" textAlignment="CENTER" wrapText="true" />
-      <Label layoutX="735.0" layoutY="87.0" prefHeight="51.0" prefWidth="97.0" text="Image of selected part :" wrapText="true">
-         <font>
-            <Font size="14.0" />
-         </font></Label>
+        <ImageView fx:id="currImageForPart" fitHeight="205.0" fitWidth="310.0" layoutX="851.0" layoutY="16.0" pickOnBounds="true" preserveRatio="true" />
+        <Label layoutX="39.0" layoutY="584.0" text="Comment" />
+        <Button fx:id="removerButton" layoutX="38.0" layoutY="707.0" mnemonicParsing="false" onAction="#removeSelectedPartFromDB" prefHeight="70.0" prefWidth="170.0" text="Remove selected part from database" textAlignment="CENTER" wrapText="true" />
+        <Button fx:id="updaterButton" layoutX="520.0" layoutY="707.0" mnemonicParsing="false" onAction="#updateCommentOfPart" prefHeight="70.0" prefWidth="170.0" text="Update comment for selected part" textAlignment="CENTER" wrapText="true" />
+        <Label layoutX="735.0" layoutY="87.0" prefHeight="51.0" prefWidth="97.0" text="Image of selected part :" wrapText="true">
+            <font>
+                <Font size="14.0" />
+            </font></Label>
     </children></AnchorPane>

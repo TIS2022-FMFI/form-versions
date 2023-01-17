@@ -54,9 +54,6 @@ public class TestWrapper {
     }
 
     public void editInDatabase(Test test, TestResult testResult) throws SQLException {
-        DatabaseChange dc = new DatabaseChange(User.getName(), "Edited test for " + test.getDocument_nr() + " in the database", new Timestamp(System.currentTimeMillis()));
-        dc.insert();
-        System.out.println(this.soll + " " + this.sollPlus + " " + this.sollMinus);
         try (PreparedStatement s = DbContext.getConnection().prepareStatement("UPDATE test_result " +
                                                                                     "SET test_result = ?, test_soll = ?, test_soll_plus = ?, test_soll_minus = ? " +
                                                                                     "WHERE test_id = ? AND id = ?",

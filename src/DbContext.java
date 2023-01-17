@@ -1,5 +1,11 @@
 import java.sql.Connection;
 
+/**
+ * Class for storing the database connection info
+ *
+ * @author Jacob Kristof
+ * @version 1.0
+ */
 public class DbContext {
 
     private static Connection connection;

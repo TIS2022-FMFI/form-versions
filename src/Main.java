@@ -5,25 +5,29 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
-import javafx.scene.control.Dialog;
-import javafx.scene.image.Image;
 import javafx.stage.Stage;
-import javafx.util.Pair;
 import jfxtras.styles.jmetro.JMetro;
 import jfxtras.styles.jmetro.Style;
 
-import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.Properties;
 
-public class Main  extends Application{
+/**
+ * Main class that runs the program, sets up the database connection and starts the front end
+ *
+ * @author Jacob Kristof
+ * @version 1.0
+ */
+public class Main extends Application {
     Stage mainStage;
-    public static void main(String[] args) throws IOException, SQLException {
+
+    public static void main(String[] args) {
 
         try {
             java.util.Properties prop = new Properties();
@@ -47,16 +51,18 @@ public class Main  extends Application{
         launch(args);
     }
 
+    /**
+     * Starts the frontend after succesfully logging in
+     */
     @Override
     public void start(Stage stage) throws Exception {
 
         stage.setResizable(false);
         User.identifyYourself();
 
-        if (User.getRes() == 1){
+        if (User.getRes() == 1) {
             mainStage = stage;
             Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("xmlka/main.fxml")));
-            stage.getIcons().add(new Image(Objects.requireNonNull(Main.class.getResourceAsStream("imgs/logo.png"))));
             Scene s = new Scene(root);
             JMetro jMetro = new JMetro(Style.LIGHT);
             jMetro.setScene(s);
@@ -65,15 +71,19 @@ public class Main  extends Application{
             stage.show();
         } else if (User.getRes() == 0) {
             ButtonType log = new ButtonType("login again", ButtonBar.ButtonData.OK_DONE);
-            Alert alert = new Alert(Alert.AlertType.NONE,"Wrong user login information, please try again !" ,log);
+            Alert alert = new Alert(Alert.AlertType.NONE, "Wrong user login information, please try again !", log);
             Optional<ButtonType> result = alert.showAndWait();
-            if (result.isPresent() && result.get() == log) { start(stage); }
+            if (result.isPresent() && result.get() == log) {
+                start(stage);
+            }
         } else {
             ButtonType log = new ButtonType("login again", ButtonBar.ButtonData.OK_DONE);
             ButtonType exit = new ButtonType("exit", ButtonBar.ButtonData.OK_DONE);
-            Alert alert = new Alert(Alert.AlertType.NONE,"Are you sure you want to exit ?" ,log, exit);
+            Alert alert = new Alert(Alert.AlertType.NONE, "Are you sure you want to exit ?", log, exit);
             Optional<ButtonType> result = alert.showAndWait();
-            if (result.orElse(exit) == log) { start(stage); }
+            if (result.orElse(exit) == log) {
+                start(stage);
+            }
         }
     }
 

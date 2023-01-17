@@ -100,7 +100,7 @@ public class MakeTemplateController implements Initializable {
     }
 
     @FXML
-    public void add_more_contoller() throws SQLException {
+    public void addMoreContoller() throws SQLException {
         int idx = label_results.size() + 1;
         Label label_result = new Label("DVP result #" + idx);
         label_result.setId("label" + idx);

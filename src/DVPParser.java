@@ -14,7 +14,12 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-
+/**
+ * Parser for Excel files containing tests
+ *
+ * @author Barbora Vicianova
+ * @version 1.0
+ */
 public class DVPParser {
     List<Test> tests = new ArrayList<>();
     private XSSFSheet sheet;
@@ -24,7 +29,6 @@ public class DVPParser {
 
     public DVPParser() {
     }
-
 
     public void addCell(XSSFCell cell) {
         boolean added = false;
