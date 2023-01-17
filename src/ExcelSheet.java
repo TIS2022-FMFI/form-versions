@@ -7,7 +7,6 @@ import java.util.List;
  * @author Jacob Kristof
  * @version 1.0
  */
-
 public class ExcelSheet {
 
     public List<Test> listOfAllTests = new ArrayList<>();
@@ -46,7 +45,6 @@ public class ExcelSheet {
     public List<Test> getListOfAllTests() {
         return listOfAllTests;
     }
-
     public void setListOfAllTests(List<Test> listOfAllTests) {
         this.listOfAllTests = listOfAllTests;
     }

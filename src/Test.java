@@ -109,7 +109,7 @@ public class Test {
     public void insert() throws SQLException {
 
         if (!isTestInDatabase(this)) {
-            DatabaseChange dc = new DatabaseChange(User.getName(), "Uploaded a test for " + this.getDocument_nr() + " for date " + this.date + " to the database", new Timestamp(System.currentTimeMillis()));
+            DatabaseChange dc = new DatabaseChange(User.getName(), "Uploaded a test for " + this.getDocument_nr() + " for date " + this.date, new Timestamp(System.currentTimeMillis()));
             dc.insert();
 
             int databaseId;
@@ -173,7 +173,6 @@ public class Test {
     public boolean areTestResultsSame(List<TestResult> other) {
         for (TestResult tr : test_results) {
             if (!other.contains(tr)) {
-                System.out.println(tr.to_string());
                 return false;
             }
         }

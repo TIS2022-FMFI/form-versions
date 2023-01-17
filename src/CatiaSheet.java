@@ -15,6 +15,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * Class for storing a CatiaSheet pdf
+ *
+ * @author Lukas Kostrian
+ * @version 1.0
+ */
 public class CatiaSheet {
 
     public List<CatiaComment> header = new ArrayList<>();
@@ -127,7 +133,7 @@ public class CatiaSheet {
 
         } else {
 
-            DatabaseChange dc = new DatabaseChange(User.getName(), "Uploaded " + documentNo + version + " to the database", new Timestamp(System.currentTimeMillis()));
+            DatabaseChange dc = new DatabaseChange(User.getName(), "Uploaded " + documentNo + version, new Timestamp(System.currentTimeMillis()));
             dc.insert();
 
                 try (PreparedStatement s = DbContext.getConnection().prepareStatement("INSERT INTO part (part_id, type, date, comment, image, developed_from, name) VALUES (?,?,?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS)) {

@@ -73,7 +73,7 @@ public class SearchInDBController implements Initializable {
     }
 
     public List<String> getDBInfoBOMListView(String selectedPart) throws SQLException {
-        return CatiaSheetFinder.getInstance().findBomFOrPart(selectedPart);
+        return BomFinder.getInstance().findBomForPart(selectedPart);
     }
 
     public String getDBInfoPartComment(String selectedPart) throws SQLException {

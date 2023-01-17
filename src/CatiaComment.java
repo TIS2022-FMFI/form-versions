@@ -1,5 +1,11 @@
 import java.util.List;
 
+/**
+ * Class for storing a CatiaSheet changes/version table entry
+ *
+ * @author Lukas Kostrian
+ * @version 1.0
+ */
 public class CatiaComment {
 
     public String version = "";
@@ -13,6 +19,11 @@ public class CatiaComment {
         changes = chng;
     }
 
+    /**
+     * Constructor to be used with CatiaSheet
+     *
+     * @param input the input from the CatiaSheet class
+     */
     CatiaComment(List<String> input) {
         int i = 0;
         version = input.get(i++);

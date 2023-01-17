@@ -43,6 +43,13 @@ public class DatabaseChangeFinder {
         }
     }
 
+    /**
+     * Find all changes made by a user stored in the database and return them as a list of DatabaseChange instances
+     *
+     * @param name the user we want to search for
+     * @return the list of all changes as instances of DatabaseChange
+     * @throws SQLException the sql exception
+     */
     public List<DatabaseChange> findWhereName(String name) throws SQLException {
         try (PreparedStatement s = DbContext.getConnection().prepareStatement("SELECT * FROM db_log WHERE user_id = ? ORDER BY time DESC")) {
             s.setString(1, name);

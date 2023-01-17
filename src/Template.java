@@ -180,7 +180,7 @@ public class Template {
 
         if (!TemplateFinder.getInstance().exists(template_name)) {
 
-            DatabaseChange dc = new DatabaseChange(User.getName(), "Uploaded a template named " + template_name + " to the database", new Timestamp(System.currentTimeMillis()));
+            DatabaseChange dc = new DatabaseChange(User.getName(), "Uploaded a template named " + template_name, new Timestamp(System.currentTimeMillis()));
             dc.insert();
 
             int databaseId;
@@ -226,10 +226,8 @@ public class Template {
     }
 
     public void delete() throws SQLException {
-
-        DatabaseChange dc = new DatabaseChange(User.getName(), "Deleted a template named " + template_name + " from the database", new Timestamp(System.currentTimeMillis()));
+        DatabaseChange dc = new DatabaseChange(User.getName(), "Deleted a template named " + template_name, new Timestamp(System.currentTimeMillis()));
         dc.insert();
-
         try (PreparedStatement s = DbContext.getConnection().prepareStatement("DELETE FROM template WHERE name = ? ")) {
             s.setString(1, template_name);
             s.executeUpdate();
