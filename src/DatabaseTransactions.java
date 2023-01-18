@@ -268,28 +268,31 @@ public class DatabaseTransactions {
     }
 
     public static void insert(String mail, String password, int admin) throws SQLException {
-            try (PreparedStatement s = DbContext.getConnection().prepareStatement("INSERT INTO users (mail, psswrd, admin) VALUES (?,?,?)", Statement.RETURN_GENERATED_KEYS)) {
-                s.setString(1, mail);
-                s.setString(2, User.getPasswordMD5Hash(password));
-                s.setInt(3, admin);
-                s.executeUpdate();
-            } catch (SQLException throwables) {
-                throwables.printStackTrace();
-            }
+        DbContext.getConnection().setAutoCommit(false);
+        DatabaseChange dc = new DatabaseChange(User.getName(), "Added user " + mail, new Timestamp(System.currentTimeMillis()));
+        dc.insert();
+        try {
+            PreparedStatement s = DbContext.getConnection().prepareStatement("INSERT INTO users (mail, psswrd, admin) VALUES (?,?,?)", Statement.RETURN_GENERATED_KEYS);
+            s.setString(1, mail);
+            s.setString(2, User.getPasswordMD5Hash(password));
+            s.setInt(3, admin);
+            s.executeUpdate();
+        } catch (SQLException e) {
+            DbContext.getConnection().rollback();
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setHeaderText("Failed to insert user");
+            alert.showAndWait();
+            throw new RuntimeException(e);
+        } finally {
+            DbContext.getConnection().setAutoCommit(true);
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setHeaderText("User added succesfully!");
+            alert.showAndWait();
+        }
 
     }
 
-//    public static void delete() {
-//        try (PreparedStatement s = DbContext.getConnection().prepareStatement("DELETE FROM users WHERE mail = ?", Statement.RETURN_GENERATED_KEYS)) {
-//            s.setString(1, name);
-//            s.executeUpdate();
-//        } catch (SQLException throwables) {
-//            throwables.printStackTrace();
-//        }
-//    }
-
     public static List<String> getAllUsers() throws SQLException {
-        //tranzakciu treba
         try (PreparedStatement s = DbContext.getConnection().prepareStatement("SELECT * FROM users")) {
             try (ResultSet r = s.executeQuery()) {
                 List<String> elements = new ArrayList<>();
@@ -328,15 +331,26 @@ public class DatabaseTransactions {
     }
 
     public static void deleteSelectedUsers(List<String> selectedUsers) throws SQLException {
-        //sem treba isto dorobit tranzakciu nech sa to nedokasle v strede cyklu keby nahodou
-        for (String u : selectedUsers) {
-            try (PreparedStatement s = DbContext.getConnection().prepareStatement("delete from users where mail = ?")) {
-                s.setString(1, u);
-                s.executeQuery();
-            }
-            catch (Exception e){
-                e.printStackTrace();
-            }
+        DbContext.getConnection().setAutoCommit(false);
+        DatabaseChange dc = new DatabaseChange(User.getName(), "Deleted " + selectedUsers.size() + "user/s", new Timestamp(System.currentTimeMillis()));
+        dc.insert();
+        try {
+            for (String u : selectedUsers) {
+                PreparedStatement s = DbContext.getConnection().prepareStatement("delete from users where mail = ?");
+                    s.setString(1, u);
+                    s.executeQuery();
+                }
+        } catch (SQLException e) {
+            DbContext.getConnection().rollback();
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setHeaderText("Failed to delete user/s");
+            alert.showAndWait();
+            throw new RuntimeException(e);
+        } finally {
+            DbContext.getConnection().setAutoCommit(true);
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setHeaderText(selectedUsers.size() + " user/s deleted succesfuly!");
+            alert.showAndWait();
         }
     }
 }

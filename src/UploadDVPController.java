@@ -134,7 +134,7 @@ public class UploadDVPController implements Initializable {
 
     @FXML
     void insertToDB(ActionEvent event) throws SQLException {
-        if (excelSheet.listOfAllTests == null || excelSheet.listOfAllTests.size() == 0) {
+        if (excelSheet == null || excelSheet.listOfAllTests == null || excelSheet.listOfAllTests.size() == 0) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setHeaderText("Empty table to upload!");
             alert.showAndWait();

@@ -10,20 +10,20 @@
 
 <AnchorPane prefHeight="850.0" prefWidth="1210.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="AdminController">
    <children>
-      <Label layoutX="549.0" layoutY="28.0" text="Add new User" underline="true" />
-      <TextField fx:id="newMailTextField" layoutX="537.0" layoutY="69.0" />
-      <CheckBox fx:id="isAdminCheckBox" layoutX="655.0" layoutY="166.0" mnemonicParsing="false" text="Admin" />
-      <Label layoutX="442.0" layoutY="74.0" text="User ID" />
-      <Label layoutX="442.0" layoutY="120.0" text="Password" />
-      <PasswordField fx:id="newPasswordField" layoutX="537.0" layoutY="115.0" />
-      <Button layoutX="549.0" layoutY="226.0" mnemonicParsing="false" onAction="#addNewUser" text="Add new User" />
-      <Label layoutX="493.0" layoutY="415.0" text="Search for Users / Delete Users" underline="true" />
-      <Label layoutX="442.0" layoutY="468.0" text="User ID" />
-      <TextField fx:id="searchForThisUserTextField" layoutX="537.0" layoutY="463.0" />
-      <ListView fx:id="searchResultListView" layoutX="359.0" layoutY="534.0" prefHeight="200.0" prefWidth="492.0" />
-      <Label layoutX="260.0" layoutY="513.0" text="Search results :" />
-      <Button layoutX="745.0" layoutY="463.0" mnemonicParsing="false" onAction="#searchForAndShowSpecificUser" text="Search" />
-      <Button layoutX="866.0" layoutY="703.0" mnemonicParsing="false" onAction="#loadAllUsersToListView" text="Reload" />
-      <Button layoutX="520.0" layoutY="745.0" mnemonicParsing="false" onAction="#removeSelectedUsers" text="Remove selected users" />
+      <Label layoutX="559.0" layoutY="35.0" text="Add new User" underline="true" />
+      <TextField fx:id="newMailTextField" layoutX="559.0" layoutY="78.0" />
+      <CheckBox fx:id="isAdminCheckBox" layoutX="569.0" layoutY="180.0" mnemonicParsing="false" text="Admin" />
+      <Label layoutX="464.0" layoutY="83.0" text="User ID" />
+      <Label layoutX="464.0" layoutY="129.0" text="Password" />
+      <PasswordField fx:id="newPasswordField" layoutX="559.0" layoutY="124.0" />
+      <Button layoutX="549.0" layoutY="222.0" mnemonicParsing="false" onAction="#addNewUser" text="Add new User" />
+      <Label layoutX="503.0" layoutY="311.0" text="Search for Users / Delete Users" underline="true" />
+      <Label layoutX="424.0" layoutY="362.0" text="User ID" />
+      <TextField fx:id="searchForThisUserTextField" layoutX="519.0" layoutY="357.0" />
+      <ListView fx:id="searchResultListView" layoutX="355.0" layoutY="443.0" prefHeight="200.0" prefWidth="500.0" />
+      <Label layoutX="556.0" layoutY="406.0" text="Search results :" />
+      <Button layoutX="722.0" layoutY="357.0" mnemonicParsing="false" onAction="#searchForAndShowSpecificUser" text="Search" />
+      <Button layoutX="662.0" layoutY="674.0" mnemonicParsing="false" onAction="#loadAllUsersToListView" text="Reload" />
+      <Button layoutX="483.0" layoutY="674.0" mnemonicParsing="false" onAction="#removeSelectedUsers" text="Remove selected users" />
    </children>
 </AnchorPane>

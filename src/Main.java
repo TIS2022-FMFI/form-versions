@@ -5,6 +5,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import jfxtras.styles.jmetro.JMetro;
 import jfxtras.styles.jmetro.Style;
@@ -68,21 +69,22 @@ public class Main extends Application {
             JMetro jMetro = new JMetro(Style.LIGHT);
             jMetro.setScene(s);
             stage.setTitle("FormVersions (Logged in as " + User.getName() + ")");
+            stage.getIcons().add(new Image("imgs/logo.png"));
             stage.setScene(s);
             stage.show();
             DatabaseTransactions.checkIfIsAdmin(User.getName());
             if (User.getIsAdmin() != 1) State.getAdminTab().setDisable(true);
         } else if (User.getRes() == 0) {
-            ButtonType log = new ButtonType("login again", ButtonBar.ButtonData.OK_DONE);
+            ButtonType log = new ButtonType("Login again", ButtonBar.ButtonData.OK_DONE);
             Alert alert = new Alert(Alert.AlertType.NONE, "Wrong user login information, please try again !", log);
             Optional<ButtonType> result = alert.showAndWait();
             if (result.isPresent() && result.get() == log) {
                 start(stage);
             }
         } else {
-            ButtonType log = new ButtonType("login again", ButtonBar.ButtonData.OK_DONE);
-            ButtonType exit = new ButtonType("exit", ButtonBar.ButtonData.OK_DONE);
-            Alert alert = new Alert(Alert.AlertType.NONE, "Are you sure you want to exit ?", log, exit);
+            ButtonType log = new ButtonType("Login again", ButtonBar.ButtonData.OK_DONE);
+            ButtonType exit = new ButtonType("Exit", ButtonBar.ButtonData.OK_DONE);
+            Alert alert = new Alert(Alert.AlertType.NONE, "Do you really want to exit?", log, exit);
             Optional<ButtonType> result = alert.showAndWait();
             if (result.orElse(exit) == log) {
                 start(stage);

@@ -46,7 +46,7 @@ public class User {
     public static void identifyYourself() {
         setRes(-1);
         Dialog<Pair<String, String>> dialog = new Dialog<>();
-        dialog.setTitle("Login Dialog");
+        dialog.setTitle("FormVersions - Login");
         dialog.setHeaderText("Please fill in your login information");
 
         ButtonType loginButtonType = new ButtonType("Login", ButtonBar.ButtonData.OK_DONE);
