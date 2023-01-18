@@ -1,3 +1,6 @@
+drop database if exists formversions;
+create database formversions;
+
 drop table if exists bom;
 drop table if exists coordinates;
 drop table if exists db_log;
