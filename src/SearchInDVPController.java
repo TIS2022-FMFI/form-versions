@@ -92,7 +92,7 @@ public class SearchInDVPController implements Initializable {
         testTypeDVPSearch.setCellFactory(TextFieldTableCell.forTableColumn());
         testTypeDVPSearch.setEditable(false);
 
-        // if editing cells and updating in db is needed, funciton editTestWrapper in DatabaseTransaction is to
+        // if editing cells and updating in db is needed, function editTestWrapper in DatabaseTransaction is to
         // be called on desired setOnEditCommit
 
         testResDVPSearch.setCellValueFactory(new PropertyValueFactory<>("testResult"));
@@ -349,7 +349,7 @@ public class SearchInDVPController implements Initializable {
         }
     }
 
-    public void deleteSelectedTests() {
+    public void deleteTestsForSelectedVersions() {
         DatabaseTransactions dbt = new DatabaseTransactions();
         selectedVersionTempList.forEach(id -> {
             try {
@@ -369,4 +369,10 @@ public class SearchInDVPController implements Initializable {
         return new TestResult();
     }
 
+    public void refreshTemplates(ActionEvent actionEvent) throws SQLException {
+        dropdownTemplates.getItems().clear();
+        listTemplatov = TemplateFinder.getInstance().findAll().stream().map(it -> it.template_name).collect(Collectors.toList());
+        dropdownTemplates.getItems().addAll(listTemplatov);
+
+    }
 }

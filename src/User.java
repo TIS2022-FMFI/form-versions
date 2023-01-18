@@ -20,6 +20,16 @@ public class User {
     public static int res = -1;
     private static String name;
 
+    private static int isAdmin;
+
+    public static int getIsAdmin() {
+        return isAdmin;
+    }
+
+    public static void setIsAdmin(int isAdmin) {
+        User.isAdmin = isAdmin;
+    }
+
     public static String getName() {
         return name;
     }
@@ -126,35 +136,6 @@ public class User {
         return generatedPassword;
     }
 
-    public static void insert(String password) {
-        try (PreparedStatement s = DbContext.getConnection().prepareStatement("INSERT INTO users (mail, psswrd) VALUES (?,?)", Statement.RETURN_GENERATED_KEYS)) {
-            s.setString(1, name);
-            s.setString(2, getPasswordMD5Hash(password));
-            s.executeUpdate();
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
-        }
-    }
 
-    public static void delete() {
-        try (PreparedStatement s = DbContext.getConnection().prepareStatement("DELETE FROM users WHERE mail = ?", Statement.RETURN_GENERATED_KEYS)) {
-            s.setString(1, name);
-            s.executeUpdate();
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
-        }
-    }
-
-    public static List<String> getAll() throws SQLException {
-        try (PreparedStatement s = DbContext.getConnection().prepareStatement("SELECT * FROM users")) {
-            try (ResultSet r = s.executeQuery()) {
-                List<String> elements = new ArrayList<>();
-                while (r.next()) {
-                    elements.add(r.getString(2));
-                }
-                return elements;
-            }
-        }
-    }
 
 }

@@ -9,6 +9,7 @@ import javafx.stage.Stage;
 import jfxtras.styles.jmetro.JMetro;
 import jfxtras.styles.jmetro.Style;
 
+import javax.xml.crypto.Data;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.sql.Connection;
@@ -69,6 +70,8 @@ public class Main extends Application {
             stage.setTitle("FormVersions (Logged in as " + User.getName() + ")");
             stage.setScene(s);
             stage.show();
+            DatabaseTransactions.checkIfIsAdmin(User.getName());
+            if (User.getIsAdmin() != 1) State.getAdminTab().setDisable(true);
         } else if (User.getRes() == 0) {
             ButtonType log = new ButtonType("login again", ButtonBar.ButtonData.OK_DONE);
             Alert alert = new Alert(Alert.AlertType.NONE, "Wrong user login information, please try again !", log);
@@ -85,6 +88,7 @@ public class Main extends Application {
                 start(stage);
             }
         }
+
     }
 
 
