@@ -1,13 +1,16 @@
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ListView;
+import javafx.scene.control.TextField;
 
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.ResourceBundle;
 
 /**
@@ -19,6 +22,9 @@ import java.util.ResourceBundle;
 public class DbLogController implements Initializable {
 
     public ListView<String> dbLogListView;
+
+    @FXML
+    public TextField changesOfThisUserTextField;
     private ObservableList<String> items = FXCollections.observableArrayList();
 
     @Override
@@ -42,14 +48,25 @@ public class DbLogController implements Initializable {
      * Fills the list with information from the database
      */
     public void fillListView() throws SQLException {
-        List<DatabaseChange> temp = new ArrayList<>();
-        StringBuilder tempString = new StringBuilder();
-        temp = DatabaseChangeFinder.getInstance().findAll();
-        temp.forEach(i ->{
-            tempString.append("User ").append(i.getWorkerId()).append(" ").append(i.getChange()).append(" at this timestamp : ").append(i.getTimestamp());
-            items.add(tempString.toString());
-            tempString.setLength(0);
-        });
-        dbLogListView.setItems(items);
+        if (!items.isEmpty()) items.clear();
+        if (!Objects.equals(changesOfThisUserTextField.getText(), "")){
+            StringBuilder tempString = new StringBuilder();
+            List<DatabaseChange> user = DatabaseChangeFinder.findWhereName(changesOfThisUserTextField.getText());
+            user.forEach(i -> {
+                tempString.append("User ").append(i.getWorkerId()).append(" ").append(i.getChange()).append(" at this timestamp : ").append(i.getTimestamp());
+                items.add(tempString.toString());
+                tempString.setLength(0);
+            });
+        }
+        else {
+            List<DatabaseChange> temp = DatabaseChangeFinder.getInstance().findAll();
+            StringBuilder tempString = new StringBuilder();
+            temp.forEach(i -> {
+                tempString.append("User ").append(i.getWorkerId()).append(" ").append(i.getChange()).append(" at this timestamp : ").append(i.getTimestamp());
+                items.add(tempString.toString());
+                tempString.setLength(0);
+            });
+        }
+            dbLogListView.setItems(items);
     }
 }

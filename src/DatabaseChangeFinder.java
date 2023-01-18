@@ -50,7 +50,7 @@ public class DatabaseChangeFinder {
      * @return the list of all changes as instances of DatabaseChange
      * @throws SQLException the sql exception
      */
-    public List<DatabaseChange> findWhereName(String name) throws SQLException {
+    public static List<DatabaseChange> findWhereName(String name) throws SQLException {
         try (PreparedStatement s = DbContext.getConnection().prepareStatement("SELECT * FROM db_log WHERE user_id = ? ORDER BY time DESC")) {
             s.setString(1, name);
             try (ResultSet r = s.executeQuery()) {
