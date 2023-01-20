@@ -54,9 +54,6 @@ public class AdminController implements Initializable {
             try {
                 if (DatabaseTransactions.checkIfCanAddNewUser(newMailTextField.getText())) {
                     DatabaseTransactions.insert(newMailTextField.getText(), newPasswordField.getText(), newUserIsAdmin);
-                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                    alert.setHeaderText("New User added successfully !");
-                    alert.showAndWait();
                 }
                 else {
                     Alert alert = new Alert(Alert.AlertType.ERROR);

@@ -4,7 +4,7 @@ import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.FileChooser;
-
+import org.imgscalr.*;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.image.BufferedImage;
@@ -144,8 +144,13 @@ public class CatiaSheet {
                     s.setBytes(5, null);
                     if (image != null) {
                         BufferedImage bImage = SwingFXUtils.fromFXImage(image, null);
+                        BufferedImage scaled = Scalr.resize(
+                                bImage,
+                                Scalr.Mode.FIT_TO_WIDTH,
+                                400
+                        );
                         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                        ImageIO.write(bImage, "png", baos);
+                        ImageIO.write(scaled, "png", baos);
                         byte[] bytes = baos.toByteArray();
                         s.setBytes(5, bytes);
                     }
@@ -168,8 +173,13 @@ public class CatiaSheet {
             s.setBytes(4, null);
             if (image != null) {
                 BufferedImage bImage = SwingFXUtils.fromFXImage(image, null);
+                BufferedImage scaled = Scalr.resize(
+                        bImage,
+                        Scalr.Mode.FIT_TO_WIDTH,
+                        400
+                );
                 ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                ImageIO.write(bImage, "png", baos);
+                ImageIO.write(scaled, "png", baos);
                 byte[] bytes = baos.toByteArray();
                 s.setBytes(4, bytes);
             }

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="850.0" prefWidth="1210.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="SearchInDBController">
+    <children>
+        <Label layoutX="30.0" layoutY="38.0" text="Part ID :" />
+        <TextField fx:id="partIDInput" layoutX="123.0" layoutY="33.0" prefHeight="31.0" prefWidth="466.0" />
+        <Label layoutX="30.0" layoutY="87.0" text="Part History" />
+        <Label layoutX="324.0" layoutY="87.0" text="Part BOM" />
+        <ListView fx:id="partHistoryListView" layoutX="30.0" layoutY="119.0" prefHeight="662.0" prefWidth="269.0" />
+        <ListView fx:id="BOMListView" layoutX="313.0" layoutY="119.0" prefHeight="662.0" prefWidth="269.0" AnchorPane.rightAnchor="628.0" />
+        <TextArea fx:id="partComment" layoutX="613.0" layoutY="495.0" prefHeight="113.0" prefWidth="564.0" wrapText="true" />
+        <Button fx:id="showDVPForPartButton" layoutX="996.0" layoutY="724.0" mnemonicParsing="false" onAction="#showDVP" prefHeight="60.0" prefWidth="180.0" text="Show DVP table for selected part" textAlignment="CENTER" wrapText="true" />
+        <ImageView fx:id="currImageForPart" fitHeight="313.0" fitWidth="564.0" layoutX="613.0" layoutY="119.0" pickOnBounds="true" preserveRatio="true" />
+        <Label layoutX="613.0" layoutY="460.0" text="Comment of selected part" />
+        <Button fx:id="removerButton" layoutX="804.0" layoutY="724.0" mnemonicParsing="false" onAction="#removeSelectedPartFromDB" prefHeight="60.0" prefWidth="180.0" text="Remove selected part from database" textAlignment="CENTER" wrapText="true" />
+        <Button fx:id="updaterButton" layoutX="613.0" layoutY="724.0" mnemonicParsing="false" onAction="#updateCommentOfPart" prefHeight="60.0" prefWidth="180.0" text="Update comment for selected part" textAlignment="CENTER" wrapText="true" />
+        <Label layoutX="613.0" layoutY="87.0" prefHeight="21.0" prefWidth="184.0" text="Image of selected part :" wrapText="true" />
+    </children></AnchorPane>

@@ -53,7 +53,7 @@ public class DbLogController implements Initializable {
             StringBuilder tempString = new StringBuilder();
             List<DatabaseChange> user = DatabaseChangeFinder.findWhereName(changesOfThisUserTextField.getText());
             user.forEach(i -> {
-                tempString.append("User ").append(i.getWorkerId()).append(" ").append(i.getChange()).append(" at this timestamp : ").append(i.getTimestamp());
+                tempString.append("User ").append(i.getWorkerId()).append(" ").append(i.getChange()).append(" at ").append(i.getTimestamp());
                 items.add(tempString.toString());
                 tempString.setLength(0);
             });

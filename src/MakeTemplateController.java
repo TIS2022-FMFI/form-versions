@@ -162,8 +162,9 @@ public class MakeTemplateController implements Initializable {
         sheet.setPrefWidth(sheets.get(sheets.size() - 1).getPrefWidth());
         add_more.getChildren().add(sheet);
         sheets.add(sheet);
-        add_more_button.setLayoutY(add_more_button.getLayoutY() + 49);
-        remove_one_button.setLayoutY(remove_one_button.getLayoutY() + 49);
+
+//        add_more_button.setLayoutY(add_more_button.getLayoutY() + 49);
+//        remove_one_button.setLayoutY(remove_one_button.getLayoutY() + 49);
 
     }
 
@@ -194,8 +195,8 @@ public class MakeTemplateController implements Initializable {
         add_more.getChildren().remove(sheets.get(sheets.size() - 1));
         sheets.remove(sheets.size() - 1);
 
-        add_more_button.setLayoutY(add_more_button.getLayoutY() - 49);
-        remove_one_button.setLayoutY(remove_one_button.getLayoutY() - 49);
+//        add_more_button.setLayoutY(add_more_button.getLayoutY() - 49);
+//        remove_one_button.setLayoutY(remove_one_button.getLayoutY() - 49);
 
     }
 
@@ -250,14 +251,23 @@ public class MakeTemplateController implements Initializable {
             }
             if (number_of_filled > 0) {
                 Template template = new Template(path_to_excel, template_menu, results, rows, cols, sheets);
-                if (template.result_names.size() > 0 && template.row_ids.size() == template.result_names.size() &&
-                        template.row_ids.size() == template.col_ids.size() && rows.size() == sheets.size()) {
+
+                if (template.result_names.size() > 0 && template.checkIfAllInfoFilled()) {
                     DatabaseTransactions dbt = new DatabaseTransactions();
                     dbt.insertTemplate(template);
                     fillChoiceBox(TemplateFinder.getInstance().findAll().stream().map(it -> it.template_name).collect(Collectors.toList()), template_menu_to_remove);
+                    resetTemplate();
+                } else {
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setHeaderText("Missing information about coordinates!");
+                    alert.showAndWait();
                 }
+            } else {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setHeaderText("Missing information about coordinates!");
+                alert.showAndWait();
             }
-            resetTemplate();
+
         } else {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setHeaderText("Not enough information to upload!");

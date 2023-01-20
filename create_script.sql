@@ -1,3 +1,6 @@
+drop database if exists formversions;
+create database formversions;
+
 drop table if exists bom;
 drop table if exists coordinates;
 drop table if exists db_log;
@@ -23,7 +26,7 @@ create table db_log
 (
     id      int auto_increment
         primary key,
-    user_id varchar(20)                           not null,
+    user_id varchar(40)                           not null,
     time    timestamp default current_timestamp() not null on update current_timestamp(),
     value   varchar(100)                          not null
 );
@@ -96,7 +99,7 @@ create table test_result
 (
     test_type       int         null,
     test_result     varchar(50) null,
-    test_soll       varchar(100) null,
+    test_soll       varchar(50) null,
     test_soll_plus  varchar(50) null,
     test_soll_minus varchar(50) null,
     id              int auto_increment

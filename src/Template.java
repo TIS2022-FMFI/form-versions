@@ -221,8 +221,12 @@ public class Template {
                 }
             }
         }
+    }
 
-
+    public boolean checkIfAllInfoFilled() {
+        return row_ids.size() == col_ids.size() &&
+                row_ids.size() == sheet_ids.size() &&
+                row_ids.size() == result_names.size();
     }
 
     public void delete() throws SQLException {

@@ -8,12 +8,12 @@
   <tabs>
       <Tab text="Search Parts">
         <content>
-            <fx:include fx:id="searchDB" source="searchInDB.fxml" />
+            <fx:include fx:id="searchDB" source="searchInDOD.fxml" />
         </content>
       </Tab>
       <Tab text="Search DVP">
         <content>
-            <fx:include fx:id="searchDVP" source="showDVPForPartXML.fxml" />
+            <fx:include fx:id="searchDVP" source="searchInDVP.fxml" />
         </content>
       </Tab>
     <Tab text="Upload Pdf File">
@@ -58,7 +58,7 @@
                   </Tab>
       <Tab fx:id="adminTab" text="Admin Tab">
         <content>
-            <fx:include fx:id="admin" source="adminTab.fxml" />
+            <fx:include fx:id="admin" source="admin.fxml" />
         </content>
       </Tab>
 
