@@ -10,7 +10,6 @@ import javafx.stage.Stage;
 import jfxtras.styles.jmetro.JMetro;
 import jfxtras.styles.jmetro.Style;
 
-import javax.xml.crypto.Data;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.sql.Connection;
@@ -64,12 +63,12 @@ public class Main extends Application {
 
         if (User.getRes() == 1) {
             mainStage = stage;
-            Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("xmlka/main.fxml")));
+            Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("xml/main.fxml")));
             Scene s = new Scene(root);
             JMetro jMetro = new JMetro(Style.LIGHT);
             jMetro.setScene(s);
             stage.setTitle("FormVersions (Logged in as " + User.getName() + ")");
-            stage.getIcons().add(new Image("imgs/logo.png"));
+            stage.getIcons().add(new Image("img/logo.png"));
             stage.setScene(s);
             stage.show();
             DatabaseTransactions.checkIfIsAdmin(User.getName());
