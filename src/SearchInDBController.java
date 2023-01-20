@@ -36,7 +36,6 @@ public class SearchInDBController implements Initializable {
         if (partIDInput != null) {
 
             partIDInput.textProperty().addListener(v -> {
-                System.out.println(partIDInput.getText());
                 try {
                     partHistoryListView.getItems().clear();
                     BOMListView.getItems().clear();
