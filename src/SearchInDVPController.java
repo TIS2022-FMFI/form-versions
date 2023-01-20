@@ -92,46 +92,29 @@ public class SearchInDVPController implements Initializable {
         testTypeDVPSearch.setCellFactory(TextFieldTableCell.forTableColumn());
         testTypeDVPSearch.setEditable(false);
 
-        // if editing cells and updating in db is needed, function editTestWrapper in DatabaseTransaction is to
-        // be called on desired setOnEditCommit
-
         testResDVPSearch.setCellValueFactory(new PropertyValueFactory<>("testResult"));
         testResDVPSearch.setCellFactory(TextFieldTableCell.forTableColumn());
-        testResDVPSearch.setOnEditCommit(testWrapperStringCellEditEvent -> {
-            int index = tableViewDVPSearch.getSelectionModel().getSelectedIndex();
-            TestWrapper tw = tableViewDVPSearch.getItems().get(index);
-            tw.setTestResult(testWrapperStringCellEditEvent.getNewValue());
-        });
+        testResDVPSearch.setEditable(false);
 
         sollDVPSearch.setCellValueFactory(new PropertyValueFactory<>("sollDVP"));
         sollDVPSearch.setCellFactory(TextFieldTableCell.forTableColumn());
-        sollDVPSearch.setOnEditCommit(testWrapperStringCellEditEvent -> {
-            int index = tableViewDVPSearch.getSelectionModel().getSelectedIndex();
-            TestWrapper tw = tableViewDVPSearch.getItems().get(index);
-            tw.setSoll(testWrapperStringCellEditEvent.getNewValue());
-        });
+        sollDVPSearch.setEditable(false);
 
         plusDVPSearch.setCellValueFactory(new PropertyValueFactory<>("sollPlus"));
         plusDVPSearch.setCellFactory(TextFieldTableCell.forTableColumn());
-        plusDVPSearch.setOnEditCommit(testWrapperStringCellEditEvent -> {
-            int index = tableViewDVPSearch.getSelectionModel().getSelectedIndex();
-            TestWrapper tw = tableViewDVPSearch.getItems().get(index);
-            tw.setSollPlus(testWrapperStringCellEditEvent.getNewValue());
-        });
+        plusDVPSearch.setEditable(false);
 
         minusDVPSearch.setCellValueFactory(new PropertyValueFactory<>("sollMinus"));
         minusDVPSearch.setCellFactory(TextFieldTableCell.forTableColumn());
-        minusDVPSearch.setOnEditCommit(testWrapperStringCellEditEvent -> {
-            int index = tableViewDVPSearch.getSelectionModel().getSelectedIndex();
-            TestWrapper tw = tableViewDVPSearch.getItems().get(index);
-            tw.setSollMinus(testWrapperStringCellEditEvent.getNewValue());
-        });
+        minusDVPSearch.setEditable(false);
+
         tableViewDVPSearch.setItems(observableListItems);
     }
 
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+
         tableViewDVPSearch.setEditable(true);
 
         try {
@@ -349,7 +332,7 @@ public class SearchInDVPController implements Initializable {
         }
     }
 
-    public void deleteTestsForSelectedVersions() {
+    public void deleteTestsForSelectedVersions() throws SQLException {
         DatabaseTransactions dbt = new DatabaseTransactions();
         selectedVersionTempList.forEach(id -> {
             try {
@@ -358,6 +341,13 @@ public class SearchInDVPController implements Initializable {
                 throw new RuntimeException(e);
             }
         });
+        resetView();
+        getAllTestsSorted(showingDVPForPartTextField.getText());
+        setCheckBoxesForDates();
+        fillTestTypeListView();
+        fillVersionsOfPartListView();
+        datesForVersionListView.setItems(FXCollections.observableArrayList(new ArrayList<>()));
+        createTable();
     }
 
     public TestResult findTestResultInTestByName(Test test, String name) {
@@ -373,6 +363,5 @@ public class SearchInDVPController implements Initializable {
         dropdownTemplates.getItems().clear();
         listTemplatov = TemplateFinder.getInstance().findAll().stream().map(it -> it.template_name).collect(Collectors.toList());
         dropdownTemplates.getItems().addAll(listTemplatov);
-
     }
 }
