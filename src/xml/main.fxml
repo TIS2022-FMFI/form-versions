@@ -16,7 +16,7 @@
             <fx:include fx:id="searchDVP" source="searchInDVP.fxml" />
         </content>
       </Tab>
-    <Tab text="Upload Pdf File">
+    <Tab text="Upload PDF File">
          <content>
                  <fx:include fx:id="pdf" source="pdfUpload.fxml" />
          </content>

@@ -180,9 +180,7 @@ public class Test {
     }
 
     public boolean isTestInDatabase(Test test) throws SQLException {
-        System.out.println(test.getTest_results().size());
         for (Test t : TestFinder.getInstance().getAll()) {
-            System.out.println(test.equals(t) + " " + t.getTest_results().size());
             if (test.equals(t)) {
                 return true;
             }
