@@ -1,15 +1,9 @@
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.URL;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.ResourceBundle;
 
 import javafx.collections.FXCollections;
@@ -23,95 +17,69 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.Clipboard;
 import javafx.stage.FileChooser;
-import org.apache.commons.io.IOUtils;
+
+import javax.swing.*;
 
 
 public class UploadPdfController implements Initializable {
+
     @FXML
     public TextField verziaTextField;
-
     @FXML
     public TextArea komentTextArea;
-
     @FXML
     public TextField releaseTextField;
-
     @FXML
     public TextField docNoTextField;
-
     @FXML
     public TextField devFromTextField;
-
     @FXML
     public ImageView assemblyImageShowcase = new ImageView();
-
     @FXML
     public Button mainPdfButton;
-
     @FXML
     public Button subpartPdf = new Button();
-
     @FXML
     public Button inserToDB = new Button();
-
     @FXML
     public Button clearAllElements = new Button();
-
     @FXML
     public TextField designationMainPdfTextField;
-
-
     @FXML
     private TableView<CatiaSheet> tableView = new TableView<>();
-
     @FXML
     private TableColumn<CatiaSheet, String> designation;
-
     @FXML
     private TableColumn<CatiaSheet, String> documentNo;
-
     @FXML
     public TableColumn<CatiaSheet, String> version;
-
     @FXML
     public TableColumn<CatiaSheet, String> lastHeaderDate;
-
     @FXML
     public TableColumn<CatiaSheet, String> lastHeaderChange;
-
     @FXML
     public TableColumn<CatiaSheet, Button> componentImage;
 
     @FXML
     Button assemblyImgButton = new Button();
-
     CatiaSheet mainPdf = null;
-
     List<CatiaSheet> subpartsCatiaSheetList = new ArrayList<>();
-
     FileChooser fc = new FileChooser();
-
     ObservableList<CatiaSheet> observableListItems;
-
 
     @Override
     public void initialize(URL arg0, ResourceBundle arg1) {
-
         tableView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
         tableView.setEditable(true);
         subpartPdf.setDisable(true);
         assemblyImgButton.setDisable(true);
         clearAllElements.setDisable(true);
-
-
     }
 
 
-    public void createTable() {
+    private void createTable() {
 
         designation.setCellValueFactory(new PropertyValueFactory<>("designation"));
         designation.setCellFactory(TextFieldTableCell.forTableColumn());
@@ -159,7 +127,6 @@ public class UploadPdfController implements Initializable {
     public void createHeaderFooter() {
         if (mainPdf != null) {
             CatiaComment h = mainPdf.getLastVersionHeader();
-
             designationMainPdfTextField.setText(mainPdf.designation);
             verziaTextField.setText(h.version);
             komentTextArea.setText(h.changes);
@@ -172,7 +139,7 @@ public class UploadPdfController implements Initializable {
     @FXML
     void loadMainPdf(ActionEvent event) {
         fc.setTitle("Choose the main PDF file");
-        fc.setInitialDirectory(new File("src\\pdfka"));
+        fc.setInitialDirectory(new File((new JFileChooser()).getFileSystemView().getDefaultDirectory().toString()));
         File selectedFile = fc.showOpenDialog(null);
 
         if (selectedFile != null) {
@@ -184,7 +151,6 @@ public class UploadPdfController implements Initializable {
                 subpartPdf.setDisable(false);
                 clearAllElements.setDisable(false);
 
-
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -195,8 +161,7 @@ public class UploadPdfController implements Initializable {
     void loadSubpartPdf(ActionEvent event) {
 
         fc.setTitle("Choose the subpart PDF files");
-        fc.setInitialDirectory(new File("src\\pdfka"));
-
+        fc.setInitialDirectory(new File((new JFileChooser()).getFileSystemView().getDefaultDirectory().toString()));
 
         List<File> listPathov = fc.showOpenMultipleDialog(null);
 
@@ -204,57 +169,70 @@ public class UploadPdfController implements Initializable {
             listPathov.forEach(item -> {
                 try {
                     subpartsCatiaSheetList.add(PDFParser.parseFile(item.toString()));
-
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
             });
             observableListItems = FXCollections.observableArrayList(subpartsCatiaSheetList);
-//            System.out.println(subpartsCatiaSheetList);
-
 
         } else System.out.println("Failed to load");
         createTable();
         createHeaderFooter();
         assemblyImgButton.setDisable(false);
-
-
     }
 
 
     public void showImage(ActionEvent actionEvent) {
-//        Image image = Clipboard.getSystemClipboard().getImage();
-//        imageShowcase.setImage(image);
-//        clearAllElements.setDisable(false);
         if (mainPdf != null) {
             mainPdf.setImageFromExplorer();
             assemblyImageShowcase.setImage(mainPdf.image);
         }
     }
 
-    //TODO checkovanie ci subpart nema dalsi part
     public void insert() throws SQLException, IOException {
 
-        updateMainPdfFromFrontend();
-        findParents(); // adds the parent-child connections
+        if (!checkForSingleCharacetrVersion()) {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setHeaderText("Verison has to only contain one character!");
+            alert.showAndWait();
+        } else {
 
+            if (checkForEmptyFields()) {
 
-        DatabaseTransactions dbt = new DatabaseTransactions();
-        dbt.insertPart(mainPdf, "dummyName", subpartsCatiaSheetList);
+                updateMainPdfFromFrontend();
+                findParents();
+                mainPdf.version = mainPdf.version.toUpperCase();
 
-        clearAll();
+                DatabaseTransactions dbt = new DatabaseTransactions();
+                dbt.insertPart(mainPdf, subpartsCatiaSheetList);
+
+                clearAll();
+            } else {
+                Alert alert = new Alert(Alert.AlertType.WARNING);
+                alert.setHeaderText("One or more fields empty!");
+                alert.showAndWait();
+            }
+        }
+    }
+
+    public boolean checkForEmptyFields() {
+        return !verziaTextField.getText().equals("") &&
+                !releaseTextField.getText().equals("") &&
+                !docNoTextField.getText().equals("") &&
+                !devFromTextField.getText().equals("");
+    }
+
+    public boolean checkForSingleCharacetrVersion() {
+        return verziaTextField.getText().length() == 1;
     }
 
     public void findParents() {
-
         subpartsCatiaSheetList.forEach(child -> {
             if (checkIfParentExistsInMainPdf(child.documentNo)) {
                 addParent(mainPdf, child);
             }
             for (CatiaSheet parent : findParentInSubparts(child)) {
                 addParent(parent, child);
-
-
             }
         });
     }
@@ -285,7 +263,7 @@ public class UploadPdfController implements Initializable {
     }
 
 
-    public void clearAll() {
+    public void clearAll() throws SQLException {
         if (observableListItems != null) observableListItems.clear();
         if (subpartsCatiaSheetList != null) subpartsCatiaSheetList.clear();
         mainPdf = null;
@@ -301,14 +279,11 @@ public class UploadPdfController implements Initializable {
         clearAllElements.setDisable(true);
         subpartPdf.setDisable(true);
         assemblyImgButton.setDisable(true);
+        assemblyImageShowcase.setImage(null);
     }
 
     public void updateMainPdfFromFrontend() {
-
-        //adds image from frontend
         mainPdf.setImage(assemblyImageShowcase.getImage());
-
-        // changes the values in mainpdf instance from the frontend text boxes
         mainPdf.version = verziaTextField.getText();
         mainPdf.documentNo = docNoTextField.getText();
         mainPdf.setLastHeaderDate(releaseTextField.getText());

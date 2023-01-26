@@ -1,8 +1,5 @@
-import org.apache.poi.ss.format.CellFormatType;
-import org.apache.poi.ss.usermodel.CellType;
-import org.apache.poi.ss.usermodel.CellValue;
+import javafx.scene.control.Alert;
 import org.apache.poi.ss.usermodel.DateUtil;
-import org.apache.poi.ss.usermodel.FormulaEvaluator;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFRow;
@@ -13,42 +10,48 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
-
+/**
+ * Parser for Excel files containing tests
+ *
+ * @author Barbora Vicianova
+ * @version 1.0
+ */
 public class DVPParser {
-    private static XSSFSheet sheet;
-    private static List<CellRangeAddress> mergedRegions;
-    private static List<List<XSSFCell>> all_cell = new ArrayList<>();
-    private static int first_row = 8;
-    static List<Test> tests = new ArrayList<>();
+    List<Test> tests = new ArrayList<>();
+    private XSSFSheet sheet;
+    private List<CellRangeAddress> mergedRegions;
+    private final List<List<XSSFCell>> allCell = new ArrayList<>();
+    private final int firstRow = 8;
 
     public DVPParser() {
     }
 
-
-    public static void add_cell(XSSFCell cell){
+    public void addCell(XSSFCell cell) {
         boolean added = false;
-        for(CellRangeAddress mergedRegion: mergedRegions) {
+        for (CellRangeAddress mergedRegion : mergedRegions) {
             if (mergedRegion.isInRange(cell)) {
                 if (cell.getRowIndex() != mergedRegion.getFirstRow() || cell.getColumnIndex() != mergedRegion.getFirstColumn()) {
-                    XSSFCell src_cell = all_cell.get(mergedRegion.getFirstRow()).get(mergedRegion.getFirstColumn());
+                    XSSFCell src_cell = allCell.get(mergedRegion.getFirstRow()).get(mergedRegion.getFirstColumn());
                     cell = copyCell(src_cell, cell);
-                    all_cell.get(cell.getRowIndex()).add(cell);
+                    allCell.get(cell.getRowIndex()).add(cell);
                     added = true;
 
                 }
             }
         }
-        if (!added) all_cell.get(cell.getRowIndex()).add(cell);
+        if (!added) allCell.get(cell.getRowIndex()).add(cell);
     }
 
     public List<Test> getTests() {
         return tests;
     }
 
-    private static XSSFCell copyCell(XSSFCell srcCell, XSSFCell cell) {
-        if (srcCell!=null) {
+    private XSSFCell copyCell(XSSFCell srcCell, XSSFCell cell) {
+        if (srcCell != null) {
             switch (srcCell.getCellType()) {
                 case BOOLEAN:
                     cell.setCellValue(srcCell.getBooleanCellValue());
@@ -67,9 +70,9 @@ public class DVPParser {
     }
 
 
-    public void readXLSXFile(String path) throws IOException{
+    public void readXLSXFile(String path) throws IOException {
         File f = new File(path);
-        if(f.exists() && !f.isDirectory()) {
+        if (f.exists() && !f.isDirectory()) {
             InputStream ExcelFileToRead = new FileInputStream(path);
             XSSFWorkbook wb = new XSSFWorkbook(ExcelFileToRead);
 
@@ -78,13 +81,17 @@ public class DVPParser {
                 sheet = wb.getSheet("DVP internal");
             } else if (wb.getSheet("DVP") != null) {
                 sheet = wb.getSheet("DVP");
+            } else {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setHeaderText("Invalid excel file!");
+                alert.showAndWait();
+                System.out.println("Nenašiel sa sheet s názvom DVP alebo DVP Internal");
             }
             if (sheet != null) {
                 XSSFRow row;
                 XSSFCell cell;
 
                 Iterator rows = sheet.rowIterator();
-                //all_cell = new ArrayList<>();
                 mergedRegions = sheet.getMergedRegions();
 
                 while (rows.hasNext()) {
@@ -92,35 +99,25 @@ public class DVPParser {
 
                     Iterator cells = row.cellIterator();
                     List<XSSFCell> cell_list = new ArrayList<>();
-                    all_cell.add(cell_list);
+                    allCell.add(cell_list);
 
                     while (cells.hasNext()) {
                         cell = (XSSFCell) cells.next();
-                        add_cell(cell);
+                        addCell(cell);
 
                     }
-
                 }
                 createTestObjects();
             }
         }
-
-
     }
 
-    public static void createTestObjects(){
-        for(int row = first_row; row<all_cell.size(); row++){
-            Test test = new Test(all_cell, row);
-            if(test.getTest_results().size() > 0) {
+    public void createTestObjects() {
+        for (int row = firstRow; row < allCell.size(); row++) {
+            Test test = new Test(allCell, row);
+            if (test.getTest_results().size() > 0) {
                 tests.add(test);
             }
-        }
-    }
-
-    public static void print_all_tests(){
-        System.out.println(tests);
-        for (Test test: tests){
-            System.out.println(test.to_string());
         }
     }
 

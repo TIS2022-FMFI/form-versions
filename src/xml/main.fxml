@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<TabPane fx:id="tabPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="850.0" prefWidth="1210.0" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="MainController">
+  <tabs>
+      <Tab text="Search Parts">
+        <content>
+            <fx:include fx:id="searchDB" source="searchInDOD.fxml" />
+        </content>
+      </Tab>
+      <Tab text="Search DVP">
+        <content>
+            <fx:include fx:id="searchDVP" source="searchInDVP.fxml" />
+        </content>
+      </Tab>
+    <Tab text="Upload PDF File">
+         <content>
+                 <fx:include fx:id="pdf" source="pdfUpload.fxml" />
+         </content>
+    </Tab>
+
+
+    <Tab text="Upload DVP table">
+      <content>
+<!--        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />-->
+          <fx:include fx:id="dvp" source="dvpUpload.fxml" />
+      </content>
+
+
+
+    </Tab>
+
+
+
+      <Tab text="Make a Template">
+        <content>
+          <!--<AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />-->
+          <fx:include fx:id="template" source="templateMaker.fxml" />
+        </content>
+      </Tab>
+
+
+
+      <Tab text="View Database Log">
+        <content>
+<!--          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">-->
+<!--            <children>-->
+<!--              <ListView fx:id="dbLogListView" layoutX="567.0" layoutY="54.0" prefHeight="734.0" prefWidth="1238.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="54.0" />-->
+<!--                  <Button layoutX="584.0" layoutY="14.0" mnemonicParsing="false" onAction="#refresh" text="Refresh" />-->
+<!--            </children>-->
+<!--          </AnchorPane>-->
+<!--          <fx:include fx:id="logdb" source="dbLog.fxml"/>-->
+                         <fx:include fx:id="dblog" source="dbLog.fxml" />
+                    </content>
+                  </Tab>
+      <Tab fx:id="adminTab" text="Admin Tab">
+        <content>
+            <fx:include fx:id="admin" source="admin.fxml" />
+        </content>
+      </Tab>
+
+
+
+              </tabs>
+            </TabPane>
