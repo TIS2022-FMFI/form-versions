@@ -103,7 +103,7 @@ public class CatiaSheet {
         if (index < lines.size() - 1) {
             index -= 2;
             List<String> line = new ArrayList<>(Arrays.asList(lines.get(index).split("\\s+")));
-            while (line.get(line.size() - 2).matches("[0-9]+\\.[0-9]+") && line.get(line.size() - 1).equals("g") || line.get(line.size() - 1).matches("[0-9]+\\.[0-9]+g")) {
+            do {
                 while (!line.get(0).matches("[0-9]+")) {
                     index--;
                     List<String> newLine = new ArrayList<>();
@@ -114,7 +114,10 @@ public class CatiaSheet {
                 items.add(new BOM(line));
                 index--;
                 line = new ArrayList<>(Arrays.asList(lines.get(index).split("\\s+")));
-            }
+            } while (line.get(line.size() - 2).matches("[0-9]+\\.[0-9]+") && line.get(line.size() - 1).equals("g") ||
+                    line.get(line.size() - 1).matches("[0-9]+\\.[0-9]+g") ||
+                    line.get(line.size() - 2).matches("[0-9]+") && line.get(line.size() - 1).equals("g") ||
+                    line.get(line.size() - 1).matches("[0-9]+g"));
         }
         lastHeaderChange = getLastVersionHeader().changes;
         lastHeaderDate = getLastVersionHeader().releaseDate;
