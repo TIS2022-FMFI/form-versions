@@ -30,7 +30,10 @@ public class BOM {
             index++;
         }
         drawingNo = input.get(index++);
-        while (!input.get(index).matches("[0-9]+\\.[0-9]+") && !input.get(index).matches("[0-9]+\\.[0-9]+g")) {
+        while (!input.get(index).matches("[0-9]+\\.[0-9]+") &&
+                !input.get(index).matches("[0-9]+\\.[0-9]+g") &&
+                !input.get(index).matches("[0-9]+") &&
+                !input.get(index).matches("[0-9]+g")) {
             if (!material.equals("")) {
                 material += " ";
             }
