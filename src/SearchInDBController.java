@@ -15,6 +15,12 @@ import java.util.Objects;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 
+/**
+ * Controller for the Search in DB tab
+ *
+ * @author Peter Vercimak
+ * @version 1.0
+ */
 public class SearchInDBController implements Initializable {
 
     @FXML
@@ -67,14 +73,32 @@ public class SearchInDBController implements Initializable {
         }
     }
 
+    /**
+     * Find all versions of one specific part
+     *
+     * @param part base id of the part we want to get history for
+     * @return list of IDs of all versions in the database
+     */
     public List<String> getDBInfoPartListView(String part) throws SQLException {
         return CatiaSheetFinder.getInstance().findHistoryForPart(part).stream().map(it -> it.documentNo + it.version).collect(Collectors.toList());
     }
 
+    /**
+     * Find all BOM parts of one specific part
+     *
+     * @param selectedPart id of the part we want to get bom for
+     * @return list of IDs of all BOM items of the part
+     */
     public List<String> getDBInfoBOMListView(String selectedPart) throws SQLException {
         return BomFinder.getInstance().findBomForPart(selectedPart);
     }
 
+    /**
+     * Get the comment for a part
+     *
+     * @param selectedPart id of the part we want to get comment for
+     * @return the comment
+     */
     public String getDBInfoPartComment(String selectedPart) throws SQLException {
         if (CatiaSheetFinder.getInstance().findWithId(selectedPart).size() > 0) {
             return CatiaSheetFinder.getInstance().findWithId(selectedPart).get(0).lastHeaderChange;
@@ -82,6 +106,12 @@ public class SearchInDBController implements Initializable {
         return "";
     }
 
+    /**
+     * Get the image for a part
+     *
+     * @param partId id of the part we want to get comment for
+     * @return the image
+     */
     public Image getSelectedPartImage(String partId) throws SQLException {
         if (CatiaSheetFinder.getInstance().findWithId(partId).size() > 0) {
             return CatiaSheetFinder.getInstance().findWithId(partId).get(0).image;

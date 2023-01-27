@@ -6,6 +6,12 @@ import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * Class for storing a single test result
+ *
+ * @author Barbora Vicianova
+ * @version 1.0
+ */
 public class TestResult {
 
     private String test_type = "";

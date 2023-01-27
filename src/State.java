@@ -2,6 +2,12 @@ import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TextField;
 
+/**
+ * Singleton class that manages the switching between search in DB and search in DVP
+ *
+ * @author Peter Vercimak
+ * @version 1.0
+ */
 public class State {
 
     public static TabPane tabPane;
@@ -20,11 +26,9 @@ public class State {
     public static void setTextField(TextField textField) {
         State.textField = textField;
     }
-
     public static Tab getAdminTab() {
         return adminTab;
     }
-
     public static void setAdminTab(Tab adminTab) {
         State.adminTab = adminTab;
     }

@@ -10,11 +10,14 @@ import java.security.NoSuchAlgorithmException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
+/**
+ * Singleton class that manages the current User who is logged in
+ *
+ * @author Peter Vercimak
+ * @version 1.0
+ */
 public class User {
 
     public static int res = -1;
@@ -43,6 +46,9 @@ public class User {
         User.res = res;
     }
 
+    /**
+     * Login sequence at the start of the app
+     */
     public static void identifyYourself() {
         setRes(-1);
         Dialog<Pair<String, String>> dialog = new Dialog<>();

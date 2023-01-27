@@ -3,7 +3,6 @@ import javafx.beans.property.SimpleBooleanProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
@@ -14,19 +13,19 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.stage.FileChooser;
 
-import javax.xml.crypto.Data;
-import java.awt.*;
-import java.awt.event.ActionListener;
-import java.io.BufferedReader;
 import java.io.File;
 import java.net.URL;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
 import java.sql.SQLException;
 import java.util.*;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * Controller for the Search in DVP tab
+ *
+ * @author Peter Vercimak
+ * @version 1.0
+ */
 public class SearchInDVPController implements Initializable {
 
     @FXML
@@ -217,6 +216,12 @@ public class SearchInDVPController implements Initializable {
         return TestFinder.getInstance().findTestsForZostava(partID);
     }
 
+    /**
+     * Fill the global variable testsForCurrentSearch with all available instances of Test
+     *
+     * @param partID id of the part we want to get tests for
+     * @throws SQLException
+     */
     public void getAllTestsSorted(String partID) throws SQLException {
         for (Test t : getAllTestsForPart(partID)) {
             if (!testsForCurrentSearch.containsKey(t.getDocument_nr())) {
@@ -234,10 +239,18 @@ public class SearchInDVPController implements Initializable {
         }
     }
 
+    /**
+     * Get a list of all versions of part available in current search
+     * @return the list
+     */
     public ObservableList<String> getAllAvailablePartsInSearch() {
-        return FXCollections.observableArrayList(testsForCurrentSearch.keySet()); // zoznam stringov verzii suciastok
+        return FXCollections.observableArrayList(testsForCurrentSearch.keySet());
     }
 
+    /**
+     * Get a list of all dates of tests available for selected versions of parts
+     * @return the list
+     */
     public List<String> getDatesForSelectedParts() {
         List<String> dates = new ArrayList<>();
         for (String part : selectedVersionTempList) {
@@ -250,6 +263,10 @@ public class SearchInDVPController implements Initializable {
         return dates;
     }
 
+    /**
+     * Generate TestWrapper instances for all tests available in the current selection for the frontend
+     * @return list of TestWrapper instances
+     */
     public ObservableList<TestWrapper> getTestWrappersForCurrentSelection() {
 
         List<Test> wantedTests = new ArrayList<>();
@@ -348,15 +365,6 @@ public class SearchInDVPController implements Initializable {
         fillVersionsOfPartListView();
         datesForVersionListView.setItems(FXCollections.observableArrayList(new ArrayList<>()));
         createTable();
-    }
-
-    public TestResult findTestResultInTestByName(Test test, String name) {
-        for (int i = 0; i < test.getTest_results().size(); i++) {
-            if (Objects.equals(test.getTest_results().get(i).getTest_type(), name)) {
-                return test.getTest_results().get(i);
-            }
-        }
-        return new TestResult();
     }
 
     public void refreshTemplates(ActionEvent actionEvent) throws SQLException {

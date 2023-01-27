@@ -16,6 +16,12 @@ import java.util.Objects;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 
+/**
+ * Controller for the Make a Template tab
+ *
+ * @author Barbora Vicianova
+ * @version 1.0
+ */
 public class MakeTemplateController implements Initializable {
     @FXML
     Label label1;
@@ -99,6 +105,9 @@ public class MakeTemplateController implements Initializable {
 
     }
 
+    /**
+     * Called when user clicks on a "Add +" button to add one more row of data input
+     */
     @FXML
     public void addMoreContoller() throws SQLException {
         int idx = label_results.size() + 1;
@@ -162,12 +171,11 @@ public class MakeTemplateController implements Initializable {
         sheet.setPrefWidth(sheets.get(sheets.size() - 1).getPrefWidth());
         add_more.getChildren().add(sheet);
         sheets.add(sheet);
-
-//        add_more_button.setLayoutY(add_more_button.getLayoutY() + 49);
-//        remove_one_button.setLayoutY(remove_one_button.getLayoutY() + 49);
-
     }
 
+    /**
+     * Called when user clicks on a "Remove -" button to remove one (last) row of data input
+     */
     public void removeOneContoller() {
         if (results.size() < 2) { return; }
 
@@ -194,10 +202,6 @@ public class MakeTemplateController implements Initializable {
 
         add_more.getChildren().remove(sheets.get(sheets.size() - 1));
         sheets.remove(sheets.size() - 1);
-
-//        add_more_button.setLayoutY(add_more_button.getLayoutY() - 49);
-//        remove_one_button.setLayoutY(remove_one_button.getLayoutY() - 49);
-
     }
 
     public void removeTemplate() throws SQLException {
@@ -209,6 +213,9 @@ public class MakeTemplateController implements Initializable {
         }
     }
 
+    /**
+     * Called when user clicks on a "Clear All" button to clear all user generated data inputs
+     */
     public void resetTemplate() {
         template_menu.clear();
         results.get(0).getSelectionModel().clearSelection();

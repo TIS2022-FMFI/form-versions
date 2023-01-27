@@ -9,6 +9,12 @@ import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * Class for storing a single row in the DVP table (Test - consumer and part info, and then list of all results)
+ *
+ * @author Barbora Vicianova
+ * @version 1.0
+ */
 public class Test {
     public int databaseId;
     private String date = "";
