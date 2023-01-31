@@ -22,7 +22,12 @@ import javafx.stage.FileChooser;
 
 import javax.swing.*;
 
-
+/**
+ * Controller for the Upload PDF tab
+ *
+ * @author Peter Vercimak
+ * @version 1.0
+ */
 public class UploadPdfController implements Initializable {
 
     @FXML
@@ -250,6 +255,11 @@ public class UploadPdfController implements Initializable {
         return false;
     }
 
+    /**
+     * Goes through the list of uploaded BOM parts and checks whether the main pdf is a parent or no. If yes, adds a parent-child connection to the child
+     * @param child CatiaSheet instance of a BOM part
+     * @return
+     */
     public List<CatiaSheet> findParentInSubparts(CatiaSheet child) {
         List<CatiaSheet> parents = new ArrayList<>();
         for (CatiaSheet cs : subpartsCatiaSheetList) {

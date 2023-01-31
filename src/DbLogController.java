@@ -8,7 +8,6 @@ import javafx.scene.control.TextField;
 
 import java.net.URL;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.ResourceBundle;

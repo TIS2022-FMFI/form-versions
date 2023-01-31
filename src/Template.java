@@ -13,6 +13,12 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Class for storing information about a Template
+ *
+ * @author Barbora Vicianova
+ * @version 1.0
+ */
 public class Template {
     String template_name = "";
     List<String> result_names = new ArrayList<>();
@@ -78,6 +84,9 @@ public class Template {
         return true;
     }
 
+    /**
+     * Validating a single row of user generated data in the template (row, col, sheet, test type)
+     */
     public Boolean validInput(String row_id, String col_id, String sheet_id) {
         boolean is_valid = true;
 
@@ -125,6 +134,11 @@ public class Template {
         return "";
     }
 
+    /**
+     * Validating if list of tests given to tempalte contains all needed results to be generated
+     *
+     * @param testWrapperList list of given TestWrapper instances
+     */
     public boolean checkIfListHasAllTests(List<TestWrapper> testWrapperList) {
         if (result_names.size() > testWrapperList.size()) return false;
         for (String rn : result_names) {

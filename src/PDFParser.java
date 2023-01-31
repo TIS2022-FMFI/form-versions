@@ -7,7 +7,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-
+/**
+ * Class for parsing a PDF file
+ *
+ * @author Lukas Kostrian
+ * @version 1.0
+ */
 public class PDFParser {
 
     public static CatiaSheet parseFile(String path) throws Exception {

@@ -1,5 +1,11 @@
 import java.util.List;
 
+/**
+ * Class for storing one line of a BOM table in a CatiaDrawing PDF
+ *
+ * @author Lukas Kostrian
+ * @version 1.0
+ */
 public class BOM {
     public String item = "";
     public String designation = "";
