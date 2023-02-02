@@ -98,10 +98,10 @@ create index test_type
 create table test_result
 (
     test_type       int         null,
-    test_result     varchar(50) null,
-    test_soll       varchar(50) null,
-    test_soll_plus  varchar(50) null,
-    test_soll_minus varchar(50) null,
+    test_result     varchar(100) null,
+    test_soll       varchar(100) null,
+    test_soll_plus  varchar(100) null,
+    test_soll_minus varchar(100) null,
     id              int auto_increment
         primary key,
     test_id         int         null,
