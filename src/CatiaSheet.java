@@ -63,6 +63,12 @@ public class CatiaSheet {
 
     public CatiaSheet() {}
 
+    /**
+     * Parses the lines from the PDF from PDFParser and creates instasnces of BOM, CatiaComment and other in the main
+     * CatiaSheet instance
+     *
+     * @param lines raw text data from the PDF
+     */
     public CatiaSheet(List<String> lines) {
         int index = lines.indexOf("Toleranzenangaben / Tolerances data");
         if (index >= 0 && lines.get(index + 1).equals("Erstellt")) {
@@ -244,10 +250,12 @@ public class CatiaSheet {
         imageView.setFitWidth(100);
         Tooltip tooltip = new Tooltip();
         tooltip.setGraphic(imageView);
-//        tooltip.setShowDelay(Duration.millis(200));
         componentImgButton.setTooltip(tooltip);
     }
 
+    /**
+     * @return the latest (newest) CatiaComment instance
+     */
     public CatiaComment getLastVersionHeader(){
         return header.get(header.size()-1);
     }

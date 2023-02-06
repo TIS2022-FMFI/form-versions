@@ -12,6 +12,12 @@ import java.net.URL;
 import java.sql.SQLException;
 import java.util.*;
 
+/**
+ * Controller for the admin tab
+ *
+ * @author Peter Vercimak
+ * @version 1.0
+ */
 public class AdminController implements Initializable {
 
     @FXML
@@ -34,6 +40,12 @@ public class AdminController implements Initializable {
     ObservableList<String> o;
     List<String> selectedUsers;
 
+    /**
+     * Called when admin wants to add a new user to the database.
+     *
+     * @param actionEvent
+     * @throws SQLException
+     */
     public void addNewUser(ActionEvent actionEvent) throws SQLException {
         if (newMailTextField == null || Objects.equals(newMailTextField.getText(), "")){
             Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -51,8 +63,8 @@ public class AdminController implements Initializable {
             if (isAdminCheckBox.isSelected()) newUserIsAdmin = 1;
 
             try {
-                if (DatabaseTransactions.checkIfCanAddNewUser(newMailTextField.getText())) {
-                    DatabaseTransactions.insert(newMailTextField.getText(), newPasswordField.getText(), newUserIsAdmin);
+                if (UserFinder.checkIfCanAddNewUser(newMailTextField.getText())) {
+                    DatabaseTransactions.insertUser(newMailTextField.getText(), newPasswordField.getText(), newUserIsAdmin);
                 }
                 else {
                     Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -94,19 +106,18 @@ public class AdminController implements Initializable {
 
     public void loadAllUsersToListView() throws SQLException {
         searchForThisUserTextField.setText("");
-        allUsers = DatabaseTransactions.getAllUsers();
+        allUsers = UserFinder.getAllUsers();
         o = FXCollections.observableArrayList(allUsers);
         searchResultListView.setItems(o);
     }
 
     public void searchForAndShowSpecificUser(ActionEvent actionEvent) throws SQLException {
         if (!Objects.equals(searchForThisUserTextField.getText(), "")){
-            allUsers = Collections.singletonList(DatabaseTransactions.getSpecificUser(searchForThisUserTextField.getText()));
+            allUsers = Collections.singletonList(UserFinder.getSpecificUser(searchForThisUserTextField.getText()));
             o = FXCollections.observableArrayList(allUsers);
             searchResultListView.setItems(o);
         }
     }
-
 
     public void removeSelectedUsers(ActionEvent actionEvent) throws SQLException {
         List<String> selecteduserMails = new ArrayList<>();
@@ -115,8 +126,9 @@ public class AdminController implements Initializable {
         }
         DatabaseTransactions.deleteSelectedUsers(selecteduserMails);
         loadAllUsersToListView();
-        if (!selectedUsers.isEmpty())
-        selectedUsers.clear();
+        if (!selectedUsers.isEmpty()){
+            selectedUsers.clear();
+        }
     }
 
 }
