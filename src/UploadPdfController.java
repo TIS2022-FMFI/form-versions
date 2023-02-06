@@ -198,7 +198,7 @@ public class UploadPdfController implements Initializable {
 
         if (!checkForSingleCharacetrVersion()) {
             Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.setHeaderText("Verison has to only contain one character!");
+            alert.setHeaderText("Version has to only contain one character!");
             alert.showAndWait();
         } else {
 

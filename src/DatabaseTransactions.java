@@ -162,20 +162,23 @@ public class DatabaseTransactions {
      */
     public void insertTestList(List<Test> listOfTests) throws SQLException {
 
+        boolean check = true;
         DbContext.getConnection().setAutoCommit(false);
         try {
-            listOfTests.forEach(test -> {
-                try {
-                    test.insert();
-                } catch (SQLException e) {
-                    Alert alert = new Alert(Alert.AlertType.ERROR);
-                    alert.setHeaderText("Upload not succesful!");
-                    alert.showAndWait();
-                    throw new RuntimeException(e);
+            for (Test t :
+                    listOfTests) {
+                t.insert();
+            }
+        } catch (SQLException e) {
+                DbContext.getConnection().rollback();
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setHeaderText("Upload not succesful!");
+                alert.showAndWait();
+                check = false;
+                throw new RuntimeException(e);
+        }
 
-                }
-            });
-        } finally {
+        if (check) {
             DbContext.getConnection().setAutoCommit(true);
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
             alert.setHeaderText("Upload succesful!");
@@ -241,22 +244,6 @@ public class DatabaseTransactions {
         }
     }
 
-    public static void checkIfIsAdmin(String userName) throws SQLException {
-        try (PreparedStatement s = DbContext.getConnection().prepareStatement("select admin from users where mail = ?")) {
-            s.setString(1, userName);
-            try (ResultSet r = s.executeQuery()) {
-                while (r.next()) {
-                    if (r.getInt("admin") == 1) {
-                        User.setIsAdmin(1);
-                        return;
-                    }
-                }
-            }
-        }
-
-        User.setIsAdmin(0);
-    }
-
 
     public static boolean checkIfCanAddNewUser(String userName) throws SQLException {
         try (PreparedStatement s = DbContext.getConnection().prepareStatement("select * from users where mail = ?")) {
@@ -267,7 +254,15 @@ public class DatabaseTransactions {
         }
     }
 
-    public static void insert(String mail, String password, int admin) throws SQLException {
+    /**
+     * Adds a new user to the database
+     *
+     * @param mail user's mail
+     * @param password user's password in MD5
+     * @param admin boolean whether new user is admin or not
+     * @throws SQLException
+     */
+    public static void insertUser(String mail, String password, int admin) throws SQLException {
         DbContext.getConnection().setAutoCommit(false);
         DatabaseChange dc = new DatabaseChange(User.getName(), "Added user " + mail, new Timestamp(System.currentTimeMillis()));
         dc.insert();
@@ -292,44 +287,12 @@ public class DatabaseTransactions {
 
     }
 
-    public static List<String> getAllUsers() throws SQLException {
-        try (PreparedStatement s = DbContext.getConnection().prepareStatement("SELECT * FROM users")) {
-            try (ResultSet r = s.executeQuery()) {
-                List<String> elements = new ArrayList<>();
-                String mail;
-                int adm;
-                String finalString;
-                while (r.next()) {
-                    mail = r.getString("mail");
-                    adm = r.getInt("admin");
-                    finalString =  mail + " " + adm;
-                    elements.add(finalString);
-                }
-                return elements;
-            }
-        }
-    }
-
-    public static String getSpecificUser(String userMail) throws SQLException {
-        try (PreparedStatement s = DbContext.getConnection().prepareStatement("SELECT * FROM users where mail = ?")) {
-            s.setString(1, userMail);
-            try (ResultSet r = s.executeQuery()) {
-                String mail;
-                int adm;
-                String finalString;
-                while (r.next()) {
-                    mail = r.getString("mail");
-                    adm = r.getInt("admin");
-                    finalString = mail + " " + adm;
-                    return finalString;
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-        return "";
-    }
-
+    /**
+     * Delete all users in the given list from the database
+     *
+     * @param selectedUsers list of usernames
+     * @throws SQLException
+     */
     public static void deleteSelectedUsers(List<String> selectedUsers) throws SQLException {
         DbContext.getConnection().setAutoCommit(false);
         DatabaseChange dc = new DatabaseChange(User.getName(), "Deleted " + selectedUsers.size() + "user/s", new Timestamp(System.currentTimeMillis()));

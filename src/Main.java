@@ -71,7 +71,8 @@ public class Main extends Application {
             stage.getIcons().add(new Image("img/logo.png"));
             stage.setScene(s);
             stage.show();
-            DatabaseTransactions.checkIfIsAdmin(User.getName());
+            User.checkIfIsAdmin();
+//            DatabaseTransactions.checkIfIsAdmin(User.getName());
             if (User.getIsAdmin() != 1) State.getAdminTab().setDisable(true);
         } else if (User.getRes() == 0) {
             ButtonType log = new ButtonType("Login again", ButtonBar.ButtonData.OK_DONE);

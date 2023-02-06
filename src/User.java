@@ -142,6 +142,21 @@ public class User {
         return generatedPassword;
     }
 
+    public static void checkIfIsAdmin() throws SQLException {
+        try (PreparedStatement s = DbContext.getConnection().prepareStatement("select admin from users where mail = ?")) {
+            s.setString(1, name);
+            try (ResultSet r = s.executeQuery()) {
+                while (r.next()) {
+                    if (r.getInt("admin") == 1) {
+                        User.setIsAdmin(1);
+                        return;
+                    }
+                }
+            }
+        }
+        User.setIsAdmin(0);
+    }
+
 
 
 }
