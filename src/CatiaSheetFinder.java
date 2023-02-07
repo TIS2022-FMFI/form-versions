@@ -77,9 +77,15 @@ public class CatiaSheetFinder {
      */
     public List<CatiaSheet> findHistoryForPart(String partID) throws SQLException {
         Image img = null;
-        if (partID.matches("[0-9]{3}[.][0-9]{3}[.][0-9]{3}[.][0-9]{3}")) {
-            try (PreparedStatement s = DbContext.getConnection().prepareStatement("SELECT * FROM part WHERE part_id REGEXP ? OR developed_from REGEXP ?")) {
-                String rgx = "[0-9]{3}[.][0-9]" + partID.split("\\.")[1].substring(1) + "[.]" + partID.split("\\.")[2] + "[.]" + partID.split("\\.")[3].substring(0, 3);
+        if (partID.matches("[0-9]{3}[.][0-9]{3}[.][0-9]{3}[.][0-9]{3}") || partID.matches("[0-9]{3}[.][0-9]{3}")) {
+            try (PreparedStatement s = DbContext.getConnection().prepareStatement("SELECT * FROM part WHERE part_id REGEXP ? OR developed_from REGEXP ? order by part_id asc")) {
+                String rgx = "";
+                if (partID.matches("[0-9]{3}[.][0-9]{3}[.][0-9]{3}[.][0-9]{3}")) {
+                    rgx = "[0-9]{3}[.][0-9]" + partID.split("\\.")[1].substring(1) + "[.]" + partID.split("\\.")[2] + "[.]" + partID.split("\\.")[3].substring(0, 3);
+                }
+                if (partID.matches("[0-9]{3}[.][0-9]{3}")) {
+                    rgx = "[0-9]{3}[.][0-9]{3}[.]" + partID.split("\\.")[0] + "[.]" + partID.split("\\.")[1].substring(0, 3);
+                }
                 s.setString(1, rgx);
                 s.setString(2, rgx);
                 try (ResultSet r = s.executeQuery()) {

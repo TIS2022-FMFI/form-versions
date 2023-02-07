@@ -164,4 +164,9 @@ public class SearchInDBController implements Initializable {
         }
 
     }
+
+    public void updateSelectedPartImage() throws SQLException {
+        DatabaseTransactions dT = new DatabaseTransactions();
+        dT.updatePartImage(CatiaSheetFinder.getInstance().findWithId(currClickedOn).get(0));
+    }
 }

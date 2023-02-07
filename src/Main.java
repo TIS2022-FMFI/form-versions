@@ -37,6 +37,10 @@ public class Main extends Application {
                     prop.getProperty("database"),
                     prop.getProperty("user"),
                     prop.getProperty("password"));
+
+            prop.setProperty("saved_user", "ahoj");
+            prop.storeToXML(Files.newOutputStream(Paths.get("./configuration.xml")), "");
+
             if (connection != null) {
                 System.out.println("Success");
                 DbContext.setConnection(connection);

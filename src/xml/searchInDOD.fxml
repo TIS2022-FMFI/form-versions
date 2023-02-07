@@ -23,4 +23,5 @@
         <Button fx:id="removerButton" layoutX="804.0" layoutY="724.0" mnemonicParsing="false" onAction="#removeSelectedPartFromDB" prefHeight="60.0" prefWidth="180.0" text="Remove selected part from database" textAlignment="CENTER" wrapText="true" />
         <Button fx:id="updaterButton" layoutX="613.0" layoutY="724.0" mnemonicParsing="false" onAction="#updateCommentOfPart" prefHeight="60.0" prefWidth="180.0" text="Update comment for selected part" textAlignment="CENTER" wrapText="true" />
         <Label layoutX="613.0" layoutY="87.0" prefHeight="21.0" prefWidth="184.0" text="Image of selected part :" wrapText="true" />
+      <Button layoutX="613.0" layoutY="653.0" mnemonicParsing="false" prefHeight="60.0" prefWidth="180.0" text="Update Image for selected part" textAlignment="CENTER" wrapText="true" onAction="#updateSelectedPartImage" />
     </children></AnchorPane>
