@@ -9,12 +9,25 @@ import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import jfxtras.styles.jmetro.JMetro;
 import jfxtras.styles.jmetro.Style;
+import org.w3c.dom.Document;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
+import java.io.File;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.text.FieldPosition;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Properties;
@@ -28,6 +41,10 @@ import java.util.Properties;
 public class Main extends Application {
     Stage mainStage;
 
+   static boolean logged = false;
+
+
+
     public static void main(String[] args) {
 
         try {
@@ -38,12 +55,20 @@ public class Main extends Application {
                     prop.getProperty("user"),
                     prop.getProperty("password"));
 
-            prop.setProperty("saved_user", "ahoj");
-            prop.storeToXML(Files.newOutputStream(Paths.get("./configuration.xml")), "");
-
             if (connection != null) {
                 System.out.println("Success");
                 DbContext.setConnection(connection);
+
+                String loggedName = prop.getProperty("saved_user");
+                String loggedPsswrd = prop.getProperty("saved_password");
+
+                if (!Objects.equals(loggedName, "") && !Objects.equals(loggedPsswrd, "")){
+                    if (User.findUserInDatabaseAndCheckPassword(loggedName,loggedPsswrd)) {
+                        logged = true;
+                        User.setName(loggedName);
+                        User.setuPsswrd(loggedPsswrd);
+                    }
+                }
             } else {
                 System.out.println("Failed to make connection!");
             }
@@ -63,37 +88,50 @@ public class Main extends Application {
     public void start(Stage stage) throws Exception {
 
         stage.setResizable(false);
-        User.identifyYourself();
+        if (logged) drawStage(stage);
+        else {
+            User.identifyYourself();
 
-        if (User.getRes() == 1) {
-            mainStage = stage;
-            Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("xml/main.fxml")));
-            Scene s = new Scene(root);
-            JMetro jMetro = new JMetro(Style.LIGHT);
-            jMetro.setScene(s);
-            stage.setTitle("FormVersions (Logged in as " + User.getName() + ")");
-            stage.getIcons().add(new Image("img/logo.png"));
-            stage.setScene(s);
-            stage.show();
-            User.checkIfIsAdmin();
-            if (User.getIsAdmin() != 1) State.getAdminTab().setDisable(true);
-        } else if (User.getRes() == 0) {
-            ButtonType log = new ButtonType("Login again", ButtonBar.ButtonData.OK_DONE);
-            Alert alert = new Alert(Alert.AlertType.NONE, "Wrong user login information, please try again !", log);
-            Optional<ButtonType> result = alert.showAndWait();
-            if (result.isPresent() && result.get() == log) {
-                start(stage);
+            if (User.getRes() == 1) {
+                drawStage(stage);
+                User.updateUserAppConfig();
+
+            } else if (User.getRes() == 0) {
+                ButtonType log = new ButtonType("Login again", ButtonBar.ButtonData.OK_DONE);
+                Alert alert = new Alert(Alert.AlertType.NONE, "Wrong user login information, please try again !", log);
+                Optional<ButtonType> result = alert.showAndWait();
+                if (result.isPresent() && result.get() == log) {
+                    start(stage);
+                }
+            } else {
+                ButtonType log = new ButtonType("Login again", ButtonBar.ButtonData.OK_DONE);
+                ButtonType exit = new ButtonType("Exit", ButtonBar.ButtonData.OK_DONE);
+                Alert alert = new Alert(Alert.AlertType.NONE, "Do you really want to exit?", log, exit);
+                Optional<ButtonType> result = alert.showAndWait();
+                if (result.orElse(exit) == log) {
+                    start(stage);
+                }
             }
-        } else {
-            ButtonType log = new ButtonType("Login again", ButtonBar.ButtonData.OK_DONE);
-            ButtonType exit = new ButtonType("Exit", ButtonBar.ButtonData.OK_DONE);
-            Alert alert = new Alert(Alert.AlertType.NONE, "Do you really want to exit?", log, exit);
-            Optional<ButtonType> result = alert.showAndWait();
-            if (result.orElse(exit) == log) {
-                start(stage);
-            }
+
         }
+        User.checkIfIsAdmin();
+        if (User.getIsAdmin() != 1) State.getAdminTab().setDisable(true);
 
+
+
+
+    }
+
+    public void drawStage(Stage stage) throws IOException {
+        mainStage = stage;
+        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("xml/main.fxml")));
+        Scene s = new Scene(root);
+        JMetro jMetro = new JMetro(Style.LIGHT);
+        jMetro.setScene(s);
+        stage.setTitle("FormVersions (Logged in as " + User.getName() + ")");
+        stage.getIcons().add(new Image("img/logo.png"));
+        stage.setScene(s);
+        stage.show();
     }
 
 
