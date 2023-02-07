@@ -4,4 +4,7 @@
     <entry key="database">jdbc:mariadb://localhost:3306/moja</entry>
     <entry key="user">root</entry>
     <entry key="password">root</entry>
+
+    <entry key="saved_user"></entry>
+    <entry key="saved_password"></entry>
 </properties>
