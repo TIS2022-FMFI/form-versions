@@ -48,6 +48,8 @@ public class UploadDVPController implements Initializable {
     ObservableList<TestWrapper> observableListItems;
     ExcelSheet excelSheet;
 
+    private String currUploadPath;
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         tableViewDVP.setEditable(true);
@@ -152,11 +154,17 @@ public class UploadDVPController implements Initializable {
     void loadDVP(ActionEvent event) {
         FileChooser fc = new FileChooser();
         fc.setTitle("Choose the excel file");
-        fc.setInitialDirectory(new File((new JFileChooser()).getFileSystemView().getDefaultDirectory().toString()));
+        try{
+            fc.setInitialDirectory(new File(this.currUploadPath));
+        }
+        catch (Exception e){
+            fc.setInitialDirectory(new File((new JFileChooser()).getFileSystemView().getDefaultDirectory().toString()));
+        }
         File selectedFile = fc.showOpenDialog(null);
 
         if (selectedFile != null) {
             try {
+                this.currUploadPath = selectedFile.getParentFile().getPath();
                 excelSheet = new ExcelSheet();
                 excelSheet.parseExcelFile(selectedFile.getAbsolutePath());
                 observableListItems = FXCollections.observableArrayList(excelSheet.generateTestWrappersForAllTest());

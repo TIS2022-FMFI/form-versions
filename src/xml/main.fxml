@@ -61,6 +61,11 @@
             <fx:include fx:id="admin" source="admin.fxml" />
         </content>
       </Tab>
+      <Tab text="Log Out">
+        <content>
+            <fx:include fx:id="logout" source="logOut.fxml" />
+        </content>
+      </Tab>
 
 
 

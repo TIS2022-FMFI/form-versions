@@ -2,15 +2,21 @@ import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.util.Pair;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Optional;
+import java.util.Properties;
 
 /**
  * Singleton class that manages the current User who is logged in
@@ -22,6 +28,15 @@ public class User {
 
     public static int res = -1;
     private static String name;
+    private static String uPsswrd;
+
+    public static String getuPsswrd() {
+        return uPsswrd;
+    }
+
+    public static void setuPsswrd(String uPsswrd) {
+        User.uPsswrd = uPsswrd;
+    }
 
     private static int isAdmin;
 
@@ -54,7 +69,6 @@ public class User {
         Dialog<Pair<String, String>> dialog = new Dialog<>();
         dialog.setTitle("FormVersions - Login");
         dialog.setHeaderText("Please fill in your login information");
-
         ButtonType loginButtonType = new ButtonType("Login", ButtonBar.ButtonData.OK_DONE);
         ButtonType cancel = new ButtonType("Cancel", ButtonBar.ButtonData.CANCEL_CLOSE);
         dialog.getDialogPane().getButtonTypes().addAll(loginButtonType, cancel);
@@ -97,8 +111,12 @@ public class User {
         result.ifPresent(u -> {
             setName(u.getKey());
             try {
-                boolean tempRes = findUserInDatabaseAndCheckPassword(u.getValue());
-                if (tempRes) res = 1;
+                boolean tempRes = findUserInDatabaseAndCheckPassword(u.getKey(), u.getValue());
+                if (tempRes) {
+                    res = 1;
+                    name = u.getKey();
+                    uPsswrd = u.getValue();
+                }
                 else res = 0;
             } catch (SQLException e) {
                 e.printStackTrace();
@@ -107,9 +125,9 @@ public class User {
 
     }
 
-    public static boolean findUserInDatabaseAndCheckPassword(String password) throws SQLException {
+    public static boolean findUserInDatabaseAndCheckPassword(String name, String password) throws SQLException {
         try (PreparedStatement s = DbContext.getConnection().prepareStatement("SELECT * FROM users WHERE mail = ?")) {
-            s.setString(1, getName());
+            s.setString(1, name);
             try (ResultSet r = s.executeQuery()) {
                 while (r.next()) {
                     return comparePasswords(password, r.getString(3));
@@ -155,6 +173,15 @@ public class User {
             }
         }
         User.setIsAdmin(0);
+    }
+
+
+    public static void updateUserAppConfig() throws IOException {
+        java.util.Properties prop = new Properties();
+        prop.loadFromXML(Files.newInputStream(Paths.get("./configuration.xml")));
+        prop.setProperty("saved_user", name);
+        prop.setProperty("saved_password",uPsswrd);
+        prop.storeToXML(Files.newOutputStream(Paths.get("./configuration.xml")), "");
     }
 
 

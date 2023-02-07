@@ -74,6 +74,8 @@ public class UploadPdfController implements Initializable {
     FileChooser fc = new FileChooser();
     ObservableList<CatiaSheet> observableListItems;
 
+    private String currUploadPath;
+
     @Override
     public void initialize(URL arg0, ResourceBundle arg1) {
         tableView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
@@ -144,29 +146,33 @@ public class UploadPdfController implements Initializable {
     @FXML
     void loadMainPdf(ActionEvent event) {
         fc.setTitle("Choose the main PDF file");
-        fc.setInitialDirectory(new File((new JFileChooser()).getFileSystemView().getDefaultDirectory().toString()));
+        try{
+            fc.setInitialDirectory(new File(this.currUploadPath));
+        }
+        catch (Exception e){
+            fc.setInitialDirectory(new File((new JFileChooser()).getFileSystemView().getDefaultDirectory().toString()));
+        }
         File selectedFile = fc.showOpenDialog(null);
 
         if (selectedFile != null) {
             try {
-
+                this.currUploadPath = selectedFile.getParentFile().getPath();
                 mainPdf = PDFParser.parseFile(String.valueOf(selectedFile));
                 loadSubpartPdf(event);
-
                 subpartPdf.setDisable(false);
                 clearAllElements.setDisable(false);
 
             } catch (Exception e) {
                 e.printStackTrace();
             }
-        } else System.out.println("zle");
+        }
     }
 
     @FXML
     void loadSubpartPdf(ActionEvent event) {
 
         fc.setTitle("Choose the subpart PDF files");
-        fc.setInitialDirectory(new File((new JFileChooser()).getFileSystemView().getDefaultDirectory().toString()));
+        fc.setInitialDirectory(new File(currUploadPath));
 
         List<File> listPathov = fc.showOpenMultipleDialog(null);
 
@@ -218,6 +224,7 @@ public class UploadPdfController implements Initializable {
                 alert.showAndWait();
             }
         }
+        this.currUploadPath = null;
     }
 
     public boolean checkForEmptyFields() {
