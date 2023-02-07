@@ -32,7 +32,7 @@ public class Main extends Application {
 
         try {
             java.util.Properties prop = new Properties();
-            prop.loadFromXML(Files.newInputStream(Paths.get("./conf.xml")));
+            prop.loadFromXML(Files.newInputStream(Paths.get("./configuration.xml")));
             Connection connection = DriverManager.getConnection(
                     prop.getProperty("database"),
                     prop.getProperty("user"),
@@ -72,7 +72,6 @@ public class Main extends Application {
             stage.setScene(s);
             stage.show();
             User.checkIfIsAdmin();
-//            DatabaseTransactions.checkIfIsAdmin(User.getName());
             if (User.getIsAdmin() != 1) State.getAdminTab().setDisable(true);
         } else if (User.getRes() == 0) {
             ButtonType log = new ButtonType("Login again", ButtonBar.ButtonData.OK_DONE);
