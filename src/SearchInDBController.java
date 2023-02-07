@@ -135,10 +135,12 @@ public class SearchInDBController implements Initializable {
 
     public void showDVP(ActionEvent actionEvent) {
         if (partIDInput != null) {
-            State.getTextField().setText(partIDInput.getText());
+            if (!Objects.equals(currClickedOn, "")) State.getTextField().setText(currClickedOn.substring(0,currClickedOn.length()-1));
+            else State.getTextField().setText(partIDInput.getText());
             MainController.switchTab(1);
         }
     }
+    //tu to bude treba zmenit podla toho jak to chcu vyhladavat
 
     public void removeSelectedPartFromDB(ActionEvent actionEvent) throws SQLException {
         if (!Objects.equals(currClickedOn, "")) {
