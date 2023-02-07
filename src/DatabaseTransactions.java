@@ -61,9 +61,8 @@ public class DatabaseTransactions {
      */
     public void editPartComment(String partID, String newComment) throws SQLException {
         DbContext.getConnection().setAutoCommit(false);
+        DatabaseChange dc = new DatabaseChange(User.getName(), "Edited a comment for " + partID, new Timestamp(System.currentTimeMillis()));
         try (PreparedStatement s = DbContext.getConnection().prepareStatement("UPDATE part SET comment=? WHERE part_id = ?", Statement.RETURN_GENERATED_KEYS)) {
-            DatabaseChange dc = new DatabaseChange(User.getName(), "Edited a comment for " + partID, new Timestamp(System.currentTimeMillis()));
-            dc.insert();
             s.setString(1, newComment);
             s.setString(2, partID);
             s.executeUpdate();
@@ -74,6 +73,7 @@ public class DatabaseTransactions {
             alert.showAndWait();
             throw new RuntimeException(e);
         } finally {
+            dc.insert();
             DbContext.getConnection().setAutoCommit(true);
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
             alert.setHeaderText("Comment edited succesfuly!");
@@ -91,9 +91,8 @@ public class DatabaseTransactions {
      */
     public void editTestWrapper(TestWrapper editedTestWrapper, Test parentTest, TestResult testResult) throws SQLException {
         DbContext.getConnection().setAutoCommit(false);
+        DatabaseChange dc = new DatabaseChange(User.getName(), "Edited a test for " + parentTest.getDocument_nr(), new Timestamp(System.currentTimeMillis()));
         try {
-            DatabaseChange dc = new DatabaseChange(User.getName(), "Edited a test for " + parentTest.getDocument_nr(), new Timestamp(System.currentTimeMillis()));
-            dc.insert();
             editedTestWrapper.editInDatabase(parentTest, testResult);
         } catch (SQLException e) {
             DbContext.getConnection().rollback();
@@ -102,6 +101,7 @@ public class DatabaseTransactions {
             alert.showAndWait();
             throw new RuntimeException(e);
         } finally {
+            dc.insert();
             DbContext.getConnection().setAutoCommit(true);
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
             alert.setHeaderText("Test result edited succesfuly!");
@@ -194,7 +194,6 @@ public class DatabaseTransactions {
     public void deleteCatiaSheet(String partID) throws SQLException {
         DbContext.getConnection().setAutoCommit(false);
         DatabaseChange dc = new DatabaseChange(User.getName(), "Deleted CatiaSheed with id " + partID, new Timestamp(System.currentTimeMillis()));
-        dc.insert();
         try {
             PreparedStatement s = DbContext.getConnection().prepareStatement("DELETE FROM part WHERE part_id = ?", Statement.RETURN_GENERATED_KEYS);
             s.setString(1, partID);
@@ -210,6 +209,7 @@ public class DatabaseTransactions {
             alert.showAndWait();
             throw new RuntimeException(e);
         } finally {
+            dc.insert();
             DbContext.getConnection().setAutoCommit(true);
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
             alert.setHeaderText("CatiaSheet deleted succesfuly!");
@@ -225,7 +225,6 @@ public class DatabaseTransactions {
     public void deleteTestsForPartId(String partID) throws SQLException {
         DbContext.getConnection().setAutoCommit(false);
         DatabaseChange dc = new DatabaseChange(User.getName(), "Deleted all tests for " + partID, new Timestamp(System.currentTimeMillis()));
-        dc.insert();
         try {
             PreparedStatement s = DbContext.getConnection().prepareStatement("DELETE FROM test WHERE part_id = ?", Statement.RETURN_GENERATED_KEYS);
             s.setString(1, partID);
@@ -238,6 +237,7 @@ public class DatabaseTransactions {
             throw new RuntimeException(e);
         } finally {
             DbContext.getConnection().setAutoCommit(true);
+            dc.insert();
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
             alert.setHeaderText("Tests deleted succesfuly!");
             alert.showAndWait();
@@ -265,7 +265,6 @@ public class DatabaseTransactions {
     public static void insertUser(String mail, String password, int admin) throws SQLException {
         DbContext.getConnection().setAutoCommit(false);
         DatabaseChange dc = new DatabaseChange(User.getName(), "Added user " + mail, new Timestamp(System.currentTimeMillis()));
-        dc.insert();
         try {
             PreparedStatement s = DbContext.getConnection().prepareStatement("INSERT INTO users (mail, psswrd, admin) VALUES (?,?,?)", Statement.RETURN_GENERATED_KEYS);
             s.setString(1, mail);
@@ -279,6 +278,7 @@ public class DatabaseTransactions {
             alert.showAndWait();
             throw new RuntimeException(e);
         } finally {
+            dc.insert();
             DbContext.getConnection().setAutoCommit(true);
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
             alert.setHeaderText("User added succesfully!");
@@ -296,13 +296,12 @@ public class DatabaseTransactions {
     public static void deleteSelectedUsers(List<String> selectedUsers) throws SQLException {
         DbContext.getConnection().setAutoCommit(false);
         DatabaseChange dc = new DatabaseChange(User.getName(), "Deleted " + selectedUsers.size() + "user/s", new Timestamp(System.currentTimeMillis()));
-        dc.insert();
         try {
             for (String u : selectedUsers) {
                 PreparedStatement s = DbContext.getConnection().prepareStatement("delete from users where mail = ?");
-                    s.setString(1, u);
-                    s.executeQuery();
-                }
+                s.setString(1, u);
+                s.executeQuery();
+            }
         } catch (SQLException e) {
             DbContext.getConnection().rollback();
             Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -310,9 +309,31 @@ public class DatabaseTransactions {
             alert.showAndWait();
             throw new RuntimeException(e);
         } finally {
+            dc.insert();
             DbContext.getConnection().setAutoCommit(true);
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
             alert.setHeaderText(selectedUsers.size() + " user/s deleted succesfuly!");
+            alert.showAndWait();
+        }
+    }
+
+    public void updatePartImage(CatiaSheet cs) throws SQLException {
+        DbContext.getConnection().setAutoCommit(false);
+        DatabaseChange dc = new DatabaseChange(User.getName(), "Edited image for " + cs.documentNo + cs.version, new Timestamp(System.currentTimeMillis()));
+        try {
+            cs.setImageFromExplorer();
+            cs.editInDatabase();
+        } catch (SQLException | IOException e) {
+            DbContext.getConnection().rollback();
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setHeaderText("Failed to update image");
+            alert.showAndWait();
+            throw new RuntimeException(e);
+        } finally {
+            dc.insert();
+            DbContext.getConnection().setAutoCommit(true);
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setHeaderText("Image updated succesfully!");
             alert.showAndWait();
         }
     }

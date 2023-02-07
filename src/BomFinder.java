@@ -49,7 +49,7 @@ public class BomFinder {
      */
     public List<String> findBomForPart(String partID) throws SQLException {
         List<String> lsc = new ArrayList<>();
-        try (PreparedStatement s = DbContext.getConnection().prepareStatement("SELECT bom.child FROM part JOIN bom ON part.part_id = bom.parent WHERE bom.parent = ?")) {
+        try (PreparedStatement s = DbContext.getConnection().prepareStatement("SELECT bom.child FROM part JOIN bom ON part.part_id = bom.parent WHERE bom.parent = ? ORDER BY bom.child asc ")) {
             s.setString(1, partID);
             try (ResultSet r = s.executeQuery()) {
                 while (r.next()) {
