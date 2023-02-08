@@ -6,7 +6,7 @@
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<SplitPane dividerPositions="0.8477" orientation="VERTICAL" prefHeight="850.0" prefWidth="1210.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="UploadDVPController">
+<SplitPane dividerPositions="0.8477" orientation="VERTICAL" prefHeight="850.0" prefWidth="1210.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.UploadDVPController">
     <items>
         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
             <children>
@@ -16,8 +16,8 @@
                         <TableColumn fx:id="dateDVP" prefWidth="128.0" text="Date" />
                         <TableColumn fx:id="aaDVP" prefWidth="140.0" text="AA" />
                         <TableColumn fx:id="custNumDVP" prefWidth="240.0" text="Customer Number" />
-                        <TableColumn fx:id="testTypeDVP" prefWidth="450.0" text="Test Type" />
-                        <TableColumn fx:id="testResDVP" prefWidth="150.0" text="Test Result" />
+                        <TableColumn fx:id="testTypeDVP" prefWidth="450.0" text="dvp.Test Type" />
+                        <TableColumn fx:id="testResDVP" prefWidth="150.0" text="dvp.Test Result" />
                         <TableColumn fx:id="sollDVP" prefWidth="150.0" text="Soll" />
                         <TableColumn fx:id="plusDVP" minWidth="0.0" prefWidth="100.0" text="Soll +" />
                         <TableColumn fx:id="minusDVP" prefWidth="100.0" text="Soll -" />
